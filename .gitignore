@@ -1,0 +1,4 @@
+.aider*
+.streamlit/secrets.toml
+.aider.tags.cache.v4
+*.pyc
