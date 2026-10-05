@@ -5,8 +5,9 @@ import data_prep
 import evaluation as ev
 import predictor as ml
 import ui
-from config import LEAGUES
+from config import LEAGUES, season_of
 from fetch_football_data import DataError, get_historical_data, get_upcoming_fixtures
+import ui
 
 st.set_page_config(page_title="AI Football Predictor", page_icon=":material/sports_soccer:", layout="wide",
                    initial_sidebar_state="collapsed")
@@ -43,6 +44,25 @@ def cached_season(master, features, params):
     return ev.season_predictions(master, features, params)
 
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def cached_latest_strength(league, teams):
+    """Elo / PPM5 ล่าสุดของทุกทีม (= ค่าที่ใช้ทำนายนัดถัดไป หลังนัดที่แข่งจบล่าสุด)
+    ใช้วิธีเดียวกับปุ่มจำลองทำนาย: ใส่นัดสมมติหลังนัดล่าสุด แล้วอ่านค่า "ก่อนเตะ" ของแต่ละทีม
+    (HomeElo ใน Master คือค่าก่อนแข่งนัดนั้น จุดสุดท้ายของเส้นกราฟจึงช้ากว่าค่าจริงไปหนึ่งนัด)"""
+    teams = list(teams)
+    n = len(teams)
+    fx = pd.DataFrame({"Date": pd.Timestamp.now("UTC").tz_localize(None),
+                       "HomeTeam": [teams[i] for i in range(0, n, 2)],
+                       "AwayTeam": [teams[(i + 1) % n] for i in range(0, n, 2)]})
+    m, _ = data_prep.build_league_master(league, fx)
+    f = m[m["is_fixture"]]
+    rows = {}
+    for side in ("Home", "Away"):
+        for team, elo, ppm in zip(f[f"{side}Team"], f[f"{side}Elo"], f[f"{side}_PPM5"]):
+            rows[team] = {"Elo": float(elo), "PPM5": float(ppm)}
+    return pd.DataFrame.from_dict(rows, orient="index")
+
+
 OUTCOME_TH = ["เหย้าชนะ", "เสมอ", "เยือนชนะ"]
 
 # ---------------------------------------------------------------- หัวแอป + เลือกลีก
@@ -51,11 +71,13 @@ c_league, c_refresh = st.columns([4, 1.4], vertical_alignment="center")
 league = c_league.radio("เลือกลีกฟุตบอล", list(LEAGUES.keys()), horizontal=True, label_visibility="collapsed")
 if c_refresh.button("อัปเดตข้อมูล", icon=":material/refresh:", width="stretch"):
     try:
-        with st.spinner("กำลังดึงข้อมูล..."):
-            get_historical_data.clear()
-            get_upcoming_fixtures.clear()
-            get_historical_data(league)
+        placeholder = st.empty()
+        placeholder.markdown(ui.spinning_ball_loader("กำลังดึงข้อมูลฟุตบอลล่าสุด..."), unsafe_allow_html=True)
+        get_historical_data.clear()
+        get_upcoming_fixtures.clear()
+        get_historical_data(league)
         cached_master.clear()
+        placeholder.empty()
         st.rerun()
     except DataError as e:
         st.error(str(e))
@@ -88,8 +110,8 @@ else:
     upcoming_error = None
 crests = ui.crest_map(upcoming)
 
-tab_fx, tab_season, tab_acc = st.tabs([":material/calendar_month: ทำนาย", ":material/sports_soccer: ผลทั้งฤดูกาล",
-                                       ":material/monitoring: ความแม่นยำ"])
+tab_fx, tab_season,tab_table, tab_acc  = st.tabs([":material/calendar_month: ทำนาย", ":material/sports_soccer: ผลทั้งฤดูกาล",
+                                        ":material/format_list_numbered: ตารางคะแนน" , ":material/monitoring: ความแม่นยำ "])
 
 # =========================== TAB: ทำนายล่วงหน้ารายสัปดาห์ ===========================
 with tab_fx:
@@ -99,7 +121,7 @@ with tab_fx:
         html(ui.empty("inbox", "ไม่มีข้อมูลโปรแกรมแข่งที่กำหนดเวลาไว้"))
     else:
         upcoming = upcoming.copy()
-        upcoming["_kickoff_utc"] = upcoming["_kickoff_utc"].fillna(pd.Timestamp.utcnow().tz_localize(None))
+        upcoming["_kickoff_utc"] = upcoming["_kickoff_utc"].fillna(pd.Timestamp.now("UTC").tz_localize(None))
         upcoming["_week"] = data_prep.matchweek_start(upcoming["_kickoff_utc"])
         weeks = sorted(upcoming["_week"].unique())
         counts = upcoming["_week"].value_counts()
@@ -152,7 +174,7 @@ with tab_fx:
         if home_team == away_team:
             st.warning("กรุณาเลือกสองทีมที่ต่างกัน")
         else:
-            sim = pd.DataFrame({"Date": [pd.Timestamp.utcnow().tz_localize(None)],
+            sim = pd.DataFrame({"Date": [pd.Timestamp.now("UTC").tz_localize(None)],
                                 "HomeTeam": [home_team], "AwayTeam": [away_team]})
             m_sim, _ = cached_master(league, sim)
             row = m_sim[m_sim["is_fixture"]].iloc[0]
@@ -163,6 +185,97 @@ with tab_fx:
                           "xg": (p["xg_home"], p["xg_away"])}, tag="จำลอง"))
             html(ui.note(f"Elo {row['HomeElo']:.0f} vs {row['AwayElo']:.0f} • วันพัก {row['HomeRestDays']:.1f} vs {row['AwayRestDays']:.1f}"))
 
+    html(ui.section("chart", f"แนวโน้มฟอร์มทีมและค่าพลัง Elo · {league}"))
+    view_mode = st.radio("รูปแบบกราฟ", ["เส้นแนวโน้มรายทีม", "จุดค่าล่าสุด (เทียบทีม)"],
+                         horizontal=True, key="trend_view_mode")
+    t_col1, t_col2 = st.columns([2, 1])
+    trend_team = t_col1.selectbox("เลือกทีมที่ต้องการดูเส้นกราฟฟอร์ม", teams, key="trend_team_select")
+    metric_choice = t_col2.selectbox("เลือกค่าที่ต้องการแสดง", ["Elo (ค่าพลัง)", "PPM5 (แต้มเฉลี่ย 5 นัด)"], key="trend_metric_select")
+    col_to_plot = "Elo" if "Elo" in metric_choice else "PPM5"
+
+    if view_mode.startswith("เส้น"):
+        if trend_team:
+            h_t = played[played["HomeTeam"] == trend_team][["Date", "HomeElo", "Home_PPM5"]].rename(columns={"HomeElo": "Elo", "Home_PPM5": "PPM5"})
+            a_t = played[played["AwayTeam"] == trend_team][["Date", "AwayElo", "Away_PPM5"]].rename(columns={"AwayElo": "Elo", "Away_PPM5": "PPM5"})
+            timeline_df = pd.concat([h_t, a_t]).sort_values("Date").dropna(subset=["Elo"]).set_index("Date")
+
+            if not timeline_df.empty:
+                st.line_chart(timeline_df[[col_to_plot]])
+                st.caption(f"กราฟแสดงพัฒนาการของ {trend_team} ตลอดฤดูกาล ช่วยให้เห็นช่วงที่ฟอร์มกำลังพุ่งขึ้นหรือตกลงอย่างชัดเจน")
+            else:
+                st.info("ยังไม่มีข้อมูลเพียงพอสำหรับสร้างกราฟของทีมนี้")
+    else:
+        import plotly.graph_objects as go
+
+        latest = cached_latest_strength(league, tuple(teams))
+        season_no = season_of(played["Date"])
+        in_season = played.loc[season_no == season_no.max()]
+        active = set(in_season["HomeTeam"]) | set(in_season["AwayTeam"])
+        in_league = [t for t in teams if t in active and t in latest.index]      # ทีมในลีกฤดูกาลล่าสุด
+        fmt = ".0f" if col_to_plot == "Elo" else ".2f"
+        mean_val = float(latest.loc[in_league, col_to_plot].mean())
+
+        cmp_mode = st.radio("เทียบกับ", ["ทุกทีมในลีก", "เลือกทีมเอง"], horizontal=True, key="trend_cmp_mode")
+        if cmp_mode == "ทุกทีมในลีก":
+            shown = list(in_league)
+        else:
+            shown = st.multiselect("เลือกทีมที่ต้องการเทียบ (ทีมที่เลือกด้านบนจะแสดงเสมอ)", teams, key=f"trend_cmp_teams_{league}")
+        shown = [t for t in dict.fromkeys([trend_team] + list(shown)) if t in latest.index]
+
+        d = latest.loc[shown, col_to_plot].sort_values()
+        stems_x, stems_y = [], []
+        for t, v in d.items():                      # เส้นบาง ๆ จากค่าเฉลี่ยลีกไปหาแต่ละทีม ให้เห็นว่าห่างกันเท่าไร
+            stems_x += [mean_val, v, None]
+            stems_y += [t, t, None]
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=stems_x, y=stems_y, mode="lines", hoverinfo="skip", showlegend=False,
+                                 line=dict(color="rgba(0,0,0,0.45)", width=2.5))) # 👈 เส้นโยงเข้มขึ้น
+        fig.add_trace(go.Scatter(
+            x=d.values, y=list(d.index), mode="markers", showlegend=False,
+            marker=dict(color=[ui.accent() if t == trend_team else "#8a8576" for t in d.index],
+                        size=[18 if t == trend_team else 11 for t in d.index],
+                        line=dict(color="white", width=1.5)),
+            hovertemplate="%{y}: %{x:" + fmt + "}<extra></extra>"))
+        fig.add_vline(x=mean_val, line_dash="dash", line_color="rgba(0,0,0,0.8)", line_width=2,
+                      annotation_text=f"ค่าเฉลี่ยลีก {format(mean_val, fmt)}", annotation_position="top",
+                      annotation_font=dict(color="black", size=13, family="Prompt, sans-serif")) # 👈 เส้นและตัวหนังสือชัดขึ้น
+        fig.update_layout(
+            xaxis=dict(
+                title=metric_choice, 
+                gridcolor="rgba(0,0,0,0.4)",  # 👈 เข้มขึ้นมาก
+                zeroline=False,
+                tickfont=dict(color="black", size=13, family="Prompt, sans-serif"),
+                title_font=dict(color="black", size=14, family="Prompt, sans-serif")
+            ),
+            yaxis=dict(
+                title="", 
+                categoryorder="array", 
+                categoryarray=list(d.index), 
+                gridcolor="rgba(0,0,0,0.2)",  # 👈 เพิ่มเส้นแกน Y แนวนอนให้ชัดขึ้น
+                tickfont=dict(color="black", size=13, family="Prompt, sans-serif")
+            ),
+            margin=dict(l=20, r=20, t=40, b=20), 
+            height=max(280, 30 * len(d) + 100),
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)"
+        )
+        st.plotly_chart(fig, width="stretch")
+
+        if trend_team in in_league:
+            me = float(latest.loc[trend_team, col_to_plot])
+            rank = int((latest.loc[in_league, col_to_plot] > me).sum()) + 1
+            st.caption(f"{trend_team}: {format(me, fmt)} • ต่างจากค่าเฉลี่ยลีก {format(me - mean_val, '+' + fmt)} "
+                       f"• อันดับ {rank}/{len(in_league)} ของลีกฤดูกาลล่าสุด • ค่าล่าสุด = ค่าที่ใช้ทำนายนัดถัดไป")
+        else:
+            me = float(latest.loc[trend_team, col_to_plot]) if trend_team in latest.index else None
+            st.caption(f"{trend_team} ไม่ได้อยู่ในลีกฤดูกาลล่าสุด ค่าที่แสดงเป็นค่าสุดท้ายที่มี (Elo ถูกดึงเข้าหาค่ากลางทุกต้นฤดูกาลตามกติกาของโมเดล)")
+        with st.expander("ดูตัวเลขเทียบกัน"):
+            tbl = d.sort_values(ascending=False).rename(col_to_plot).rename_axis("ทีม").reset_index()
+            tbl.insert(0, "ลำดับ", range(1, len(tbl) + 1))
+            if me is not None:
+                tbl[f"ต่างจาก {trend_team}"] = tbl[col_to_plot] - me
+            st.dataframe(tbl.round(0 if col_to_plot == "Elo" else 2), width="stretch", hide_index=True)
+
     with st.expander(":material/insights: ฟีเจอร์ไหนสำคัญที่สุดต่อโมเดล"):
         imp = ml.feature_importance(model).rename("ความสำคัญ").rename_axis("ฟีเจอร์").reset_index()
         try:   # เรียงจากมากไปน้อย (streamlit รุ่นเก่าไม่รองรับ sort/horizontal)
@@ -172,8 +285,10 @@ with tab_fx:
 
 # =========================== TAB: ผลทั้งฤดูกาลนี้ ===========================
 with tab_season:
-    with st.spinner("กำลังย้อนทำนายทั้งฤดูกาล..."):
-        season_res = cached_season(played, features, params)
+    placeholder = st.empty()
+    placeholder.markdown(ui.spinning_ball_loader("กำลังจำลองผลการแข่งขันทั้งฤดูกาล..."), unsafe_allow_html=True)
+    season_res = cached_season(played, features, params)
+    placeholder.empty()
     if season_res.empty:
         html(ui.empty("inbox", "ฤดูกาลนี้ยังไม่มีนัดที่แข่งจบ"))
     else:
@@ -185,11 +300,12 @@ with tab_season:
         n = len(season_res)
         s = ev.summarize(season_res)
         acc = right.mean() * 100
+        exact_acc = exact.mean() * 100
 
         html(ui.section("trophy", f"ผลทั้งฤดูกาลนี้ · {league}", f"{n} นัด"))
         html(ui.tiles(
             ui.tile(int(right.sum()), f"/{n}", f"ทายผลถูก ({acc:.0f}%)", "lime" if acc >= 50 else "amber"),
-            ui.tile(int(exact.sum()), f"/{n}", "สกอร์ตรงเป๊ะ", "blue"),
+            ui.tile(int(exact.sum()), f"/{n}", f"สกอร์ตรงเป๊ะ ({exact_acc:.0f}%)", "blue"),
             ui.tile(f"{s['logloss']:.3f}", "", "Log-loss (ต่ำ = ดี)", "amber"),
         ))
         rows = []
@@ -221,8 +337,73 @@ with tab_season:
         html("".join(out_rows) if out_rows else ui.empty("inbox", "ไม่มีนัดที่ตรงกับตัวกรอง"))
 
         disp = ev.results_for_display(season_res)
-        st.download_button("ดาวน์โหลดผลทั้งฤดูกาล (CSV)", disp.to_csv(index=False).encode("utf-8-sig"),
-                           f"season_{league.replace(' ', '_')}.csv", "text/csv", icon=":material/download:")
+        # จัดรูปแบบ DataFrame สำหรับส่งออกเป็น CSV ในสไตล์เดียวกัน
+        export_season = pd.DataFrame({
+            "วันที่": disp["วันที่"], 
+            "ทีมเหย้า": disp["ทีมเหย้า"], 
+            "ทีมเยือน": disp["ทีมเยือน"],
+            "ผลจริง": disp["ผลจริง"], 
+            "AI ทายสกอร์": disp["AI ทายสกอร์"],
+            "เหย้าชนะ %": disp["เหย้าชนะ %"], 
+            "เสมอ %": disp["เสมอ %"], 
+            "เยือนชนะ %": disp["เยือนชนะ %"],
+            "ผลที่ AI เชื่อ": disp["ผลที่ AI เชื่อ"],
+            "ผลจริง (H/D/A)": disp["ผลจริง (H/D/A)"],
+            "ถูก/ผิด": disp["ถูก/ผิด"],
+        })
+        
+        st.download_button(
+            "ดาวน์โหลดผลทั้งฤดูกาล (CSV)", 
+            export_season.to_csv(index=False).encode("utf-8-sig"),
+            f"season_{league.replace(' ', '_')}.csv", 
+            "text/csv", 
+            icon=":material/download:"
+        )
+# =========================== TAB: ตารางคะแนน ===========================
+with tab_table:
+    from config import current_season_year, season_of
+    html(ui.section("trophy", f"ตารางคะแนน · {league}"))
+    
+    curr_matches = played[season_of(played["Date"]) == current_season_year()]
+    if curr_matches.empty:
+        curr_matches = played
+        
+    table_dict = {}
+    for _, r in curr_matches.iterrows():
+        h, a = r["HomeTeam"], r["AwayTeam"]
+        hg, ag = int(r["FTHG"]), int(r["FTAG"])
+        
+        for t in [h, a]:
+            if t not in table_dict:
+                table_dict[t] = {"P": 0, "W": 0, "D": 0, "L": 0, "GF": 0, "GA": 0, "Pts": 0}
+                
+        table_dict[h]["P"] += 1; table_dict[a]["P"] += 1
+        table_dict[h]["GF"] += hg; table_dict[h]["GA"] += ag
+        table_dict[a]["GF"] += ag; table_dict[a]["GA"] += hg
+        
+        if hg > ag:
+            table_dict[h]["W"] += 1; table_dict[h]["Pts"] += 3
+            table_dict[a]["L"] += 1
+        elif hg < ag:
+            table_dict[a]["W"] += 1; table_dict[a]["Pts"] += 3
+            table_dict[h]["L"] += 1
+        else:
+            table_dict[h]["D"] += 1; table_dict[h]["Pts"] += 1
+            table_dict[a]["D"] += 1; table_dict[a]["Pts"] += 1
+            
+    tdf = pd.DataFrame.from_dict(table_dict, orient="index")
+    tdf["GD"] = tdf["GF"] - tdf["GA"]
+    tdf = tdf.sort_values(by=["Pts", "GD", "GF"], ascending=False).reset_index()
+    tdf.rename(columns={
+        "index": "ทีม", "P": "แข่ง", "W": "ชนะ", "D": "เสมอ", 
+        "L": "แพ้", "GF": "ได้", "GA": "เสีย", "GD": "ลูกได้เสีย", "Pts": "แต้ม"
+    }, inplace=True)
+    tdf["อันดับ"] = range(1, len(tdf) + 1)
+    
+    # 🌟 เรียกใช้ฟังก์ชัน HTML ของ UI ตัวเดียวจบ จัดระเบียบหัวและตารางให้อัตโนมัติ
+    html(ui.league_table(tdf, crests))
+    html(ui.note("ตารางคะแนนคำนวณอัตโนมัติจากผลการแข่งขันจริง • แถบสีเขียว = โซนหัวตาราง • แถบสีแดง = โซนท้ายตาราง"))
+
 
 # =========================== TAB: วัดความแม่นยำ ===========================
 with tab_acc:
@@ -238,8 +419,10 @@ with tab_acc:
         if st.button("เริ่มวัดผล", type="primary"):
             st.session_state[key] = True
         if st.session_state.get(key):
-            with st.spinner("กำลังย้อนทำนายทีละสัปดาห์ (อาจใช้เวลา 30–90 วินาที)..."):
-                out = cached_walk_forward(played, features, params, n_eval)
+            placeholder = st.empty()
+            placeholder.markdown(ui.spinning_ball_loader("กำลังย้อนทำนายทีละสัปดาห์ (โปรดรอสักครู่)..."), unsafe_allow_html=True)
+            out = cached_walk_forward(played, features, params, n_eval)
+            placeholder.empty()
             s = ev.summarize(out["results"])
             if s is None:
                 st.warning("ไม่มีนัดที่ทดสอบได้")
@@ -258,6 +441,47 @@ with tab_acc:
                           delta=f"{s['brier'] - s['baseline_brier']:+.3f} เทียบสัดส่วนเฉลี่ยลีก", delta_color="inverse")
                 st.caption(f"accuracy คลาดเคลื่อนได้ราว ±{s['accuracy_ci'] * 100:.1f} จุด (95%)")
 
+                st.caption(f"โอกาสเสมอที่โมเดลให้เฉลี่ย {s['draw_pred'] * 100:.1f}% • เสมอจริง {s['draw_real'] * 100:.1f}% "
+                            f"(ต่าง {s['draw_gap'] * 100:+.1f} จุด, z = {s['draw_z']:+.2f})")
+
+                st.markdown("##### 📊 กราฟสรุปประสิทธิภาพการทำนาย")
+                import plotly.graph_objects as go
+                
+                categories = ["ทายผลถูก (1X2)", "ทายถูกจากสกอร์", "ทายสกอร์ตรงเป๊ะ"]
+                values = [s['accuracy'] * 100, s['accuracy_from_score'] * 100, s['exact_score'] * 100]
+                
+                fig = go.Figure(data=[
+                    go.Bar(
+                        x=categories,
+                        y=values,
+                        text=[f"{v:.1f}%" for v in values],
+                        textposition='auto',
+                        marker_color=ui.accent(),
+                        marker_line_color='rgba(0,0,0,0.1)',
+                        marker_line_width=1,
+                        opacity=0.9
+                    )
+                ])
+                fig.update_layout(
+                    yaxis=dict(
+                        range=[0, 100], 
+                        title="เปอร์เซ็นต์ความแม่นยำ (%)",
+                        gridcolor='rgba(0, 0, 0, 0.25)',       # 👈 เพิ่ม: ให้เส้นตารางด้านหลังสีเข้มและชัดขึ้น
+                        zerolinecolor='rgba(0, 0, 0, 0.4)',    # 👈 เพิ่ม: ให้เส้นฐานที่ 0 เข้มขึ้น
+                        tickfont=dict(color='black', size=12), # 👈 เพิ่ม: เปลี่ยนตัวเลขแกน Y เป็นสีดำ
+                        title_font=dict(color='black', size=13) # 👈 เพิ่ม: เปลี่ยนชื่อแกน Y เป็นสีดำ
+                    ),
+                    xaxis=dict(
+                        title="",
+                        tickfont=dict(color='black', size=13)  # 👈 เพิ่ม: เปลี่ยนตัวอักษรแกน X เป็นสีดำ
+                    ),
+                    margin=dict(l=20, r=20, t=30, b=20),
+                    height=350,
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    paper_bgcolor='rgba(0,0,0,0)'
+                )
+                st.plotly_chart(fig, width="stretch")
+
                 st.markdown("##### Calibration")
                 st.dataframe(ev.calibration_table(out["results"]), width="stretch", hide_index=True)
                 with st.expander("ดูผลรายนัด"):
@@ -271,8 +495,10 @@ with tab_acc:
         st.caption("ลอง n_estimators / max_depth / min_samples_leaf บนช่วงเก่า แล้วตรวจกับช่วงล่าสุดที่ไม่เคยใช้เลือกค่า (ใช้เวลาหลายนาที)")
         tkey = f"tune_{league}"
         if st.button("เริ่มจูน"):
-            with st.spinner("กำลังลองทุกชุดค่า..."):
-                st.session_state[tkey] = cached_tuning(played, features)
+            placeholder = st.empty()
+            placeholder.markdown(ui.spinning_ball_loader("กำลังจูนพารามิเตอร์ Random Forest..."), unsafe_allow_html=True)
+            st.session_state[tkey] = cached_tuning(played, features)
+            placeholder.empty()
             if st.session_state[tkey] is None:
                 st.warning("ข้อมูลยังไม่พอสำหรับการจูน")
         tr = st.session_state.get(tkey)
@@ -295,11 +521,4 @@ with tab_acc:
 
 # ---------------------------------------------------------------- ข้อมูลโมเดล
 with st.expander(":material/info: ข้อมูลโมเดลและข้อมูลที่ใช้"):
-    cov = (master["Home_PrevPoss"].notna().mean() if "Home_PrevPoss" in master else 0) * 100
-    st.markdown(
-        f"- ฟีเจอร์: {set_name} ({len(features)} ตัว)\n"
-        f"- เทรนด้วย {len(played):,} นัด ({played['Date'].min():%d/%m/%Y} – {played['Date'].max():%d/%m/%Y})\n"
-        f"- Random Forest {params['n_estimators']} ต้น, depth {params['max_depth']}, leaf {params['min_samples_leaf']} "
-        f"({'ค่าตั้งต้น' if ml.is_default(params) else 'ค่าที่จูนแล้ว'})\n"
-        f"- ครอบคลุมสถิติ FBref {cov:.0f}% ของนัด"
-    )
+    st.markdown(ui.model_info_html(), unsafe_allow_html=True)

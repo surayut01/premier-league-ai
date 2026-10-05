@@ -153,9 +153,14 @@ def is_default(params):
 
 
 # ---------------------------------------------------------------- tuning
-def run_tuning(master, features, n_tune=380, n_holdout=380, step_weeks=3):
-    """คืน dict: grid, best, holdout, improved, n_tune, n_holdout หรือ None ถ้าข้อมูลไม่พอ
-    step_weeks: ตอนจูนเทรนใหม่ทุกกี่สัปดาห์ (ยิ่งมากยิ่งเร็ว)"""
+def run_tuning(master, features, n_tune=380, n_holdout=380, step_weeks=3, n_trials=20):
+    """จูนพารามิเตอร์ของ Random Forest ด้วย Bayesian Optimization (Optuna)
+    คืน dict: grid, best, holdout, improved, n_tune, n_holdout หรือ None ถ้าข้อมูลไม่พอ
+    step_weeks: ตอนจูนเทรนใหม่ทุกกี่สัปดาห์ (ยิ่งมากยิ่งเร็ว)
+    n_trials: จำนวนครั้งในการสุ่มจูนของ Optuna
+    """
+    import optuna
+    optuna.logging.set_verbosity(optuna.logging.WARNING)
     from evaluation import MIN_TRAIN_MATCHES, compare_models, summarize, walk_forward  # กัน import วน
 
     played = int(master["FTHG"].notna().sum())
@@ -166,27 +171,42 @@ def run_tuning(master, features, n_tune=380, n_holdout=380, step_weeks=3):
     n_tune = min(n_tune, avail - n_holdout)
 
     rows = []
-    for ne in GRID["n_estimators"]:
-        for md in GRID["max_depth"]:
-            for leaf in GRID["min_samples_leaf"]:
-                p = {"kind": "rf", "n_estimators": ne, "max_depth": md, "min_samples_leaf": leaf}
-                s = summarize(walk_forward(master, features, p, n_tune, skip_last=n_holdout,
-                                           step_weeks=step_weeks)["results"])
-                if s:
-                    rows.append({**{k: p[k] for k in GRID}, "logloss": s["logloss"], "accuracy": s["accuracy"]})
+    
+    def objective(trial):
+        ne = trial.suggest_int("n_estimators", 100, 500, step=50)
+        md = trial.suggest_int("max_depth", 3, 10)
+        leaf = trial.suggest_int("min_samples_leaf", 5, 30)
+        
+        p = {"kind": "rf", "n_estimators": ne, "max_depth": md, "min_samples_leaf": leaf}
+        s = summarize(walk_forward(master, features, p, n_tune, skip_last=n_holdout,
+                                   step_weeks=step_weeks)["results"])
+        if s is None:
+            raise optuna.TrialPruned()
+            
+        rows.append({"n_estimators": ne, "max_depth": md, "min_samples_leaf": leaf, 
+                     "logloss": s["logloss"], "accuracy": s["accuracy"]})
+                     
+        return s["logloss"]
+
+    study = optuna.create_study(direction="minimize")
+    study.optimize(objective, n_trials=n_trials)
+    
     if not rows:
         return None
 
-    grid = pd.DataFrame(rows).sort_values("logloss").reset_index(drop=True)
-    top = grid.iloc[0]
-    best = {"kind": "rf", "n_estimators": int(top["n_estimators"]),
-            "max_depth": int(top["max_depth"]), "min_samples_leaf": int(top["min_samples_leaf"])}
+    # แปลงประวัติการจูนเป็นตารางและเรียงตาม logloss น้อยสุด
+    grid = pd.DataFrame(rows).sort_values("logloss").drop_duplicates(subset=["n_estimators", "max_depth", "min_samples_leaf"]).reset_index(drop=True)
+    
+    best_params = study.best_params
+    best = {"kind": "rf", "n_estimators": int(best_params["n_estimators"]),
+            "max_depth": int(best_params["max_depth"]), "min_samples_leaf": int(best_params["min_samples_leaf"])}
 
     holdout = compare_models(master, n_holdout, {
-        "RF (ค่าที่จูนได้)": (features, best),
+        "RF (จูนด้วย Optuna)": (features, best),
         "RF (ค่าตั้งต้น)": (features, dict(DEFAULT_PARAMS)),
     }, step_weeks=step_weeks)
+    
     ll = dict(zip(holdout["โมเดล"], holdout["Log-loss"]))
     return {"grid": grid, "best": best, "holdout": holdout,
-            "improved": bool(ll["RF (ค่าที่จูนได้)"] < ll["RF (ค่าตั้งต้น)"]),
+            "improved": bool(ll["RF (จูนด้วย Optuna)"] < ll["RF (ค่าตั้งต้น)"]),
             "n_tune": n_tune, "n_holdout": n_holdout}

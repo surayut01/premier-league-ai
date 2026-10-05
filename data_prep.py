@@ -1,10 +1,12 @@
 """หน่วยเตรียมและประกอบร่างข้อมูล -> Master DataFrame (1 แถว = 1 นัด)
 
-(อัปเกรด 🌟: Advanced Football Context & Contextual Scaling)
-- แยก AttackElo / DefenseElo เพื่อจับทางบอลบุกและบอลอุด
-- Dynamic K-Factor (Crisis Detector) หักคะแนนทีมใหญ่ฟอร์มตก
-- แยกคำนวณฟอร์ม 5 นัดในบ้าน (HomeGF_Home) และนอกบ้าน (AwayGA_Away)
-- Contextual Scaling (หักเปอร์เซ็นต์ครองบอลถ้าเจอทีมที่ Elo ห่างกันมาก)
+(Stable Version: ถอดลอจิกซ้ำซ้อน กลับสู่ความเรียบง่ายและเสถียรที่สุด)
+- ใช้ Single Elo มาตรฐาน (เสถียรกว่าการแยก Attack/Defense)
+- ใช้ K=20 คงที่ (ลบ Crisis Detector ที่สร้าง Noise และบั๊กออก)
+- ใช้ PrevPoss ดิบ (ลบ ContextPoss ที่ซ้ำซ้อน)
+- คงการแยกฟอร์ม 5 นัดในบ้าน (HomeGF_Home) และนอกบ้าน (AwayGA_Away)
+- ตัด Feature ที่เป็น Noise ออก (GA5, ใบแดง) 
+- ส่งออก Clean Data เป็น CSV แยกตามฤดูกาล
 """
 import glob
 from pathlib import Path
@@ -22,23 +24,23 @@ ELO_SEASON_REGRESS = 0.25
 SEASON_GAP_DAYS = 60
 ROLL_N, ROLL_MIN = 5, 3
 REST_CAP = 14
+ELO_K = 20.0  
 
-# 🌟 พารามิเตอร์ใหม่สำหรับ Dynamic Rating (Crisis Detector & Contextual Scaling)
-ELO_K_NORMAL = 20.0        # K-factor ทีมทั่วไป
-ELO_K_TIER1_NORMAL = 10.0  # K-factor ทีมใหญ่ (Tier 1) ตอนปกติ (แพ้แล้วคะแนนไม่ค่อยลด)
-ELO_K_TIER1_CRISIS = 35.0  # K-factor ทีมใหญ่ (Tier 1) ตอนวิกฤต (คะแนนร่วงดิ่งพสุธา)
-CRISIS_PPM5_THRESHOLD = 1.0 # ถ้าแต้มเฉลี่ย 5 นัดของทีมใหญ่ <= 1.0 จะเปิดโหมดวิกฤตทันที
-
-FB_FLAGS = ["HomeNoPrev", "AwayNoPrev"]  
+FB_FLAGS = []  
 LEAGUE_AVG_GOALS, LEAGUE_AVG_PTS = 1.4, 1.37   
 
-# 🌟 อัปเดตรายการฟีเจอร์ที่จะส่งให้โมเดล Random Forest เทรน
-BASE_FEATURES = (
-    ["Home_AttackElo", "Home_DefenseElo", "Away_AttackElo", "Away_DefenseElo", "EloDiff", "HomeRestDays", "AwayRestDays"]
-    + [f"{s}_{k}5" for s in ("Home", "Away") for k in ("GA", "PPM")]
-    + ["HomeGF_Home", "AwayGA_Away"] # ฟีเจอร์ใหม่: สิงห์สนามศุภฯ
-)
-FBREF_FEATURES = [f"{s}_Prev{k}" for s in ("Home", "Away") for k in FB_STATS] + ["Home_ContextPoss", "Away_ContextPoss"]
+# 🌟 ฟีเจอร์ที่สะอาดและผ่านการทดสอบว่าเสถียรที่สุด (Single Elo)
+BASE_FEATURES = [
+    "HomeElo", "AwayElo", "EloDiff", "HomeRestDays", "AwayRestDays",
+    "Home_PPM5", "Away_PPM5",
+    "HomeGF_Home", "AwayGA_Away"
+]
+
+# 🌟 ใช้สถิติดิบ และตัด CrdR90 (ใบแดง) ออก
+FBREF_FEATURES = [
+    c for c in [f"{s}_Prev{k}" for s in ("Home", "Away") for k in FB_STATS]
+    if "CrdR90" not in c
+]
 
 # ---------------------------------------------------------------- โหลดไฟล์ดิบ
 def load_results(code, api_dir=API_DIR):
@@ -46,7 +48,7 @@ def load_results(code, api_dir=API_DIR):
     frames = [pd.read_csv(f, parse_dates=["Date"]) for f in files]
     frames = [f for f in frames if not f.empty]
     if not frames:
-        raise FileNotFoundError(f"ไม่พบไฟล์ {code}_*.csv ใน {api_dir} (รัน python fetch_football_data.py ก่อน)")
+        raise FileNotFoundError(f"ไม่พบไฟล์ {code}_*.csv ใน {api_dir}")
     df = pd.concat(frames, ignore_index=True)
     df = df.dropna(subset=["Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG"])
     df = df.drop_duplicates(["Date", "HomeTeam", "AwayTeam"], keep="last")
@@ -92,95 +94,50 @@ def fbref_missing_seasons(results, fbref):
     need = {int(s) - 1 for s in np.unique(season_of(pd.to_datetime(results["Date"])))}
     return sorted(need - have)
 
-# ---------------------------------------------------------------- Elo (🌟 อัปเกรด Attack/Defense Elo & Crisis Detector)
-def compute_elo(df, long_df=None):
-    """คืนค่า AttackElo และ DefenseElo แยกกัน และมีระบบตรวจจับทีมใหญ่วิกฤต (Crisis Detector)"""
+# ---------------------------------------------------------------- Elo (Single Elo มาตรฐาน)
+def compute_elo(df):
     d = df.sort_values("Date", kind="stable").reset_index(drop=True)
-    # เตรียม Dictionary แยกสาย
-    attack_ratings = {}
-    defense_ratings = {}
+    ratings = {}
     last_played = None
-    
-    # ดึงค่า PPM5 มาจาก long_df (ถ้ามี) เพื่อใช้เช็คฟอร์มวิกฤต (Crisis)
-    ppm_history = {}
-    if long_df is not None:
-        for r in long_df.itertuples(index=False):
-            if r.PPM5 is not np.nan:
-                ppm_history[f"{r.Team}_{r.Date.date()}"] = r.PPM5
-
     t0 = d["Date"].min()
     start_pool_until = t0 + pd.Timedelta(days=SEASON_GAP_DAYS)
     
-    h_atk, a_atk = np.empty(len(d)), np.empty(len(d))
-    h_def, a_def = np.empty(len(d)), np.empty(len(d))
+    h_elo, a_elo = np.empty(len(d)), np.empty(len(d))
 
-    def get_rtg(team, when, r_dict):
-        if team not in r_dict:
-            r_dict[team] = ELO_START if when <= start_pool_until else ELO_NEWCOMER
-        return r_dict[team]
-        
-    def get_k_factor(team, date, current_elo):
-        """เช็คว่าเป็นทีม Tier 1 หรือไม่ และกำลังฟอร์มตก (PPM5 <= 1.0) หรือเปล่า"""
-        ppm = ppm_history.get(f"{team}_{date.date()}", 1.5)
-        # ตีความว่าเป็น Tier 1 ถ้าค่าเฉลี่ย Elo (รุก+รับ) สูงกว่า 1700
-        is_tier_1 = current_elo > 1700 
-        
-        if is_tier_1:
-            if ppm <= CRISIS_PPM5_THRESHOLD:
-                return ELO_K_TIER1_CRISIS # วิกฤต! คะแนนไหลรูด
-            else:
-                return ELO_K_TIER1_NORMAL # ปกติล้มยาก
-        return ELO_K_NORMAL
+    def get_rtg(team, when):
+        if team not in ratings:
+            ratings[team] = ELO_START if when <= start_pool_until else ELO_NEWCOMER
+        return ratings[team]
 
     for i, r in enumerate(d.itertuples(index=False)):
         played = pd.notna(r.FTHG) and pd.notna(r.FTAG)
         if played and last_played is not None and (r.Date - last_played).days > SEASON_GAP_DAYS:
-            for t in attack_ratings:                                
-                attack_ratings[t] = (1 - ELO_SEASON_REGRESS) * attack_ratings[t] + ELO_SEASON_REGRESS * ELO_START
-                defense_ratings[t] = (1 - ELO_SEASON_REGRESS) * defense_ratings[t] + ELO_SEASON_REGRESS * ELO_START
+            for t in ratings:                                
+                ratings[t] = (1 - ELO_SEASON_REGRESS) * ratings[t] + ELO_SEASON_REGRESS * ELO_START
                 
-        # ดึงเรตติ้งปัจจุบัน
-        rh_atk, ra_atk = get_rtg(r.HomeTeam, r.Date, attack_ratings), get_rtg(r.AwayTeam, r.Date, attack_ratings)
-        rh_def, ra_def = get_rtg(r.HomeTeam, r.Date, defense_ratings), get_rtg(r.AwayTeam, r.Date, defense_ratings)
-        
-        h_atk[i], a_atk[i] = rh_atk, ra_atk
-        h_def[i], a_def[i] = rh_def, ra_def
+        rh, ra = get_rtg(r.HomeTeam, r.Date), get_rtg(r.AwayTeam, r.Date)
+        h_elo[i], a_elo[i] = rh, ra
         
         if not played:
             continue
             
         last_played = r.Date
         
-        # คำนวณ K-Factor แยกทีมตามวิกฤตฟอร์ม
-        k_home = get_k_factor(r.HomeTeam, r.Date, (rh_atk + rh_def)/2)
-        k_away = get_k_factor(r.AwayTeam, r.Date, (ra_atk + ra_def)/2)
+        exp_h = 1 / (1 + 10 ** (-(rh + ELO_HOME_ADV - ra) / 400))
+        score_h = 1.0 if r.FTHG > r.FTAG else (0.5 if r.FTHG == r.FTAG else 0.0)
         
-        # 🌟 จำลองการต่อสู้ 2 คู่: [บุกเหย้า vs รับเยือน] และ [รับเหย้า vs บุกเยือน]
-        # 1. เหย้าบุก (Home Attack vs Away Defense)
-        exp_h_atk = 1 / (1 + 10 ** (-(rh_atk + ELO_HOME_ADV - ra_def) / 400))
-        score_h_atk = 1.0 if r.FTHG >= 1 else 0.0 # ยิงได้ = ชนะการดวล
-        mult_h = 1.0 if r.FTHG <= 1 else (11 + r.FTHG) / 8
-        delta_atk = k_home * mult_h * (score_h_atk - exp_h_atk)
-        attack_ratings[r.HomeTeam] += delta_atk
-        defense_ratings[r.AwayTeam] -= delta_atk
+        margin = abs(r.FTHG - r.FTAG)
+        mult = 1.0 if margin <= 1 else (11 + margin) / 8
         
-        # 2. เยือนบุก (Away Attack vs Home Defense)
-        exp_a_atk = 1 / (1 + 10 ** (-(ra_atk - rh_def - ELO_HOME_ADV) / 400))
-        score_a_atk = 1.0 if r.FTAG >= 1 else 0.0 # เยือนยิงได้ = ชนะการดวล
-        mult_a = 1.0 if r.FTAG <= 1 else (11 + r.FTAG) / 8
-        delta_def = k_away * mult_a * (score_a_atk - exp_a_atk)
-        attack_ratings[r.AwayTeam] += delta_def
-        defense_ratings[r.HomeTeam] -= delta_def
+        delta = ELO_K * mult * (score_h - exp_h)
+        ratings[r.HomeTeam] += delta
+        ratings[r.AwayTeam] -= delta
         
-    d["Home_AttackElo"], d["Away_AttackElo"] = h_atk, a_atk
-    d["Home_DefenseElo"], d["Away_DefenseElo"] = h_def, a_def
-    
-    # สร้าง EloDiff จากค่าเฉลี่ยเพื่อเก็บไว้ใช้ทำ Contextual Scaling
-    d["HomeElo"] = (h_atk + h_def) / 2
-    d["AwayElo"] = (a_atk + a_def) / 2
+    d["HomeElo"], d["AwayElo"] = h_elo, a_elo
+    d["EloDiff"] = d["HomeElo"] - d["AwayElo"]
     return d
 
-# ---------------------------------------------------------------- rolling / rest (🌟 อัปเกรด HomeGF / AwayGA)
+# ---------------------------------------------------------------- rolling / rest 
 def _team_long(d):
     home = d[["match_id", "Date", "HomeTeam", "FTHG", "FTAG"]].set_axis(["match_id", "Date", "Team", "GF", "GA"], axis=1)
     home["side"] = "Home"
@@ -202,7 +159,6 @@ def _add_rolling(long):
 
     long["GF5"], long["GA5"], long["PPM5"] = roll("GF"), roll("GA"), roll("PTS")
     
-    # 🌟 ฟีเจอร์ใหม่: สิงห์สนามศุภฯ (แยกฟอร์มในบ้าน และ นอกบ้าน)
     home_games = long[long["side"] == "Home"].copy()
     home_games["HomeGF_Home"] = home_games.groupby("Team", sort=False)["GF"].transform(lambda s: s.shift(1).rolling(ROLL_N, min_periods=ROLL_MIN).mean())
     
@@ -221,6 +177,7 @@ def _clean_form(d):
     pts = pd.Series(np.where(played, np.where(d["FTHG"] == d["FTAG"], 2.0, 3.0), 0.0), index=d.index).cumsum().shift(1)
     lg_goals = (goals / (2 * cnt)).replace([np.inf, -np.inf], np.nan).fillna(LEAGUE_AVG_GOALS)
     lg_pts = (pts / (2 * cnt)).replace([np.inf, -np.inf], np.nan).fillna(LEAGUE_AVG_PTS)
+    
     for side in ("Home", "Away"):
         d[f"{side}RestDays"] = d[f"{side}RestDays"].fillna(REST_CAP)
         d[f"{side}_GF5"] = d[f"{side}_GF5"].fillna(lg_goals)
@@ -240,20 +197,15 @@ def build_master(results, fbref=None, fixtures=None):
         d = pd.concat([d, fx], ignore_index=True)
     d["Date"] = pd.to_datetime(d["Date"])
 
-    # เพื่อให้ compute_elo รู้ฟอร์ม PPM5 ของแต่ละทีม ต้องทำ rolling ขั้นต้นก่อน
     d["match_id"] = np.arange(len(d))
-    long_init = _add_rolling(_team_long(d))
     
-    d = compute_elo(d, long_init)
-    d["EloDiff"] = d["HomeElo"] - d["AwayElo"]
+    d = compute_elo(d)
 
     long = _add_rolling(_team_long(d))
     keep = ["RestDays", "GF5", "GA5", "PPM5", "HomeGF_Home", "AwayGA_Away"]
     for side in ("Home", "Away"):
         part = long.loc[long["side"] == side, ["match_id"] + keep].set_index("match_id")
-        # เปลี่ยนชื่อคอลัมน์ไม่ให้ซ้ำตอน merge
         part.columns = [f"{side}RestDays" if c == "RestDays" else (c if c in ["HomeGF_Home", "AwayGA_Away"] else f"{side}_{c}") for c in keep]
-        # เอา HomeGF_Home เฉพาะฝั่งเจ้าบ้าน และ AwayGA_Away เฉพาะฝั่งเยือน
         if side == "Home":
             part = part.drop(columns=["AwayGA_Away"], errors="ignore")
         else:
@@ -284,13 +236,6 @@ def build_master(results, fbref=None, fixtures=None):
             for c in stats:
                 d[f"{side}_Prev{c}"] = d[f"{side}_Prev{c}"].fillna(d["_season"].map(lg_base[c]))
         d = d.drop(columns=["_season", "_hasHome", "_hasAway"])
-        
-        # 🌟 Contextual Scaling: ปรับลดการครองบอลตามช่องว่าง Elo
-        # (ห่างกัน 100 Elo เปลี่ยนแปลง 2.5% โดยลิมิตเพดานไว้ที่ 25% - 75%)
-        if "Home_PrevPoss" in d.columns and "Away_PrevPoss" in d.columns:
-            elo_impact = (d["EloDiff"] / 100) * 2.5 
-            d["Home_ContextPoss"] = (d["Home_PrevPoss"] + elo_impact).clip(lower=25.0, upper=75.0)
-            d["Away_ContextPoss"] = (d["Away_PrevPoss"] - elo_impact).clip(lower=25.0, upper=75.0)
 
     cols = [c for c in FBREF_FEATURES if c in d]
     d.attrs["fbref_coverage"] = float(d[cols].notna().all(axis=1).mean()) if cols else 0.0
@@ -300,8 +245,7 @@ def feature_sets(master):
     fb = [c for c in FBREF_FEATURES if c in master and master[c].notna().mean() > 0.2]
     if not fb:
         return {"Elo + วันพัก + ฟอร์ม (ไม่มี FBref)": list(BASE_FEATURES)}
-    flags = [c for c in FB_FLAGS if c in master]
-    return {"Elo + วันพัก + ฟอร์ม + สถิติ FBref (อัปเกรดแล้ว)": BASE_FEATURES + fb + flags}
+    return {"Elo + วันพัก + ฟอร์ม + สถิติ FBref": BASE_FEATURES + fb + FB_FLAGS}
 
 def build_league_master(league_name, fixtures=None, api_dir=API_DIR, fbref_dir=FBREF_DIR):
     code = LEAGUES[league_name]["csv_code"]
@@ -313,17 +257,13 @@ def build_league_master(league_name, fixtures=None, api_dir=API_DIR, fbref_dir=F
     if where_warn:
         warnings.append(where_warn)
     if not files:
-        warnings.append(f"ไม่พบไฟล์ FBref ({code}_season_*.csv) ใน {Path(fbref_dir)} จึงใช้เฉพาะ Elo/วันพัก/ฟอร์ม "
-                        "(รัน python fetch_fbref_data.py)")
+        warnings.append(f"ไม่พบไฟล์ FBref ({code}_season_*.csv) ใน {Path(fbref_dir)}")
     if unmatched:
-        warnings.append(f"จับคู่ชื่อ FBref กับผลแข่งไม่ได้: {', '.join(unmatched)} "
-                        "(เพิ่มชื่อใน FBREF_ALIASES ของไฟล์ team_names.py)")
+        warnings.append(f"จับคู่ชื่อ FBref กับผลแข่งไม่ได้: {', '.join(unmatched)}")
     if fb is not None:
         miss = fbref_missing_seasons(results, fb)
         if miss:
-            warnings.append("ยังไม่มีไฟล์ FBref ของฤดูกาล " + ", ".join(map(str, miss)) +
-                            f" ทำให้นัดในฤดูกาล {', '.join(str(m + 1) for m in miss)} ไม่มีค่าตั้งต้นจากปีก่อน "
-                            "(รัน python fetch_fbref_data.py)")
+            warnings.append("ยังไม่มีไฟล์ FBref ของฤดูกาล " + ", ".join(map(str, miss)))
     return build_master(results, fb, fixtures), warnings
 
 def prepare_fixtures(fixtures, known_teams):
@@ -337,3 +277,33 @@ def prepare_fixtures(fixtures, known_teams):
 def matchweek_start(kickoff_utc):
     t = pd.to_datetime(kickoff_utc) + pd.Timedelta(hours=7 - 6)
     return t.dt.normalize() - pd.to_timedelta(t.dt.dayofweek, unit="D")
+
+# ---------------------------------------------------------------- Export Clean Data 🌟
+def export_clean_data(league_name):
+    print(f"\nกำลังประมวลผลข้อมูลของลีก: {league_name}...")
+    
+    master_df, warnings = build_league_master(league_name)
+    if warnings:
+        for w in warnings:
+            print(f"  ⚠️ {w}")
+            
+    clean_dir = DATA_DIR / "clean_data"
+    clean_dir.mkdir(parents=True, exist_ok=True)
+    
+    master_df["Season_Year"] = season_of(master_df["Date"])
+    
+    for year, group in master_df.groupby("Season_Year"):
+        code = LEAGUES[league_name]['csv_code']
+        file_name = f"{code}_{year}_clean.csv"
+        file_path = clean_dir / file_name
+        
+        save_df = group.drop(columns=["Season_Year"])
+        save_df.to_csv(file_path, index=False, encoding='utf-8-sig')
+        
+        print(f"  ✅ บันทึก {file_name} สำเร็จ (จำนวน {len(save_df)} นัด)")
+
+if __name__ == "__main__":
+    print("--- 🚀 เริ่มกระบวนการสร้างและส่งออก Clean Data ---")
+    for league in LEAGUES.keys():
+        export_clean_data(league)
+    print("\n--- ✨ เสร็จสิ้นกระบวนการทั้งหมด ข้อมูลอยู่ในโฟลเดอร์ Data/clean_data ---")

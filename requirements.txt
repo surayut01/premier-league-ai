@@ -5,3 +5,5 @@ scipy
 scikit-learn
 requests
 soccerdata
+plotly
+optuna

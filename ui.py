@@ -22,7 +22,7 @@ _ICON_PATHS = {
     "pause": '<rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/>',
     "chart": '<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
     "trophy": '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
-    "cpu": '<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>',
+    "cpu": '<rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/>',
     "zap": '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
     "ball": '<circle cx="12" cy="12" r="10"/><path d="m12 8 3.8 2.8-1.45 4.45h-4.7L8.2 10.8z"/><path d="M12 2v6"/><path d="m21.5 9.5-5.7 1.3"/><path d="m18 20-3.65-4.75"/><path d="M6 20l3.65-4.75"/><path d="m2.5 9.5 5.7 1.3"/>',
     "inbox": '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
@@ -37,10 +37,100 @@ def icon(name, size=18, cls="fb-ic"):
 
 # ---------------------------------------------------------------- CSS
 _CSS = """
+/* 🌟 เพิ่มแอนิเมชันลูกฟุตบอลหมุน */
+@keyframes fb-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.fb-spin-ball {
+    display: inline-block;
+    animation: fb-spin 3s linear infinite;
+    font-size: 2.2rem;
+}
+.fb-loader-box {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--mut);
+    font-weight: 500;
+}
 @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap');
 html,body,.stApp,.stApp p,.stApp label,.stApp button,.stApp input,.stApp textarea,.stApp h1,.stApp h2,.stApp h3,.stApp h4,.stApp td,.stApp th,
 [data-testid="stMetricValue"],[data-testid="stMetricLabel"],[data-testid="stCaptionContainer"]{font-family:var(--font)}
 .stApp{background:radial-gradient(900px 480px at 92% -10%,var(--glow1),transparent 62%),radial-gradient(700px 420px at -8% 0%,var(--glow2),transparent 58%),var(--bg);color:var(--tx)}
+
+
+/* 🌟 4. กิมมิก: แอนิเมชันหลอดเปอร์เซ็นต์วิ่งตอนโหลด (Animated Probability Bars) */
+.fb-pbar i {
+    display: block;
+    height: 100%;
+    animation: bar-grow 1.2s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+    transform-origin: left;
+}
+@keyframes bar-grow {
+    0% { transform: scaleX(0); opacity: 0; }
+    100% { transform: scaleX(1); opacity: 1; }
+}
+
+/* 🌟 5. กิมมิก: ป้ายเตือน Smart Match Tags (สูสี / มั่นใจมาก) */
+.fb-tag-tight {
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+    color: #fff;
+    padding: 0.15rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3);
+    letter-spacing: 0.2px;
+    animation: pulse-tight 2s infinite;
+}
+@keyframes pulse-tight {
+    0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+    70% { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+.fb-tag-confident {
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    background: linear-gradient(90deg, #10b981, #059669);
+    color: #fff;
+    padding: 0.15rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+    letter-spacing: 0.2px;
+}
+
+/* 🌟 3. กิมมิก: ลายน้ำลูกฟุตบอลยักษ์หมุนช้าๆ ที่พื้นหลัง */
+.stApp::after {
+    content: "⚽";
+    position: fixed;
+    font-size: max(70vw, 400px); /* เพิ่มขนาดให้ใหญ่ขึ้นอีก */ /* ใหญ่ขึ้นให้เห็นชัดเจน */
+    bottom: -30vh;
+    right: -22vw;
+    opacity: 0.15; /* ⚠️ ปรับให้เข้มแบบเห็นชัดทะลุจอ (สว่างมาก) */
+    z-index: 0;
+    pointer-events: none; /* ทะลุได้ ไม่บังปุ่มกด */
+    filter: grayscale(100%) contrast(200%) brightness(120%); /* เพิ่มความสว่างและคอนทราสต์จัดๆ */
+    animation: bg-ball-float 40s ease-in-out infinite;
+}
+@media (max-width: 768px) {      /* 📱 ปรับเฉพาะสำหรับมือถือและแท็บเล็ต */
+    .stApp::after {
+        font-size: 110vw;        /* ใหญ่สะใจบนมือถือ */
+        bottom: -5vh;            /* ให้อยู่กลางจอมากขึ้น */
+        right: -25vw;
+        opacity: 0.20;           /* เข้มขึ้นนิดหน่อยบนมือถือ */
+    }
+}
+@keyframes bg-ball-float {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50% { transform: translateY(-80px) rotate(20deg); }
+}
+.block-container {
+    position: relative;
+    z-index: 1; /* ดันเนื้อหาหลักให้อยู่เหนือลายน้ำ */
+}
+
 [data-testid="stHeader"]{background:transparent}
 .block-container{padding:1.1rem 1.2rem 6.5rem;max-width:1160px}
 .fb-ic{flex:none;vertical-align:middle}
@@ -115,6 +205,38 @@ background:var(--hero-bg);color:var(--hero-tx);border:1px solid var(--hero-line)
 .fb-panel .big b{color:var(--hero-pop)}
 .fb-panel .xg{display:flex;justify-content:space-between;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--hero-line);font-size:.8rem;color:var(--hero-mut)}
 .fb-panel .xg b{color:var(--hero-tx);font-weight:600}
+
+/* 🔥 บิ๊กแมตช์ไฮไลต์ (Big Match Glow) */
+.fb-mc.big-match {
+    border: 1px solid color-mix(in srgb, var(--warn) 50%, transparent);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--warn) 15%, transparent);
+    position: relative;
+    overflow: hidden;
+}
+.fb-mc.big-match::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #ff8a00, #e52e71, #ff8a00);
+    background-size: 200% 100%;
+    animation: gradientMove 3s linear infinite;
+}
+@keyframes gradientMove {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+}
+.fb-bm-tag {
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    color: #fff;
+    padding: 0.15rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(229, 46, 113, 0.3);
+    letter-spacing: 0.2px;
+}
+
 /* การ์ดแมตช์ */
 .fb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.9rem}
 .fb-mc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:1rem;box-shadow:var(--shadow)}
@@ -142,11 +264,17 @@ background:var(--hero-bg);color:var(--hero-tx);border:1px solid var(--hero-line)
 .fb-ab-h small{color:var(--mut);font-size:.74rem;margin-left:.4rem}
 .fb-ab-h b{font-weight:700}
 .fb-ab-t{height:6px;border-radius:99px;background:var(--track);overflow:hidden}
-.fb-ab-t i{display:block;height:100%;border-radius:99px}
+.fb-ab-t i{
+    display:block;
+    height:100%;
+    border-radius:99px;
+    animation: bar-grow 1.2s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; /* 👈 เพิ่มบรรทัดนี้ */
+    transform-origin: left; /* 👈 และเพิ่มบรรทัดนี้เพื่อให้หลอดวิ่งจากซ้ายไปขวา */
+}
 .c-lime{color:var(--good)}.c-amber{color:var(--warn)}.c-red{color:var(--bad)}
 i.c-lime{background:var(--good)}i.c-amber{background:var(--warn)}i.c-red{background:var(--bad)}
 /* แถวผลการแข่งขัน */
-.fb-rr{display:grid;grid-template-columns:84px 1fr auto;gap:.85rem;align-items:center;padding:.8rem 1rem;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:14px;margin-bottom:.55rem;box-shadow:var(--shadow)}
+.fb-rr{display:grid;grid-template-columns:95px 1fr 95px;gap:.85rem;align-items:center;padding:.8rem 1rem;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:14px;margin-bottom:.55rem;box-shadow:var(--shadow)}
 .fb-rr.ok{border-left-color:var(--good)}
 .fb-rr-d{font-size:.78rem;color:var(--mut);line-height:1.35;white-space:nowrap}
 .fb-rr-d b{display:block;color:var(--tx);font-weight:600;font-size:.84rem}
@@ -160,6 +288,13 @@ i.c-lime{background:var(--good)}i.c-amber{background:var(--warn)}i.c-red{backgro
 .fb-rr.ok .fb-st .res{color:var(--good)}.fb-rr .fb-st .res{color:var(--bad)}
 .fb-st .ex{color:var(--info)}
 .fb-st .res,.fb-st .ex{display:flex;align-items:center;gap:.3rem}
+
+/* ตารางคะแนนสไตล์พรีเมียม */
+.fb-mc table tr { border-bottom: 1px solid var(--line); transition: background 0.2s ease; }
+.fb-mc table tr:hover { background: var(--chip); }
+.fb-mc table td { padding: 0.7rem 0.5rem; vertical-align: middle; color: var(--tx); }
+.fb-mc table tr.top-4 td:first-child { border-left: 4px solid var(--good); }
+.fb-mc table tr.relegation td:first-child { border-left: 4px solid var(--bad); }
 @media(max-width:720px){
 .block-container{padding:.8rem .8rem 6.5rem}
 .fb-hero{grid-template-columns:1fr;padding:1.1rem}
@@ -181,14 +316,42 @@ background:var(--nav-bg);backdrop-filter:blur(14px);box-shadow:var(--nav-shadow)
 .stTabs [data-baseweb="tab"]{padding:.5rem .55rem;font-size:.74rem}
 .stTabs [data-baseweb="tab"] p{font-size:.74rem}
 }
+
+/* 🌟 1. กิมมิก: แสงไฟสนามเคลื่อนไหวพื้นหลัง (Animated Stadium Lights) */
+@keyframes stadiumLights {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.stApp {
+    background: radial-gradient(circle at 15% 50%, var(--glow1), transparent 60%),
+                radial-gradient(circle at 85% 30%, var(--glow2), transparent 60%),
+                var(--bg) !important;
+    background-size: 200% 200% !important;
+    animation: stadiumLights 15s ease infinite; /* เคลื่อนไหวช้าๆ ทุก 15 วินาที */
+    background-attachment: fixed !important;
+}
+
+/* 🌟 2. กิมมิก: การ์ดแข่งขันและสถิติเด้งสู้มือ (Interactive 3D Hover) */
+.fb-mc, .fb-tile, .fb-bars {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.fb-mc:hover, .fb-tile:hover, .fb-bars:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    border-color: var(--acc);
+}
+.fb-hero {
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.fb-hero:hover {
+    transform: scale(1.015);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
 """
 
 # ---------------------------------------------------------------- ธีม
-# เปลี่ยนธีมด้วย:  python set_theme.py cream   (เขียน theme.txt + .streamlit/config.toml ให้ตรงกัน)
-# ตัวแปรสี: bg/glow = พื้นหลัง • card/line/tx/mut = การ์ด เส้น ตัวหนังสือ • c_* = แถบเหย้า/เสมอ/เยือน
-# good/bad/warn/info = สีบอกความหมาย • hero_* / h_* = การ์ดเด่น • bdg_* = ตัวย่อทีมในวงกลม • cfg = ค่า [theme] ของ Streamlit
 THEMES = {
-    # ครีมอุ่น: พื้นกระดาษครีม + เขียวป่าหม่น + ส้มดินเผา การ์ดเด่นเป็นเขียวเข้มตัดกับพื้นครีม
     "cream": dict(
         bg="#f4efe4", glow1="rgba(217,160,110,.20)", glow2="rgba(160,190,160,.18)", card="#fffdf8", line="rgba(70,55,35,.11)",
         tx="#2a2823", mut="#7a7365", track="rgba(70,55,35,.09)", chip="rgba(70,55,35,.07)",
@@ -203,7 +366,6 @@ THEMES = {
         shadow_hero="0 14px 34px rgba(31,66,55,.28)", nav_shadow="0 8px 30px rgba(70,55,35,.2)",
         bdg_s="30%", bdg_l="86%", bdg_tx="#3b362b",
         cfg=dict(base="light", primaryColor="#2f5d50", backgroundColor="#f4efe4", secondaryBackgroundColor="#fffdf8", textColor="#2a2823")),
-    # สเลตมืดแบบมินิมอล: แบน ไม่มีแสงเรือง สีเดียวคือเขียวเซจ
     "slate": dict(
         bg="#101214", glow1="transparent", glow2="transparent", card="#171a1d", line="rgba(255,255,255,.07)",
         tx="#e7e9eb", mut="#8b9298", track="rgba(255,255,255,.07)", chip="rgba(255,255,255,.06)",
@@ -216,7 +378,6 @@ THEMES = {
         nav_bg="rgba(23,26,29,.94)", shadow="none", shadow_hero="none", nav_shadow="0 8px 30px rgba(0,0,0,.5)",
         bdg_s="10%", bdg_l="24%", bdg_tx="#cfd4d8",
         cfg=dict(base="dark", primaryColor="#8fb8a6", backgroundColor="#101214", secondaryBackgroundColor="#171a1d", textColor="#e7e9eb")),
-    # คอนทราสต์: พื้นเทาฟ้าอ่อน + กรมท่าเข้ม + ส้มปะการัง
     "contrast": dict(
         bg="#edf0f5", glow1="rgba(255,122,89,.10)", glow2="rgba(74,99,216,.08)", card="#ffffff", line="rgba(16,26,58,.09)",
         tx="#111a3a", mut="#6a7391", track="rgba(16,26,58,.08)", chip="rgba(16,26,58,.06)",
@@ -277,7 +438,6 @@ _SKIP = {"fc", "afc", "&", "and", "of", "the", "1.", "cf", "sc"}
 
 
 def when_text(ts_utc):
-    """(วันที่แบบไทยสั้น, เวลา) จากเวลา UTC แบบ naive -> เวลาไทย"""
     t = pd.Timestamp(ts_utc) + pd.Timedelta(hours=7)
     return f"{_TH_DAY[t.weekday()]} {t.day} {_TH_MON[t.month - 1]}", f"{t:%H:%M} น."
 
@@ -289,16 +449,215 @@ def _initials(name):
     return (words[0][:3] if len(words) == 1 else "".join(w[0] for w in words[:3])).upper()
 
 
+TEAM_CRESTS = {
+    "Arsenal": "https://en.wikipedia.org/wiki/Special:FilePath/Arsenal_FC.svg",
+    "Aston Villa": "https://en.wikipedia.org/wiki/Special:FilePath/Aston_Villa_FC_new_crest.svg",
+    "Bournemouth": "https://en.wikipedia.org/wiki/Special:FilePath/AFC_Bournemouth_(2013).svg",
+    "AFC Bournemouth": "https://en.wikipedia.org/wiki/Special:FilePath/AFC_Bournemouth_(2013).svg",
+    "Brentford": "https://en.wikipedia.org/wiki/Special:FilePath/Brentford_FC_crest.svg",
+    "Brighton": "https://en.wikipedia.org/wiki/Special:FilePath/Brighton_and_Hove_Albion_FC_crest.svg",
+    "Brighton & Hove Albion": "https://en.wikipedia.org/wiki/Special:FilePath/Brighton_and_Hove_Albion_FC_crest.svg",
+    "Chelsea": "https://en.wikipedia.org/wiki/Special:FilePath/Chelsea_FC.svg",
+    "Crystal Palace": "https://en.wikipedia.org/wiki/Special:FilePath/Crystal_Palace_FC_logo_(2022).svg",
+    "Everton": "https://en.wikipedia.org/wiki/Special:FilePath/Everton_FC_logo.svg",
+    "Fulham": "https://en.wikipedia.org/wiki/Special:FilePath/Fulham_FC_(shield).svg",
+    "Ipswich": "https://en.wikipedia.org/wiki/Special:FilePath/Ipswich_Town.svg",
+    "Ipswich Town": "https://en.wikipedia.org/wiki/Special:FilePath/Ipswich_Town.svg",
+    "Leicester": "https://en.wikipedia.org/wiki/Special:FilePath/Leicester_City_FC_crest.svg",
+    "Leicester City": "https://en.wikipedia.org/wiki/Special:FilePath/Leicester_City_FC_crest.svg",
+    "Liverpool": "https://en.wikipedia.org/wiki/Special:FilePath/Liverpool_FC.svg",
+    "Man City": "https://en.wikipedia.org/wiki/Special:FilePath/Manchester_City_FC_badge.svg",
+    "Manchester City": "https://en.wikipedia.org/wiki/Special:FilePath/Manchester_City_FC_badge.svg",
+    "Man United": "https://en.wikipedia.org/wiki/Special:FilePath/Manchester_United_FC_crest.svg",
+    "Manchester United": "https://en.wikipedia.org/wiki/Special:FilePath/Manchester_United_FC_crest.svg",
+    "Manchester Utd": "https://en.wikipedia.org/wiki/Special:FilePath/Manchester_United_FC_crest.svg",
+    "Newcastle": "https://en.wikipedia.org/wiki/Special:FilePath/Newcastle_United_Logo.svg",
+    "Newcastle United": "https://en.wikipedia.org/wiki/Special:FilePath/Newcastle_United_Logo.svg",
+    "Newcastle Utd": "https://en.wikipedia.org/wiki/Special:FilePath/Newcastle_United_Logo.svg",
+    "Nott'm Forest": "https://en.wikipedia.org/wiki/Special:FilePath/Nottingham_Forest_F.C._logo.svg",
+    "Nottingham Forest": "https://en.wikipedia.org/wiki/Special:FilePath/Nottingham_Forest_F.C._logo.svg",
+    "Nott'ham Forest": "https://en.wikipedia.org/wiki/Special:FilePath/Nottingham_Forest_F.C._logo.svg",
+    "Southampton": "https://en.wikipedia.org/wiki/Special:FilePath/Southampton_FC.svg",
+    "Tottenham": "https://en.wikipedia.org/wiki/Special:FilePath/Tottenham_Hotspur.svg",
+    "Tottenham Hotspur": "https://en.wikipedia.org/wiki/Special:FilePath/Tottenham_Hotspur.svg",
+    "West Ham": "https://en.wikipedia.org/wiki/Special:FilePath/West_Ham_United_FC_logo.svg",
+    "West Ham United": "https://en.wikipedia.org/wiki/Special:FilePath/West_Ham_United_FC_logo.svg",
+    "Wolves": "https://en.wikipedia.org/wiki/Special:FilePath/Wolverhampton_Wanderers_FC_logo.svg",
+    "Wolverhampton Wanderers": "https://en.wikipedia.org/wiki/Special:FilePath/Wolverhampton_Wanderers_FC_logo.svg",
+    "Leeds": "https://en.wikipedia.org/wiki/Special:FilePath/Leeds_United_F.C._logo.svg",
+    "Leeds United": "https://en.wikipedia.org/wiki/Special:FilePath/Leeds_United_F.C._logo.svg",
+    "Burnley": "https://en.wikipedia.org/wiki/Special:FilePath/Burnley_FC_Logo.svg",
+    "Sheffield United": "https://en.wikipedia.org/wiki/Special:FilePath/Sheffield_United_FC_logo.svg",
+    "Sheffield Utd": "https://en.wikipedia.org/wiki/Special:FilePath/Sheffield_United_FC_logo.svg",
+    "Luton": "https://en.wikipedia.org/wiki/Special:FilePath/Luton_Town_FC.svg",
+    "Luton Town": "https://en.wikipedia.org/wiki/Special:FilePath/Luton_Town_FC.svg",
+    "Hull City": "https://en.wikipedia.org/wiki/Special:FilePath/Hull_City_A.F.C._logo.svg",
+    "Coventry": "https://en.wikipedia.org/wiki/Special:FilePath/Coventry_City_FC_crest.svg",
+    "Coventry City": "https://en.wikipedia.org/wiki/Special:FilePath/Coventry_City_FC_crest.svg",
+    "Sunderland": "https://en.wikipedia.org/wiki/Special:FilePath/Logo_Sunderland.svg",
+    "West Brom": "https://en.wikipedia.org/wiki/Special:FilePath/West_Bromwich_Albion.svg",
+    "West Bromwich Albion": "https://en.wikipedia.org/wiki/Special:FilePath/West_Bromwich_Albion.svg",
+    "Real Madrid": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Madrid_CF.svg",
+    "Barcelona": "https://en.wikipedia.org/wiki/Special:FilePath/FC_Barcelona_(crest).svg",
+    "Ath Madrid": "https://en.wikipedia.org/wiki/Special:FilePath/Atletico_Madrid_Logo_2024.svg",
+    "Club Atlético de Madrid": "https://en.wikipedia.org/wiki/Special:FilePath/Atletico_Madrid_Logo_2024.svg",
+    "Atlético Madrid": "https://en.wikipedia.org/wiki/Special:FilePath/Atletico_Madrid_Logo_2024.svg",
+    "Atletico Madrid": "https://en.wikipedia.org/wiki/Special:FilePath/Atletico_Madrid_Logo_2024.svg",
+    "Atlético de Madrid": "https://en.wikipedia.org/wiki/Special:FilePath/Atletico_Madrid_Logo_2024.svg",
+    "Ath Bilbao": "https://en.wikipedia.org/wiki/Special:FilePath/Athletic_Club_(Minas_Gerais).svg",
+    "Athletic Club": "https://en.wikipedia.org/wiki/Special:FilePath/Athletic_Club_(Minas_Gerais).svg",
+    "Sociedad": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Sociedad_logo.svg",
+    "Real Sociedad de Fútbol": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Sociedad_logo.svg",
+    "Real Sociedad": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Sociedad_logo.svg",
+    "Villarreal": "https://en.wikipedia.org/wiki/Special:FilePath/Villarreal_CF_logo-en.svg",
+    "Betis": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Betis_2022_logo.svg",
+    "Real Betis Balompié": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Betis_2022_logo.svg",
+    "Real Betis": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Betis_2022_logo.svg",
+    "Sevilla": "https://en.wikipedia.org/wiki/Special:FilePath/Sevilla_FC_logo.svg",
+    "Valencia": "https://en.wikipedia.org/wiki/Special:FilePath/Valenciacf.svg",
+    "Osasuna": "https://en.wikipedia.org/wiki/Special:FilePath/CA_Osasuna_2024_crest.svg",
+    "CA Osasuna": "https://en.wikipedia.org/wiki/Special:FilePath/CA_Osasuna_2024_crest.svg",
+    "Celta": "https://en.wikipedia.org/wiki/Special:FilePath/RC_Celta_de_Vigo_logo.svg",
+    "RC Celta de Vigo": "https://en.wikipedia.org/wiki/Special:FilePath/RC_Celta_de_Vigo_logo.svg",
+    "Celta Vigo": "https://en.wikipedia.org/wiki/Special:FilePath/RC_Celta_de_Vigo_logo.svg",
+    "Getafe": "https://en.wikipedia.org/wiki/Special:FilePath/Getafe_logo.svg",
+    "Mallorca": "https://en.wikipedia.org/wiki/Special:FilePath/RCD_Mallorca_logo.svg",
+    "RCD Mallorca": "https://en.wikipedia.org/wiki/Special:FilePath/RCD_Mallorca_logo.svg",
+    "Las Palmas": "https://en.wikipedia.org/wiki/Special:FilePath/UD_Las_Palmas_logo.svg",
+    "UD Las Palmas": "https://en.wikipedia.org/wiki/Special:FilePath/UD_Las_Palmas_logo.svg",
+    "Vallecano": "https://en.wikipedia.org/wiki/Special:FilePath/Rayo_Vallecano_logo.svg",
+    "Rayo Vallecano": "https://en.wikipedia.org/wiki/Special:FilePath/Rayo_Vallecano_logo.svg",
+    "Rayo Vallecano de Madrid": "https://en.wikipedia.org/wiki/Special:FilePath/Rayo_Vallecano_logo.svg",
+    "Alaves": "https://en.wikipedia.org/wiki/Special:FilePath/Deportivo_Alaves_logo_(2020).svg",
+    "Deportivo Alavés": "https://en.wikipedia.org/wiki/Special:FilePath/Deportivo_Alaves_logo_(2020).svg",
+    "Alavés": "https://en.wikipedia.org/wiki/Special:FilePath/Deportivo_Alaves_logo_(2020).svg",
+    "Deportivo Alaves": "https://en.wikipedia.org/wiki/Special:FilePath/Deportivo_Alaves_logo_(2020).svg",
+    "Girona": "https://en.wikipedia.org/wiki/Special:FilePath/Girona_FC_Logo.svg",
+    "Leganes": "https://en.wikipedia.org/wiki/Special:FilePath/CD_Leganés_logo.svg",
+    "CD Leganés": "https://en.wikipedia.org/wiki/Special:FilePath/CD_Leganés_logo.svg",
+    "Leganés": "https://en.wikipedia.org/wiki/Special:FilePath/CD_Leganés_logo.svg",
+    "Valladolid": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Valladolid_logo_2022.svg",
+    "Real Valladolid CF": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Valladolid_logo_2022.svg",
+    "Real Valladolid": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Valladolid_logo_2022.svg",
+    "Espanol": "https://en.wikipedia.org/wiki/Special:FilePath/RCD_Espanyol_crest.svg",
+    "Espanyol": "https://en.wikipedia.org/wiki/Special:FilePath/RCD_Espanyol_crest.svg",
+    "RCD Espanyol de Barcelona": "https://en.wikipedia.org/wiki/Special:FilePath/RCD_Espanyol_crest.svg",
+    "Málaga": "https://en.wikipedia.org/wiki/Special:FilePath/Málaga_CF.svg",
+    "Málaga CF": "https://en.wikipedia.org/wiki/Special:FilePath/Málaga_CF.svg",
+    "Malaga": "https://en.wikipedia.org/wiki/Special:FilePath/Málaga_CF.svg",
+    "Levante": "https://en.wikipedia.org/wiki/Special:FilePath/Levante_Unión_Deportiva,_S.A.D._logo.svg",
+    "Levante UD": "https://en.wikipedia.org/wiki/Special:FilePath/Levante_Unión_Deportiva,_S.A.D._logo.svg",
+    "Racing Santander": "https://en.wikipedia.org/wiki/Special:FilePath/Racing_de_Santander_logo.svg",
+    "Real Racing Club de Santander": "https://en.wikipedia.org/wiki/Special:FilePath/Racing_de_Santander_logo.svg",
+    "Deportivo La Coruna": "https://en.wikipedia.org/wiki/Special:FilePath/RC_Deportivo_A_Coruña_logo_2026.svg",
+    "La Coruña": "https://en.wikipedia.org/wiki/Special:FilePath/RC_Deportivo_A_Coruña_logo_2026.svg",
+    "RC Deportivo La Coruña": "https://en.wikipedia.org/wiki/Special:FilePath/RC_Deportivo_A_Coruña_logo_2026.svg",
+    "Deportivo La Coruña": "https://en.wikipedia.org/wiki/Special:FilePath/RC_Deportivo_A_Coruña_logo_2026.svg",
+    "Elche": "https://en.wikipedia.org/wiki/Special:FilePath/Elche_CF_logo.svg",
+    "Elche CF": "https://en.wikipedia.org/wiki/Special:FilePath/Elche_CF_logo.svg",
+    "Cadiz": "https://en.wikipedia.org/wiki/Special:FilePath/Cádiz_CF_logo.svg",
+    "Cádiz CF": "https://en.wikipedia.org/wiki/Special:FilePath/Cádiz_CF_logo.svg",
+    "Cádiz": "https://en.wikipedia.org/wiki/Special:FilePath/Cádiz_CF_logo.svg",
+    "Almeria": "https://en.wikipedia.org/wiki/Special:FilePath/UD_Almería_logo.svg",
+    "UD Almería": "https://en.wikipedia.org/wiki/Special:FilePath/UD_Almería_logo.svg",
+    "Almería": "https://en.wikipedia.org/wiki/Special:FilePath/UD_Almería_logo.svg",
+    "Oviedo": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Oviedo_logo.svg",
+    "Real Oviedo": "https://en.wikipedia.org/wiki/Special:FilePath/Real_Oviedo_logo.svg",
+    "Bayern Munich": "https://en.wikipedia.org/wiki/Special:FilePath/FC_Bayern_München_logo_(2024).svg",
+    "FC Bayern München": "https://en.wikipedia.org/wiki/Special:FilePath/FC_Bayern_München_logo_(2024).svg",
+    "Bayern München": "https://en.wikipedia.org/wiki/Special:FilePath/FC_Bayern_München_logo_(2024).svg",
+    "Dortmund": "https://en.wikipedia.org/wiki/Special:FilePath/Borussia_Dortmund_logo.svg",
+    "Borussia Dortmund": "https://en.wikipedia.org/wiki/Special:FilePath/Borussia_Dortmund_logo.svg",
+    "Leverkusen": "https://en.wikipedia.org/wiki/Special:FilePath/Bayer_04_Leverkusen_logo.svg",
+    "Bayer 04 Leverkusen": "https://en.wikipedia.org/wiki/Special:FilePath/Bayer_04_Leverkusen_logo.svg",
+    "Bayer 04": "https://en.wikipedia.org/wiki/Special:FilePath/Bayer_04_Leverkusen_logo.svg",
+    "Bayer Leverkusen": "https://en.wikipedia.org/wiki/Special:FilePath/Bayer_04_Leverkusen_logo.svg",
+    "RB Leipzig": "https://en.wikipedia.org/wiki/Special:FilePath/RB_Leipzig_2014_logo.svg",
+    "Stuttgart": "https://en.wikipedia.org/wiki/Special:FilePath/VfB_Stuttgart_1893_Logo.svg",
+    "VfB Stuttgart": "https://en.wikipedia.org/wiki/Special:FilePath/VfB_Stuttgart_1893_Logo.svg",
+    "Ein Frankfurt": "https://en.wikipedia.org/wiki/Special:FilePath/Eintracht_Frankfurt_crest.svg",
+    "Eintracht Frankfurt": "https://en.wikipedia.org/wiki/Special:FilePath/Eintracht_Frankfurt_crest.svg",
+    "Eint Frankfurt": "https://en.wikipedia.org/wiki/Special:FilePath/Eintracht_Frankfurt_crest.svg",
+    "Frankfurt": "https://en.wikipedia.org/wiki/Special:FilePath/Eintracht_Frankfurt_crest.svg",
+    "Wolfsburg": "https://en.wikipedia.org/wiki/Special:FilePath/VfL_Wolfsburg_Logo.svg",
+    "VfL Wolfsburg": "https://en.wikipedia.org/wiki/Special:FilePath/VfL_Wolfsburg_Logo.svg",
+    "Werder Bremen": "https://en.wikipedia.org/wiki/Special:FilePath/SV-Werder-Bremen-Logo.svg",
+    "SV Werder Bremen": "https://en.wikipedia.org/wiki/Special:FilePath/SV-Werder-Bremen-Logo.svg",
+    "Freiburg": "https://en.wikipedia.org/wiki/Special:FilePath/SC_Freiburg_logo.svg",
+    "SC Freiburg": "https://en.wikipedia.org/wiki/Special:FilePath/SC_Freiburg_logo.svg",
+    "Augsburg": "https://en.wikipedia.org/wiki/Special:FilePath/FC_Augsburg_logo.svg",
+    "FC Augsburg": "https://en.wikipedia.org/wiki/Special:FilePath/FC_Augsburg_logo.svg",
+    "Mainz": "https://en.wikipedia.org/wiki/Special:FilePath/1._FSV_Mainz_05_logo.svg",
+    "1. FSV Mainz 05": "https://en.wikipedia.org/wiki/Special:FilePath/1._FSV_Mainz_05_logo.svg",
+    "Mainz 05": "https://en.wikipedia.org/wiki/Special:FilePath/1._FSV_Mainz_05_logo.svg",
+    "Hoffenheim": "https://en.wikipedia.org/wiki/Special:FilePath/Logo_TSG_Hoffenheim.svg",
+    "TSG 1899 Hoffenheim": "https://en.wikipedia.org/wiki/Special:FilePath/Logo_TSG_Hoffenheim.svg",
+    "TSG Hoffenheim": "https://en.wikipedia.org/wiki/Special:FilePath/Logo_TSG_Hoffenheim.svg",
+    "Heidenheim": "https://en.wikipedia.org/wiki/Special:FilePath/1._FC_Heidenheim_Logo.svg",
+    "1. FC Heidenheim 1846": "https://en.wikipedia.org/wiki/Special:FilePath/1._FC_Heidenheim_Logo.svg",
+    "1. Heidenheim 1846": "https://en.wikipedia.org/wiki/Special:FilePath/1._FC_Heidenheim_Logo.svg",
+    "1. Union Berlin": "https://en.wikipedia.org/wiki/Special:FilePath/1._FC_Union_Berlin_Logo.svg",
+    "Union Berlin": "https://en.wikipedia.org/wiki/Special:FilePath/1._FC_Union_Berlin_Logo.svg",
+    "Bochum": "https://en.wikipedia.org/wiki/Special:FilePath/VfL_Bochum_logo.svg",
+    "VfL Bochum 1848": "https://en.wikipedia.org/wiki/Special:FilePath/VfL_Bochum_logo.svg",
+    "St Pauli": "https://en.wikipedia.org/wiki/Special:FilePath/FC_St._Pauli_Logo.svg",
+    "FC St. Pauli 1910": "https://en.wikipedia.org/wiki/Special:FilePath/FC_St._Pauli_Logo.svg",
+    "St. Pauli": "https://en.wikipedia.org/wiki/Special:FilePath/FC_St._Pauli_Logo.svg",
+    "St. Pauli 1910": "https://en.wikipedia.org/wiki/Special:FilePath/FC_St._Pauli_Logo.svg",
+    "Kiel": "https://en.wikipedia.org/wiki/Special:FilePath/Holstein_Kiel_Logo.svg",
+    "Holstein Kiel": "https://en.wikipedia.org/wiki/Special:FilePath/Holstein_Kiel_Logo.svg",
+    "M'gladbach": "https://en.wikipedia.org/wiki/Special:FilePath/Borussia_Mönchengladbach_logo.svg",
+    "Borussia Mönchengladbach": "https://en.wikipedia.org/wiki/Special:FilePath/Borussia_Mönchengladbach_logo.svg",
+    "Gladbach": "https://en.wikipedia.org/wiki/Special:FilePath/Borussia_Mönchengladbach_logo.svg",
+    "M'Gladbach": "https://en.wikipedia.org/wiki/Special:FilePath/Borussia_Mönchengladbach_logo.svg",
+    "Hamburg": "https://en.wikipedia.org/wiki/Special:FilePath/Hamburger_SV_logo.svg",
+    "Hamburger SV": "https://en.wikipedia.org/wiki/Special:FilePath/Hamburger_SV_logo.svg",
+    "Hamburger": "https://en.wikipedia.org/wiki/Special:FilePath/Hamburger_SV_logo.svg",
+    "SC Paderborn": "https://en.wikipedia.org/wiki/Special:FilePath/SC_Paderborn_07_Logo_new.svg",
+    "SC Paderborn 07": "https://en.wikipedia.org/wiki/Special:FilePath/SC_Paderborn_07_Logo_new.svg",
+    "Paderborn 07": "https://en.wikipedia.org/wiki/Special:FilePath/SC_Paderborn_07_Logo_new.svg",
+    "FC Koln": "https://en.wikipedia.org/wiki/Special:FilePath/Wappen_1_FC_Koeln.svg",
+    "1. FC Köln": "https://en.wikipedia.org/wiki/Special:FilePath/Wappen_1_FC_Koeln.svg",
+    "1. Köln": "https://en.wikipedia.org/wiki/Special:FilePath/Wappen_1_FC_Koeln.svg",
+    "Köln": "https://en.wikipedia.org/wiki/Special:FilePath/Wappen_1_FC_Koeln.svg",
+    "07 Elversberg": "https://en.wikipedia.org/wiki/Special:FilePath/SV_Elversberg_logo.svg",
+    "SV Elversberg": "https://en.wikipedia.org/wiki/Special:FilePath/SV_Elversberg_logo.svg",
+    "Elversberg": "https://en.wikipedia.org/wiki/Special:FilePath/SV_Elversberg_logo.svg",
+    "Hertha": "https://en.wikipedia.org/wiki/Special:FilePath/Hertha_BSC_Logo.svg",
+    "Hertha BSC": "https://en.wikipedia.org/wiki/Special:FilePath/Hertha_BSC_Logo.svg",
+    "Darmstadt": "https://en.wikipedia.org/wiki/Special:FilePath/SV_Darmstadt_98_logo.svg",
+    "SV Darmstadt 98": "https://en.wikipedia.org/wiki/Special:FilePath/SV_Darmstadt_98_logo.svg",
+    "Schalke 04": "https://en.wikipedia.org/wiki/Special:FilePath/FC_Schalke_04_Logo.svg",
+    "FC Schalke 04": "https://en.wikipedia.org/wiki/Special:FilePath/FC_Schalke_04_Logo.svg",
+    "Düsseldorf": "https://en.wikipedia.org/wiki/Special:FilePath/Fortuna_Düsseldorf_logo.svg",
+    "Fortuna Düsseldorf": "https://en.wikipedia.org/wiki/Special:FilePath/Fortuna_Düsseldorf_logo.svg",
+    "Hannover": "https://en.wikipedia.org/wiki/Special:FilePath/Hannover_96_Logo.svg",
+    "Hannover 96": "https://en.wikipedia.org/wiki/Special:FilePath/Hannover_96_Logo.svg",
+    "Karlsruhe": "https://en.wikipedia.org/wiki/Special:FilePath/Karlsruher_SC_logo.svg",
+    "Karlsruher SC": "https://en.wikipedia.org/wiki/Special:FilePath/Karlsruher_SC_logo.svg",
+    "Nürnberg": "https://en.wikipedia.org/wiki/Special:FilePath/1._FC_Nürnberg_logo.svg",
+    "1. FC Nürnberg": "https://en.wikipedia.org/wiki/Special:FilePath/1._FC_Nürnberg_logo.svg",
+    "Nurnberg": "https://en.wikipedia.org/wiki/Special:FilePath/1._FC_Nürnberg_logo.svg",
+}
+
+BIG_TEAMS = {"Arsenal", "Chelsea", "Liverpool", "Man City", "Manchester City", "Man United", "Manchester United", "Tottenham", "Aston Villa", "Newcastle", "Real Madrid", "Barcelona", "Ath Madrid", "Club Atlético de Madrid", "Atletico Madrid", "Atlético Madrid", "Bayern Munich", "Bayern München", "FC Bayern München", "Dortmund", "Borussia Dortmund", "Leverkusen", "Bayer 04 Leverkusen", "RB Leipzig", "Juventus", "Inter", "AC Milan", "Paris SG", "PSG"}
+
 def badge(name, crest=None, size=""):
+    """แสดงตราสโมสร หรือโชว์ตัวหนังสือ (Fallback) ถ้าโหลดภาพไม่ขึ้น"""
     cls = f"fb-bdg {size}".strip()
-    if crest and str(crest).startswith("https://"):
-        return f'<span class="{cls} has"><img src="{_e(str(crest), quote=True)}" alt="" loading="lazy"></span>'
+    c = crest if (crest and str(crest).startswith("https://")) else TEAM_CRESTS.get(str(name))
     hue = int(hashlib.md5(str(name).encode("utf-8")).hexdigest()[:4], 16) % 360
-    return f'<span class="{cls}" style="--h:{hue}">{_e(_initials(name))}</span>'
+    initials = _e(_initials(name))
+    
+    if c:
+        # ระบบกันภาพแตก: ถ้าโหลดรูปไม่ขึ้น ให้ซ่อนรูป แล้วแสดงตัวย่อแทน พร้อมปรับพื้นหลัง
+        err_handler = f"this.style.display='none'; this.nextElementSibling.style.display='block'; this.parentElement.classList.remove('has');"
+        return f"""<span class="{cls} has" style="--h:{hue}"><img src="{_e(str(c), quote=True)}" alt="" loading="lazy" onerror="{err_handler}"><span style="display:none">{initials}</span></span>"""
+    
+    return f"""<span class="{cls}" style="--h:{hue}">{initials}</span>"""
 
 
 def crest_map(df):
-    """ชื่อทีม -> URL ตราสโมสร จากตารางโปรแกรม (ทุกทีมในลีกต้องมีนัดในโปรแกรมอยู่แล้ว)"""
     out = {}
     if df is None or len(df) == 0:
         return out
@@ -311,7 +670,6 @@ def crest_map(df):
 
 
 def _outcome(p):
-    """(ดัชนีผลที่ความน่าจะเป็นสูงสุด, ความน่าจะเป็นนั้น) p = (เหย้า, เสมอ, เยือน) หน่วย %"""
     i = max(range(3), key=lambda k: p[k])
     return i, p[i]
 
@@ -346,7 +704,6 @@ def _score_parts(score):
     return a, b
 
 
-# ---------------------------------------------------------------- ส่วนประกอบหลัก
 def app_bar(subtitle):
     return (f'<div class="fb-bar"><div class="fb-logo">{icon("ball", 24)}</div>'
             f'<div><div class="fb-ttl">AI Football Predictor</div><div class="fb-sub">{_e(subtitle)}</div></div></div>')
@@ -366,7 +723,6 @@ def empty(icon_name, text):
 
 
 def hero(m, tag="แมตช์ถัดไป"):
-    """m: dict(home, away, home_crest, away_crest, kickoff, status, p=(%,%,%), score, xg=(h,a))"""
     sh, sa = _score_parts(m["score"])
     v, pct = verdict(m["p"], m["home"], m["away"])
     tags = f'<span class="fb-tag hot">{icon("zap", 14)}{_e(tag)}</span>'
@@ -386,10 +742,31 @@ def match_card(m):
     sh, sa = _score_parts(m["score"])
     v, pct = verdict(m["p"], m["home"], m["away"])
     d, t = when_text(m["kickoff"])
-    top = f'<span class="fb-chip">{icon("calendar", 14)}{d}</span><span class="fb-chip">{icon("clock", 14)}{t}</span>'
-    top = f'<div style="display:flex;gap:.8rem">{top}</div>{_status_chip(m.get("status"))}'
+    
+    # วิเคราะห์ความมั่นใจของ AI (Smart Match Tags)
+    p_max = max(m["p"])
+    p_min = min(m["p"])
+    is_confident = p_max >= 60.0  # โอกาสชนะสูงกว่า 60%
+    is_tight = (p_max - p_min) <= 15.0  # เปอร์เซ็นต์สูงสุด-ต่ำสุด ห่างกันไม่เกิน 15% (สูสีมาก)
+    
+    smart_tag = ''
+    if is_confident:
+        smart_tag = f'<span class="fb-tag-confident">{icon("target", 12)} AI มั่นใจมาก</span>'
+    elif is_tight:
+        smart_tag = f'<span class="fb-tag-tight">{icon("alert", 12)} ระวังพลิกล็อก</span>'
+    
+    # ตรวจสอบว่าเป็นบิ๊กแมตช์หรือไม่
+    is_bm = m["home"] in BIG_TEAMS and m["away"] in BIG_TEAMS
+    bm_tag = f'<span class="fb-bm-tag">{icon("zap", 12)} บิ๊กแมตช์</span>' if is_bm else ''
+    bm_cls = ' big-match' if is_bm else ''
+    
+    # รวมป้ายเตือนต่างๆ
+    all_tags = f"{bm_tag} {smart_tag}".strip()
+    
+    top = f'{all_tags}<span class="fb-chip">{icon("calendar", 14)}{d}</span><span class="fb-chip">{icon("clock", 14)}{t}</span>'
+    top = f'<div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;">{top}</div>{_status_chip(m.get("status"))}'
     tm = lambda n, c, s: f'<div class="fb-tm">{badge(n, c)}<span class="nm">{_e(n)}</span><span class="sc">{s}</span></div>'
-    return (f'<div class="fb-mc"><div class="fb-mc-top">{top}</div>{tm(m["home"], m.get("home_crest"), sh)}{tm(m["away"], m.get("away_crest"), sa)}'
+    return (f'<div class="fb-mc{bm_cls}"><div class="fb-mc-top">{top}</div>{tm(m["home"], m.get("home_crest"), sh)}{tm(m["away"], m.get("away_crest"), sa)}'
             f'{prob_bar(m["p"])}'
             f'<div class="fb-mc-foot"><span>AI เชื่อ <b>{_e(v)}</b></span><span>xG <b>{m["xg"][0]:.1f}</b> - <b>{m["xg"][1]:.1f}</b></span></div></div>')
 
@@ -411,7 +788,6 @@ def bar_tone(pct):
 
 
 def bars(rows):
-    """rows: [(ชื่อ, เปอร์เซ็นต์, หมายเหตุ)] แถบสีตามค่า (เขียว >= 55, ส้ม >= 40, แดง ต่ำกว่านั้น)"""
     out = []
     for label, pct, sub in rows:
         tone = bar_tone(pct)
@@ -421,7 +797,6 @@ def bars(rows):
 
 
 def result_row(r):
-    """r: dict(kickoff, home, away, home_crest, away_crest, real, pred, p, right, exact, new_team)"""
     d, t = when_text(r["kickoff"])
     v, _ = verdict(r["p"], r["home"], r["away"])
     res = (f'<span class="res">{icon("check", 18)}<span>ทายถูก</span></span>' if r["right"]
@@ -434,3 +809,51 @@ def result_row(r):
             f'<span class="s">{_e(r["real"])}</span>{badge(r["away"], r.get("away_crest"), "sm")}<span class="t">{_e(r["away"])}</span></div>'
             f'<div class="fb-rr-ai">AI ทาย <b>{_e(r["pred"])}</b> · เชื่อ <b>{_e(v)}</b> ({p[0]:.0f} / {p[1]:.0f} / {p[2]:.0f}%)</div></div>'
             f'<div class="fb-st">{res}{ex}{warn}</div></div>')
+
+def league_table(df, crests={}):
+    rows_html = []
+    for idx, r in df.iterrows():
+        rank = r.get("อันดับ", idx + 1)
+        team = r["ทีม"]
+        crest = crests.get(team)
+        p = r["แข่ง"]
+        w = r["ชนะ"]
+        d = r["เสมอ"]
+        l = r["แพ้"]
+        gf = r["ได้"]
+        ga = r["เสีย"]
+        gd = r["ลูกได้เสีย"]
+        pts = r["แต้ม"]
+        
+        gd_str = f"+{gd}" if gd > 0 else str(gd)
+        gd_cls = "c-lime" if gd > 0 else ("c-red" if gd < 0 else "")
+        
+        highlight_class = "top-4" if rank <= 4 else ("relegation" if rank >= len(df) - 2 else "")
+        
+        rows_html.append(f'<tr class="{highlight_class}"><td style="text-align:center; font-weight:700; width: 45px;">{rank}</td><td style="display:flex; align-items:center; gap:0.6rem; font-weight:600;">{badge(team, crest, "sm")}<span>{_e(team)}</span></td><td style="text-align:center">{p}</td><td style="text-align:center">{w}</td><td style="text-align:center">{d}</td><td style="text-align:center">{l}</td><td style="text-align:center">{gf}</td><td style="text-align:center">{ga}</td><td style="text-align:center; font-weight:600;" class="{gd_cls}">{gd_str}</td><td style="text-align:center; font-weight:700; color:var(--acc); font-size:1.05rem;">{pts}</td></tr>')
+    
+    table_head = '<thead><tr style="border-bottom: 2px solid var(--line); color: var(--mut); font-size: 0.82rem; text-transform: uppercase;"><th style="text-align:center; padding: 0.75rem 0.5rem;">#</th><th style="padding: 0.75rem 0.5rem;">ทีมสโมสร</th><th style="text-align:center; padding: 0.75rem 0.5rem;">แข่ง</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ชนะ</th><th style="text-align:center; padding: 0.75rem 0.5rem;">เสมอ</th><th style="text-align:center; padding: 0.75rem 0.5rem;">แพ้</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ได้</th><th style="text-align:center; padding: 0.75rem 0.5rem;">เสีย</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ต่าง</th><th style="text-align:center; padding: 0.75rem 0.5rem; color: var(--tx);">แต้ม</th></tr></thead>'
+    
+    body = "".join(rows_html)
+    return f'<div class="fb-mc" style="padding: 0.5rem; overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">{table_head}<tbody>{body}</tbody></table></div>'
+
+def spinning_ball_loader(text="กำลังโหลดข้อมูลการแข่งขัน..."):
+    return f'<div class="fb-loader-box"><div class="fb-spin-ball">⚽</div><div>{_e(text)}</div></div>'
+
+def model_info_html():
+    return f'''<div class="fb-mc" style="margin-top: 1rem;">
+        <div style="font-weight: 600; font-size: 1rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+            {icon("cpu", 18)} <span>รายละเอียดโมเดลและแหล่งข้อมูลอ้างอิง (Model Specs & Data Sources)</span>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--mut); display: grid; gap: 0.5rem; line-height: 1.5;">
+            <div><b>ฟีเจอร์ที่ใช้ (17 ตัวชี้วัด):</b> คะแนน Elo, วันพักผ่อนนักเตะ, ฟอร์มย้อนหลัง และสถิติเชิงลึกจาก FBref</div>
+            <div><b>ชุดข้อมูลฝึกสอน (Training Data):</b> วิเคราะห์และเทรนจากแมตช์การแข่งขันจริง 1,190 นัด (11/08/2023 – 20/09/2026) ครอบคลุม 100%</div>
+            <div><b>อัลกอริทึม (Algorithm):</b> Random Forest (300 Estimators, Max Depth: 5, Min Samples Leaf: 15 ผ่านการจูนไฮเปอร์พารามิเตอร์)</div>
+            <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--line);"><b>🌐 แหล่งข้อมูลและเว็บไซต์ที่อ้างอิง:</b></div>
+            <div style="padding-left: 1rem; display: grid; gap: 0.25rem;">
+                <div>• <b>FBref (Football Reference)</b> (fbref.com) - สถิติการแข่งขันเชิงลึก</div>
+                <div>• <b>Wikipedia & Wikimedia Commons</b> - แหล่งอ้างอิงตราสโมสรและโลโก้ทีมอย่างเป็นทางการ</div>
+                <div>• <b>Football Data APIs</b> - โปรแกรมการแข่งขัน ตารางคะแนน และผลสกอร์ปัจจุบัน</div>
+            </div>
+        </div>
+    </div>'''

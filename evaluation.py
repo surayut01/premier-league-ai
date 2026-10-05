@@ -51,12 +51,15 @@ def walk_forward(master, features, params=None, n_eval=380, skip_last=0, step_we
                 skipped += 1
                 continue
             ph, pa = map(int, p["score"].split(" - "))
+            real_idx = outcome_index(r["FTHG"], r["FTAG"])
+            p_real = (p["p_home"], p["p_draw"], p["p_away"])[real_idx] / 100
             rows.append({
                 "Date": r["Date"], "HomeTeam": r["HomeTeam"], "AwayTeam": r["AwayTeam"],
                 "real_score": f"{int(r['FTHG'])} - {int(r['FTAG'])}", "pred_score": p["score"],
-                "real_idx": outcome_index(r["FTHG"], r["FTAG"]), "score_idx": outcome_index(ph, pa),
+                "real_idx": real_idx, "score_idx": outcome_index(ph, pa),
                 "p_home": p["p_home"] / 100, "p_draw": p["p_draw"] / 100, "p_away": p["p_away"] / 100,
                 "b_home": base[0], "b_draw": base[1], "b_away": base[2],
+                "ll": float(-np.log(np.clip(p_real, _EPS, 1))),   # log-loss รายนัด ใช้เทียบโมเดลแบบจับคู่
             })
     return {"results": pd.DataFrame(rows), "skipped": skipped}
 
@@ -72,7 +75,18 @@ def summarize(res):
     B = res[["b_home", "b_draw", "b_away"]].to_numpy()
     onehot = np.eye(3)[y]
     acc = float((P.argmax(axis=1) == y).mean())
+
+    # ความเอนเอียงของโอกาส "เสมอ": โมเดล Poisson อิสระมักทายเสมอต่ำไป
+    # draw_gap = p_draw เฉลี่ย − สัดส่วนเสมอจริง (ติดลบ = ทายต่ำไป) • draw_z = draw_gap / SE (|z| > 1.96 = ต่างอย่างมีนัยสำคัญ)
+    is_draw = (y == 1).astype(float)
+    d_err = P[:, 1] - is_draw
+    d_se = float(d_err.std(ddof=1) / np.sqrt(n)) if n > 1 else 0.0
+    d_gap = float(d_err.mean())
     return {
+        "draw_pred": float(P[:, 1].mean()),
+        "draw_real": float(is_draw.mean()),
+        "draw_gap": d_gap,
+        "draw_z": d_gap / d_se if d_se > 0 else 0.0,
         "n": n,
         "accuracy": acc,
         "accuracy_ci": float(1.96 * np.sqrt(acc * (1 - acc) / n)),
@@ -88,10 +102,31 @@ def summarize(res):
     }
 
 
+COL_DELTA = "Δ Log-loss (เทียบโมเดลแรก)"
+COL_SE = "± SE"
+COL_VERDICT = "สรุป"
+
+
+def _paired_diff(res, ref):
+    """ส่วนต่าง log-loss แบบจับคู่รายนัด (res − ref) พร้อมค่าคลาดเคลื่อนมาตรฐาน (SE)
+    ติดลบ = res ดีกว่า ref • ถ้า |ส่วนต่าง| ไม่เกิน 1.96×SE ถือว่าแยกจากโชคไม่ได้
+    จับคู่ด้วย (วันที่, ทีมเหย้า, ทีมเยือน) จึงเทียบได้แม้บางนัดถูกข้ามไม่เท่ากัน"""
+    keys = ["Date", "HomeTeam", "AwayTeam"]
+    m = res[keys + ["ll"]].merge(ref[keys + ["ll"]], on=keys, suffixes=("", "_ref"))
+    if len(m) < 2:
+        return {}
+    d = (m["ll"] - m["ll_ref"]).to_numpy()
+    mean = float(d.mean())
+    se = float(d.std(ddof=1) / np.sqrt(len(d)))
+    return {COL_DELTA: round(mean, 4), COL_SE: round(se, 4),
+            COL_VERDICT: "ต่างอย่างมีนัยสำคัญ" if abs(mean) > 1.96 * se else "แยกจากโชคไม่ได้"}
+
+
 def compare_models(master, n_eval, configs, skip_last=0, step_weeks=1):
     """เทียบหลายโมเดล/ชุดฟีเจอร์บนนัดชุดเดียวกัน
-    configs = {ชื่อ: (รายการฟีเจอร์, params)}  คืน DataFrame (บรรทัดแรกสุดคือ baseline สัดส่วนเฉลี่ยของลีก)"""
-    rows, base_row = [], None
+    configs = {ชื่อ: (รายการฟีเจอร์, params)}  คืน DataFrame (บรรทัดแรกสุดคือ baseline สัดส่วนเฉลี่ยของลีก)
+    คอลัมน์ Δ / ± SE / สรุป: เทียบแต่ละโมเดลกับโมเดลแรกใน configs แบบจับคู่รายนัด (โมเดลแรกเองเว้นว่างไว้)"""
+    rows, base_row, ref = [], None, None
     for name, (features, params) in configs.items():
         res = walk_forward(master, features, params, n_eval, skip_last, step_weeks)["results"]
         s = summarize(res)
@@ -100,8 +135,13 @@ def compare_models(master, n_eval, configs, skip_last=0, step_weeks=1):
         if base_row is None:
             base_row = {"โมเดล": "baseline: สัดส่วนเฉลี่ยของลีก", "จำนวนนัด": s["n"], "Accuracy %": np.nan,
                         "Log-loss": round(s["baseline_logloss"], 4), "Brier": round(s["baseline_brier"], 4)}
-        rows.append({"โมเดล": name, "จำนวนนัด": s["n"], "Accuracy %": round(s["accuracy"] * 100, 1),
-                     "Log-loss": round(s["logloss"], 4), "Brier": round(s["brier"], 4)})
+        row = {"โมเดล": name, "จำนวนนัด": s["n"], "Accuracy %": round(s["accuracy"] * 100, 1),
+               "Log-loss": round(s["logloss"], 4), "Brier": round(s["brier"], 4)}
+        if ref is None:
+            ref = res
+        else:
+            row.update(_paired_diff(res, ref))
+        rows.append(row)
     if not rows:
         return pd.DataFrame()
     return pd.DataFrame([base_row] + rows)
@@ -175,7 +215,7 @@ def permutation_importance(master, features, params=None, n_val=380, skip_last=3
 
     เทรนด้วยนัดเก่า แล้วสลับค่าของแต่ละกลุ่มฟีเจอร์ในช่วงตรวจ n_val นัด (เว้น skip_last นัดล่าสุดไว้เป็นช่วงทดสอบจริง
     ที่ไม่ใช้ตัดสินใจ) ค่า > 0 = ฟีเจอร์ช่วยลด log-loss, ค่า <= 0 = ไม่ช่วย/เป็นสัญญาณรบกวน
-    คืน DataFrame: กลุ่ม, delta (เฉลี่ย), std, ฟีเจอร์ในกลุ่ม"""
+    คืน (DataFrame, base): DataFrame มีคอลัมน์ กลุ่ม, delta (เฉลี่ย), std, ฟีเจอร์ในกลุ่ม • base = log-loss ก่อนสลับค่า"""
     d = master[master["FTHG"].notna()].sort_values("Date", kind="stable").reset_index(drop=True)
     end = len(d) - int(skip_last)
     val = d.iloc[end - n_val:end]
