@@ -1,0 +1,381 @@
+Date,HomeTeam,AwayTeam,FTHG,FTAG
+2025-08-15 17:00:00,Girona,Rayo Vallecano de Madrid,1,3
+2025-08-15 19:30:00,Villarreal,Real Oviedo,2,0
+2025-08-16 17:30:00,RCD Mallorca,Barcelona,0,3
+2025-08-16 19:30:00,Deportivo Alavés,Levante UD,2,1
+2025-08-16 19:30:00,Valencia,Real Sociedad de Fútbol,1,1
+2025-08-17 15:00:00,RC Celta de Vigo,Getafe,0,2
+2025-08-17 17:30:00,Athletic Club,Sevilla,3,2
+2025-08-17 19:30:00,RCD Espanyol de Barcelona,Club Atlético de Madrid,2,1
+2025-08-18 19:00:00,Elche,Real Betis Balompié,1,1
+2025-08-19 19:00:00,Real Madrid,CA Osasuna,1,0
+2025-08-22 19:30:00,Real Betis Balompié,Deportivo Alavés,1,0
+2025-08-23 15:00:00,RCD Mallorca,RC Celta de Vigo,1,1
+2025-08-23 17:30:00,Club Atlético de Madrid,Elche,1,1
+2025-08-23 19:30:00,Levante UD,Barcelona,2,3
+2025-08-24 15:00:00,CA Osasuna,Valencia,1,0
+2025-08-24 17:30:00,Real Sociedad de Fútbol,RCD Espanyol de Barcelona,2,2
+2025-08-24 17:30:00,Villarreal,Girona,5,0
+2025-08-24 19:30:00,Real Oviedo,Real Madrid,0,3
+2025-08-25 17:30:00,Athletic Club,Rayo Vallecano de Madrid,1,0
+2025-08-25 19:30:00,Sevilla,Getafe,1,2
+2025-08-27 19:00:00,RC Celta de Vigo,Real Betis Balompié,1,1
+2025-08-29 17:30:00,Elche,Levante UD,2,0
+2025-08-29 19:30:00,Valencia,Getafe,3,0
+2025-08-30 15:00:00,Deportivo Alavés,Club Atlético de Madrid,1,1
+2025-08-30 17:00:00,Real Oviedo,Real Sociedad de Fútbol,1,0
+2025-08-30 17:30:00,Girona,Sevilla,0,2
+2025-08-30 19:30:00,Real Madrid,RCD Mallorca,2,1
+2025-08-31 15:00:00,RC Celta de Vigo,Villarreal,1,1
+2025-08-31 17:00:00,Real Betis Balompié,Athletic Club,1,2
+2025-08-31 17:30:00,RCD Espanyol de Barcelona,CA Osasuna,1,0
+2025-08-31 19:30:00,Rayo Vallecano de Madrid,Barcelona,1,1
+2025-09-12 19:00:00,Sevilla,Elche,2,2
+2025-09-13 12:00:00,Getafe,Real Oviedo,2,0
+2025-09-13 14:15:00,Real Sociedad de Fútbol,Real Madrid,1,2
+2025-09-13 16:30:00,Athletic Club,Deportivo Alavés,0,1
+2025-09-13 19:00:00,Club Atlético de Madrid,Villarreal,2,0
+2025-09-14 12:00:00,RC Celta de Vigo,Girona,1,1
+2025-09-14 14:15:00,Levante UD,Real Betis Balompié,2,2
+2025-09-14 16:30:00,CA Osasuna,Rayo Vallecano de Madrid,2,0
+2025-09-14 19:00:00,Barcelona,Valencia,6,0
+2025-09-15 19:00:00,RCD Espanyol de Barcelona,RCD Mallorca,3,2
+2025-09-19 19:00:00,Real Betis Balompié,Real Sociedad de Fútbol,3,1
+2025-09-20 12:00:00,Girona,Levante UD,0,4
+2025-09-20 14:15:00,Real Madrid,RCD Espanyol de Barcelona,2,0
+2025-09-20 16:30:00,Villarreal,CA Osasuna,2,1
+2025-09-20 16:30:00,Deportivo Alavés,Sevilla,1,2
+2025-09-20 19:00:00,Valencia,Athletic Club,2,0
+2025-09-21 12:00:00,Rayo Vallecano de Madrid,RC Celta de Vigo,1,1
+2025-09-21 14:15:00,RCD Mallorca,Club Atlético de Madrid,1,1
+2025-09-21 16:30:00,Elche,Real Oviedo,1,0
+2025-09-21 19:00:00,Barcelona,Getafe,3,0
+2025-09-23 17:00:00,Athletic Club,Girona,1,1
+2025-09-23 17:00:00,RCD Espanyol de Barcelona,Valencia,2,2
+2025-09-23 19:30:00,Levante UD,Real Madrid,1,4
+2025-09-23 19:30:00,Sevilla,Villarreal,1,2
+2025-09-24 17:00:00,Getafe,Deportivo Alavés,1,1
+2025-09-24 19:30:00,Club Atlético de Madrid,Rayo Vallecano de Madrid,3,2
+2025-09-24 19:30:00,Real Sociedad de Fútbol,RCD Mallorca,1,0
+2025-09-25 17:30:00,CA Osasuna,Elche,1,1
+2025-09-25 19:30:00,Real Oviedo,Barcelona,1,3
+2025-09-26 19:00:00,Girona,RCD Espanyol de Barcelona,0,0
+2025-09-27 12:00:00,Getafe,Levante UD,1,1
+2025-09-27 14:15:00,Club Atlético de Madrid,Real Madrid,5,2
+2025-09-27 16:30:00,RCD Mallorca,Deportivo Alavés,1,0
+2025-09-27 19:00:00,Villarreal,Athletic Club,1,0
+2025-09-28 12:00:00,Rayo Vallecano de Madrid,Sevilla,0,1
+2025-09-28 14:15:00,Elche,RC Celta de Vigo,2,1
+2025-09-28 16:30:00,Barcelona,Real Sociedad de Fútbol,2,1
+2025-09-28 19:00:00,Real Betis Balompié,CA Osasuna,2,0
+2025-09-30 18:00:00,Valencia,Real Oviedo,1,2
+2025-10-03 19:00:00,CA Osasuna,Getafe,2,1
+2025-10-04 12:00:00,Real Oviedo,Levante UD,0,2
+2025-10-04 14:15:00,Girona,Valencia,2,1
+2025-10-04 16:30:00,Athletic Club,RCD Mallorca,2,1
+2025-10-04 19:00:00,Real Madrid,Villarreal,3,1
+2025-10-05 12:00:00,Deportivo Alavés,Elche,3,1
+2025-10-05 14:15:00,Sevilla,Barcelona,4,1
+2025-10-05 16:30:00,RCD Espanyol de Barcelona,Real Betis Balompié,1,2
+2025-10-05 16:30:00,Real Sociedad de Fútbol,Rayo Vallecano de Madrid,0,1
+2025-10-05 19:00:00,RC Celta de Vigo,Club Atlético de Madrid,1,1
+2025-10-17 19:00:00,Real Oviedo,RCD Espanyol de Barcelona,0,2
+2025-10-18 12:00:00,Sevilla,RCD Mallorca,1,3
+2025-10-18 14:15:00,Barcelona,Girona,2,1
+2025-10-18 16:30:00,Villarreal,Real Betis Balompié,2,2
+2025-10-18 19:00:00,Club Atlético de Madrid,CA Osasuna,1,0
+2025-10-19 12:00:00,Elche,Athletic Club,0,0
+2025-10-19 14:15:00,RC Celta de Vigo,Real Sociedad de Fútbol,1,1
+2025-10-19 16:30:00,Levante UD,Rayo Vallecano de Madrid,0,3
+2025-10-19 19:00:00,Getafe,Real Madrid,0,1
+2025-10-20 19:00:00,Deportivo Alavés,Valencia,0,0
+2025-10-24 19:00:00,Real Sociedad de Fútbol,Sevilla,2,1
+2025-10-25 12:00:00,Girona,Real Oviedo,3,3
+2025-10-25 14:15:00,RCD Espanyol de Barcelona,Elche,1,0
+2025-10-25 16:30:00,Athletic Club,Getafe,0,1
+2025-10-25 19:00:00,Valencia,Villarreal,0,2
+2025-10-26 13:00:00,RCD Mallorca,Levante UD,1,1
+2025-10-26 15:15:00,Real Madrid,Barcelona,2,1
+2025-10-26 17:30:00,CA Osasuna,RC Celta de Vigo,2,3
+2025-10-26 20:00:00,Rayo Vallecano de Madrid,Deportivo Alavés,1,0
+2025-10-27 20:00:00,Real Betis Balompié,Club Atlético de Madrid,0,2
+2025-10-31 20:00:00,Getafe,Girona,2,1
+2025-11-01 13:00:00,Villarreal,Rayo Vallecano de Madrid,4,0
+2025-11-01 15:15:00,Club Atlético de Madrid,Sevilla,3,0
+2025-11-01 17:30:00,Real Sociedad de Fútbol,Athletic Club,3,2
+2025-11-01 20:00:00,Real Madrid,Valencia,4,0
+2025-11-02 13:00:00,Levante UD,RC Celta de Vigo,1,2
+2025-11-02 15:15:00,Deportivo Alavés,RCD Espanyol de Barcelona,2,1
+2025-11-02 17:30:00,Barcelona,Elche,3,1
+2025-11-02 20:00:00,Real Betis Balompié,RCD Mallorca,3,0
+2025-11-03 20:00:00,Real Oviedo,CA Osasuna,0,0
+2025-11-07 20:00:00,Elche,Real Sociedad de Fútbol,1,1
+2025-11-08 13:00:00,Girona,Deportivo Alavés,1,0
+2025-11-08 15:15:00,Sevilla,CA Osasuna,1,0
+2025-11-08 17:30:00,Club Atlético de Madrid,Levante UD,3,1
+2025-11-08 20:00:00,RCD Espanyol de Barcelona,Villarreal,0,2
+2025-11-09 13:00:00,Athletic Club,Real Oviedo,1,0
+2025-11-09 15:15:00,Rayo Vallecano de Madrid,Real Madrid,0,0
+2025-11-09 17:30:00,Valencia,Real Betis Balompié,1,1
+2025-11-09 17:30:00,RCD Mallorca,Getafe,1,0
+2025-11-09 20:00:00,RC Celta de Vigo,Barcelona,2,4
+2025-11-21 20:00:00,Valencia,Levante UD,1,0
+2025-11-22 13:00:00,Deportivo Alavés,RC Celta de Vigo,0,1
+2025-11-22 15:15:00,Barcelona,Athletic Club,4,0
+2025-11-22 17:30:00,CA Osasuna,Real Sociedad de Fútbol,1,3
+2025-11-22 20:00:00,Villarreal,RCD Mallorca,2,1
+2025-11-23 13:00:00,Real Oviedo,Rayo Vallecano de Madrid,0,0
+2025-11-23 15:15:00,Real Betis Balompié,Girona,1,1
+2025-11-23 17:30:00,Getafe,Club Atlético de Madrid,0,1
+2025-11-23 20:00:00,Elche,Real Madrid,2,2
+2025-11-24 20:00:00,RCD Espanyol de Barcelona,Sevilla,2,1
+2025-11-28 20:00:00,Getafe,Elche,1,0
+2025-11-29 13:00:00,RCD Mallorca,CA Osasuna,2,2
+2025-11-29 15:15:00,Barcelona,Deportivo Alavés,3,1
+2025-11-29 17:30:00,Levante UD,Athletic Club,0,2
+2025-11-29 20:00:00,Club Atlético de Madrid,Real Oviedo,2,0
+2025-11-30 13:00:00,Real Sociedad de Fútbol,Villarreal,2,3
+2025-11-30 15:15:00,Sevilla,Real Betis Balompié,0,2
+2025-11-30 17:30:00,RC Celta de Vigo,RCD Espanyol de Barcelona,0,1
+2025-11-30 20:00:00,Girona,Real Madrid,1,1
+2025-12-01 20:00:00,Rayo Vallecano de Madrid,Valencia,1,1
+2025-12-02 20:00:00,Barcelona,Club Atlético de Madrid,3,1
+2025-12-03 18:00:00,Athletic Club,Real Madrid,0,3
+2025-12-05 20:00:00,Real Oviedo,RCD Mallorca,0,0
+2025-12-06 13:00:00,Villarreal,Getafe,2,0
+2025-12-06 15:15:00,Deportivo Alavés,Real Sociedad de Fútbol,1,0
+2025-12-06 17:30:00,Real Betis Balompié,Barcelona,3,5
+2025-12-06 20:00:00,Athletic Club,Club Atlético de Madrid,1,0
+2025-12-07 13:00:00,Elche,Girona,3,0
+2025-12-07 15:15:00,Valencia,Sevilla,1,1
+2025-12-07 17:30:00,RCD Espanyol de Barcelona,Rayo Vallecano de Madrid,1,0
+2025-12-07 20:00:00,Real Madrid,RC Celta de Vigo,0,2
+2025-12-08 20:00:00,CA Osasuna,Levante UD,2,0
+2025-12-12 20:00:00,Real Sociedad de Fútbol,Girona,1,2
+2025-12-13 13:00:00,Club Atlético de Madrid,Valencia,2,1
+2025-12-13 15:15:00,RCD Mallorca,Elche,3,1
+2025-12-13 17:30:00,Barcelona,CA Osasuna,2,0
+2025-12-13 20:00:00,Getafe,RCD Espanyol de Barcelona,0,1
+2025-12-14 13:00:00,Sevilla,Real Oviedo,4,0
+2025-12-14 15:15:00,RC Celta de Vigo,Athletic Club,2,0
+2025-12-14 20:00:00,Deportivo Alavés,Real Madrid,1,2
+2025-12-15 20:00:00,Rayo Vallecano de Madrid,Real Betis Balompié,0,0
+2025-12-19 20:00:00,Valencia,RCD Mallorca,1,1
+2025-12-20 13:00:00,Real Oviedo,RC Celta de Vigo,0,0
+2025-12-20 15:15:00,Levante UD,Real Sociedad de Fútbol,1,1
+2025-12-20 17:30:00,CA Osasuna,Deportivo Alavés,3,0
+2025-12-20 20:00:00,Real Madrid,Sevilla,2,0
+2025-12-21 13:00:00,Girona,Club Atlético de Madrid,0,3
+2025-12-21 15:15:00,Villarreal,Barcelona,0,2
+2025-12-21 17:30:00,Elche,Rayo Vallecano de Madrid,4,0
+2025-12-21 20:00:00,Real Betis Balompié,Getafe,4,0
+2025-12-22 20:00:00,Athletic Club,RCD Espanyol de Barcelona,1,2
+2026-01-02 20:00:00,Rayo Vallecano de Madrid,Getafe,1,1
+2026-01-03 13:00:00,RC Celta de Vigo,Valencia,4,1
+2026-01-03 15:15:00,CA Osasuna,Athletic Club,1,1
+2026-01-03 17:30:00,Elche,Villarreal,1,3
+2026-01-03 20:00:00,RCD Espanyol de Barcelona,Barcelona,0,2
+2026-01-04 13:00:00,Sevilla,Levante UD,0,3
+2026-01-04 15:15:00,Real Madrid,Real Betis Balompié,5,1
+2026-01-04 17:30:00,Deportivo Alavés,Real Oviedo,1,1
+2026-01-04 17:30:00,RCD Mallorca,Girona,1,2
+2026-01-04 20:00:00,Real Sociedad de Fútbol,Club Atlético de Madrid,1,1
+2026-01-09 20:00:00,Getafe,Real Sociedad de Fútbol,1,2
+2026-01-10 13:00:00,Real Oviedo,Real Betis Balompié,1,1
+2026-01-10 15:15:00,Villarreal,Deportivo Alavés,3,1
+2026-01-10 17:30:00,Girona,CA Osasuna,1,0
+2026-01-10 20:00:00,Valencia,Elche,1,1
+2026-01-11 13:00:00,Rayo Vallecano de Madrid,RCD Mallorca,2,1
+2026-01-11 15:15:00,Levante UD,RCD Espanyol de Barcelona,1,1
+2026-01-12 20:00:00,Sevilla,RC Celta de Vigo,0,1
+2026-01-16 20:00:00,RCD Espanyol de Barcelona,Girona,0,2
+2026-01-17 13:00:00,Real Madrid,Levante UD,2,0
+2026-01-17 15:15:00,RCD Mallorca,Athletic Club,3,2
+2026-01-17 17:30:00,CA Osasuna,Real Oviedo,3,2
+2026-01-17 20:00:00,Real Betis Balompié,Villarreal,2,0
+2026-01-18 13:00:00,Getafe,Valencia,0,1
+2026-01-18 15:15:00,Club Atlético de Madrid,Deportivo Alavés,1,0
+2026-01-18 17:30:00,RC Celta de Vigo,Rayo Vallecano de Madrid,3,0
+2026-01-18 20:00:00,Real Sociedad de Fútbol,Barcelona,2,1
+2026-01-19 20:00:00,Elche,Sevilla,2,2
+2026-01-23 20:00:00,Levante UD,Elche,3,2
+2026-01-24 13:00:00,Rayo Vallecano de Madrid,CA Osasuna,1,3
+2026-01-24 15:15:00,Valencia,RCD Espanyol de Barcelona,3,2
+2026-01-24 17:30:00,Sevilla,Athletic Club,2,1
+2026-01-24 20:00:00,Villarreal,Real Madrid,0,2
+2026-01-25 13:00:00,Club Atlético de Madrid,RCD Mallorca,3,0
+2026-01-25 15:15:00,Barcelona,Real Oviedo,3,0
+2026-01-25 17:30:00,Real Sociedad de Fútbol,RC Celta de Vigo,3,1
+2026-01-25 20:00:00,Deportivo Alavés,Real Betis Balompié,2,1
+2026-01-26 20:00:00,Girona,Getafe,1,1
+2026-01-30 20:00:00,RCD Espanyol de Barcelona,Deportivo Alavés,1,2
+2026-01-31 13:00:00,Real Oviedo,Girona,1,0
+2026-01-31 15:15:00,CA Osasuna,Villarreal,2,2
+2026-01-31 17:30:00,Levante UD,Club Atlético de Madrid,0,0
+2026-01-31 20:00:00,Elche,Barcelona,1,3
+2026-02-01 13:00:00,Real Madrid,Rayo Vallecano de Madrid,2,1
+2026-02-01 15:15:00,Real Betis Balompié,Valencia,2,1
+2026-02-01 17:30:00,Getafe,RC Celta de Vigo,0,0
+2026-02-01 20:00:00,Athletic Club,Real Sociedad de Fútbol,1,1
+2026-02-02 20:00:00,RCD Mallorca,Sevilla,4,1
+2026-02-06 20:00:00,RC Celta de Vigo,CA Osasuna,1,2
+2026-02-07 15:15:00,Barcelona,RCD Mallorca,3,0
+2026-02-07 20:00:00,Real Sociedad de Fútbol,Elche,3,1
+2026-02-08 13:00:00,Deportivo Alavés,Getafe,0,2
+2026-02-08 15:15:00,Athletic Club,Levante UD,4,2
+2026-02-08 15:15:00,Sevilla,Girona,1,1
+2026-02-08 17:30:00,Club Atlético de Madrid,Real Betis Balompié,0,1
+2026-02-08 20:00:00,Valencia,Real Madrid,0,2
+2026-02-09 20:00:00,Villarreal,RCD Espanyol de Barcelona,4,1
+2026-02-13 20:00:00,Elche,CA Osasuna,0,0
+2026-02-14 13:00:00,RCD Espanyol de Barcelona,RC Celta de Vigo,2,2
+2026-02-14 15:15:00,Getafe,Villarreal,2,1
+2026-02-14 17:30:00,Sevilla,Deportivo Alavés,1,1
+2026-02-14 20:00:00,Real Madrid,Real Sociedad de Fútbol,4,1
+2026-02-15 13:00:00,Real Oviedo,Athletic Club,1,2
+2026-02-15 15:15:00,Rayo Vallecano de Madrid,Club Atlético de Madrid,3,0
+2026-02-15 17:30:00,Levante UD,Valencia,0,2
+2026-02-15 20:00:00,RCD Mallorca,Real Betis Balompié,1,2
+2026-02-16 20:00:00,Girona,Barcelona,2,1
+2026-02-18 19:00:00,Levante UD,Villarreal,0,1
+2026-02-20 20:00:00,Athletic Club,Elche,2,1
+2026-02-21 13:00:00,Real Sociedad de Fútbol,Real Oviedo,3,3
+2026-02-21 15:15:00,Real Betis Balompié,Rayo Vallecano de Madrid,1,1
+2026-02-21 17:30:00,CA Osasuna,Real Madrid,2,1
+2026-02-21 20:00:00,Club Atlético de Madrid,RCD Espanyol de Barcelona,4,2
+2026-02-22 13:00:00,Getafe,Sevilla,0,1
+2026-02-22 15:15:00,Barcelona,Levante UD,3,0
+2026-02-22 17:30:00,RC Celta de Vigo,RCD Mallorca,2,0
+2026-02-22 20:00:00,Villarreal,Valencia,2,1
+2026-02-23 20:00:00,Deportivo Alavés,Girona,2,2
+2026-02-27 20:00:00,Levante UD,Deportivo Alavés,2,0
+2026-02-28 13:00:00,Rayo Vallecano de Madrid,Athletic Club,1,1
+2026-02-28 15:15:00,Barcelona,Villarreal,4,1
+2026-02-28 17:30:00,RCD Mallorca,Real Sociedad de Fútbol,0,1
+2026-02-28 20:00:00,Real Oviedo,Club Atlético de Madrid,0,1
+2026-03-01 13:00:00,Elche,RCD Espanyol de Barcelona,2,2
+2026-03-01 15:15:00,Valencia,CA Osasuna,1,0
+2026-03-01 17:30:00,Real Betis Balompié,Sevilla,2,2
+2026-03-01 20:00:00,Girona,RC Celta de Vigo,1,2
+2026-03-02 20:00:00,Real Madrid,Getafe,0,1
+2026-03-04 18:00:00,Rayo Vallecano de Madrid,Real Oviedo,3,0
+2026-03-06 20:00:00,RC Celta de Vigo,Real Madrid,1,2
+2026-03-07 13:00:00,CA Osasuna,RCD Mallorca,2,2
+2026-03-07 15:15:00,Levante UD,Girona,1,1
+2026-03-07 17:30:00,Club Atlético de Madrid,Real Sociedad de Fútbol,3,2
+2026-03-07 20:00:00,Athletic Club,Barcelona,0,1
+2026-03-08 13:00:00,Villarreal,Elche,2,1
+2026-03-08 15:15:00,Getafe,Real Betis Balompié,2,0
+2026-03-08 17:30:00,Sevilla,Rayo Vallecano de Madrid,1,1
+2026-03-08 20:00:00,Valencia,Deportivo Alavés,3,2
+2026-03-09 20:00:00,RCD Espanyol de Barcelona,Real Oviedo,1,1
+2026-03-13 20:00:00,Deportivo Alavés,Villarreal,1,1
+2026-03-14 13:00:00,Girona,Athletic Club,3,0
+2026-03-14 15:15:00,Club Atlético de Madrid,Getafe,1,0
+2026-03-14 17:30:00,Real Oviedo,Valencia,1,0
+2026-03-14 20:00:00,Real Madrid,Elche,4,1
+2026-03-15 13:00:00,RCD Mallorca,RCD Espanyol de Barcelona,2,1
+2026-03-15 15:15:00,Barcelona,Sevilla,5,2
+2026-03-15 17:30:00,Real Betis Balompié,RC Celta de Vigo,1,1
+2026-03-15 20:00:00,Real Sociedad de Fútbol,CA Osasuna,3,1
+2026-03-16 20:00:00,Rayo Vallecano de Madrid,Levante UD,1,1
+2026-03-20 20:00:00,Villarreal,Real Sociedad de Fútbol,3,1
+2026-03-21 13:00:00,Elche,RCD Mallorca,2,1
+2026-03-21 15:15:00,RCD Espanyol de Barcelona,Getafe,1,2
+2026-03-21 17:30:00,Levante UD,Real Oviedo,4,2
+2026-03-21 17:30:00,CA Osasuna,Girona,1,0
+2026-03-21 20:00:00,Sevilla,Valencia,0,2
+2026-03-22 13:00:00,Barcelona,Rayo Vallecano de Madrid,1,0
+2026-03-22 15:15:00,RC Celta de Vigo,Deportivo Alavés,3,4
+2026-03-22 17:30:00,Athletic Club,Real Betis Balompié,2,1
+2026-03-22 20:00:00,Real Madrid,Club Atlético de Madrid,3,2
+2026-04-03 19:00:00,Rayo Vallecano de Madrid,Elche,1,0
+2026-04-04 12:00:00,Real Sociedad de Fútbol,Levante UD,2,0
+2026-04-04 14:15:00,RCD Mallorca,Real Madrid,2,1
+2026-04-04 16:30:00,Real Betis Balompié,RCD Espanyol de Barcelona,0,0
+2026-04-04 19:00:00,Club Atlético de Madrid,Barcelona,1,2
+2026-04-05 12:00:00,Getafe,Athletic Club,2,0
+2026-04-05 14:15:00,Valencia,RC Celta de Vigo,2,3
+2026-04-05 16:30:00,Real Oviedo,Sevilla,1,0
+2026-04-05 19:00:00,Deportivo Alavés,CA Osasuna,2,2
+2026-04-06 19:00:00,Girona,Villarreal,1,0
+2026-04-10 19:00:00,Real Madrid,Girona,1,1
+2026-04-11 12:00:00,Real Sociedad de Fútbol,Deportivo Alavés,3,3
+2026-04-11 14:15:00,Elche,Valencia,1,0
+2026-04-11 16:30:00,Barcelona,RCD Espanyol de Barcelona,4,1
+2026-04-11 19:00:00,Sevilla,Club Atlético de Madrid,2,1
+2026-04-12 12:00:00,CA Osasuna,Real Betis Balompié,1,1
+2026-04-12 14:15:00,RCD Mallorca,Rayo Vallecano de Madrid,3,0
+2026-04-12 16:30:00,RC Celta de Vigo,Real Oviedo,0,3
+2026-04-12 19:00:00,Athletic Club,Villarreal,1,2
+2026-04-13 19:00:00,Levante UD,Getafe,1,0
+2026-04-21 17:00:00,Athletic Club,CA Osasuna,1,0
+2026-04-21 17:00:00,RCD Mallorca,Valencia,1,1
+2026-04-21 19:30:00,Real Madrid,Deportivo Alavés,2,1
+2026-04-21 19:30:00,Girona,Real Betis Balompié,2,3
+2026-04-22 17:00:00,Elche,Club Atlético de Madrid,3,2
+2026-04-22 18:00:00,Real Sociedad de Fútbol,Getafe,0,1
+2026-04-22 19:30:00,Barcelona,RC Celta de Vigo,1,0
+2026-04-23 17:00:00,Levante UD,Sevilla,2,0
+2026-04-23 18:00:00,Rayo Vallecano de Madrid,RCD Espanyol de Barcelona,1,0
+2026-04-23 19:30:00,Real Oviedo,Villarreal,1,1
+2026-04-24 19:00:00,Real Betis Balompié,Real Madrid,1,1
+2026-04-25 12:00:00,Deportivo Alavés,RCD Mallorca,2,1
+2026-04-25 14:15:00,Getafe,Barcelona,0,2
+2026-04-25 16:30:00,Valencia,Girona,2,1
+2026-04-25 19:00:00,Club Atlético de Madrid,Athletic Club,3,2
+2026-04-26 12:00:00,Rayo Vallecano de Madrid,Real Sociedad de Fútbol,3,3
+2026-04-26 14:15:00,Real Oviedo,Elche,1,2
+2026-04-26 16:30:00,CA Osasuna,Sevilla,2,1
+2026-04-26 19:00:00,Villarreal,RC Celta de Vigo,2,1
+2026-04-27 19:00:00,RCD Espanyol de Barcelona,Levante UD,0,0
+2026-05-01 19:00:00,Girona,RCD Mallorca,0,1
+2026-05-02 12:00:00,Villarreal,Levante UD,5,1
+2026-05-02 14:15:00,Valencia,Club Atlético de Madrid,0,2
+2026-05-02 16:30:00,Deportivo Alavés,Athletic Club,2,4
+2026-05-02 19:00:00,CA Osasuna,Barcelona,1,2
+2026-05-03 12:00:00,RC Celta de Vigo,Elche,3,1
+2026-05-03 14:15:00,Getafe,Rayo Vallecano de Madrid,0,2
+2026-05-03 16:30:00,Real Betis Balompié,Real Oviedo,3,0
+2026-05-03 19:00:00,RCD Espanyol de Barcelona,Real Madrid,0,2
+2026-05-04 19:00:00,Sevilla,Real Sociedad de Fútbol,1,0
+2026-05-08 19:00:00,Levante UD,CA Osasuna,3,2
+2026-05-09 12:00:00,Elche,Deportivo Alavés,1,1
+2026-05-09 14:15:00,Sevilla,RCD Espanyol de Barcelona,2,1
+2026-05-09 16:30:00,Club Atlético de Madrid,RC Celta de Vigo,0,1
+2026-05-09 19:00:00,Real Sociedad de Fútbol,Real Betis Balompié,2,2
+2026-05-10 12:00:00,RCD Mallorca,Villarreal,1,1
+2026-05-10 14:15:00,Athletic Club,Valencia,0,1
+2026-05-10 16:30:00,Real Oviedo,Getafe,0,0
+2026-05-10 19:00:00,Barcelona,Real Madrid,2,0
+2026-05-11 19:00:00,Rayo Vallecano de Madrid,Girona,1,1
+2026-05-12 17:00:00,RC Celta de Vigo,Levante UD,2,3
+2026-05-12 18:00:00,Real Betis Balompié,Elche,2,1
+2026-05-12 19:30:00,CA Osasuna,Club Atlético de Madrid,1,2
+2026-05-13 17:00:00,RCD Espanyol de Barcelona,Athletic Club,2,0
+2026-05-13 17:00:00,Villarreal,Sevilla,2,3
+2026-05-13 19:30:00,Deportivo Alavés,Barcelona,1,0
+2026-05-13 19:30:00,Getafe,RCD Mallorca,3,1
+2026-05-14 17:00:00,Valencia,Rayo Vallecano de Madrid,1,1
+2026-05-14 18:00:00,Girona,Real Sociedad de Fútbol,1,1
+2026-05-14 19:30:00,Real Madrid,Real Oviedo,2,0
+2026-05-17 17:00:00,Athletic Club,RC Celta de Vigo,1,1
+2026-05-17 17:00:00,Club Atlético de Madrid,Girona,1,0
+2026-05-17 17:00:00,Elche,Getafe,1,0
+2026-05-17 17:00:00,Levante UD,RCD Mallorca,2,0
+2026-05-17 17:00:00,Rayo Vallecano de Madrid,Villarreal,2,0
+2026-05-17 17:00:00,Real Sociedad de Fútbol,Valencia,3,4
+2026-05-17 17:00:00,Real Oviedo,Deportivo Alavés,0,1
+2026-05-17 17:00:00,CA Osasuna,RCD Espanyol de Barcelona,1,2
+2026-05-17 17:00:00,Sevilla,Real Madrid,0,1
+2026-05-17 19:15:00,Barcelona,Real Betis Balompié,3,1
+2026-05-23 19:00:00,Deportivo Alavés,Rayo Vallecano de Madrid,1,2
+2026-05-23 19:00:00,Real Betis Balompié,Levante UD,2,1
+2026-05-23 19:00:00,RC Celta de Vigo,Sevilla,1,0
+2026-05-23 19:00:00,RCD Espanyol de Barcelona,Real Sociedad de Fútbol,1,1
+2026-05-23 19:00:00,Getafe,CA Osasuna,1,0
+2026-05-23 19:00:00,RCD Mallorca,Real Oviedo,3,0
+2026-05-23 19:00:00,Real Madrid,Athletic Club,4,2
+2026-05-23 19:00:00,Valencia,Barcelona,3,1
+2026-05-23 19:00:00,Girona,Elche,1,1
+2026-05-24 19:00:00,Villarreal,Club Atlético de Madrid,5,1

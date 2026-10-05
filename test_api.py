@@ -49,7 +49,7 @@ from datetime import datetime, timezone
 _now = datetime.now(timezone.utc)
 _start = _now.year if _now.month >= 8 else _now.year - 1
 
-for year in range(_start - 2, _start + 1):
+for year in range(_start - 3, _start + 1):
     try:
         r = requests.get(
             "https://api.football-data.org/v4/competitions/2021/matches",

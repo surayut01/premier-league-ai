@@ -62,6 +62,30 @@ NAME_MAP = {
     "SV Darmstadt 98": "Darmstadt",
 }
 
+# ชื่อทีมใน FBref (ผ่าน soccerdata) -> ชื่อใน API (football-data.org) เฉพาะชื่อที่ต่างกันเกินกว่าตัวช่วยจับคู่จะหาเจอ
+# ถ้าแอปเตือน "จับคู่ชื่อ FBref ไม่ได้" ให้เพิ่มบรรทัดใหม่ที่นี่ (ทีมที่ตกชั้นไปแล้ว เช่น Hertha ไม่ต้องใส่)
+FBREF_ALIASES = {
+    "Brighton": "Brighton & Hove Albion", "Newcastle Utd": "Newcastle United",
+    "Nott'ham Forest": "Nottingham Forest", "Tottenham": "Tottenham Hotspur",
+    "West Ham": "West Ham United", "Wolves": "Wolverhampton Wanderers",
+    "Manchester Utd": "Manchester United", "Sheffield Utd": "Sheffield United",
+    "Atlético Madrid": "Club Atlético de Madrid", "Celta Vigo": "RC Celta de Vigo",
+    "Alavés": "Deportivo Alavés", "Rayo Vallecano": "Rayo Vallecano de Madrid",
+    "Espanyol": "RCD Espanyol de Barcelona", "Betis": "Real Betis Balompié",
+    "Real Sociedad": "Real Sociedad de Fútbol", "Mallorca": "RCD Mallorca",
+    "Osasuna": "CA Osasuna", "Leganés": "CD Leganés", "Levante": "Levante UD",
+    "Racing Santander": "Real Racing Club de Santander", "La Coruña": "RC Deportivo La Coruña",
+    "Bayern Munich": "Bayern München", "Leverkusen": "Bayer 04 Leverkusen",
+    "Eint Frankfurt": "Eintracht Frankfurt", "M'Gladbach": "Borussia Mönchengladbach",
+    "Mainz 05": "1. FSV Mainz 05", "St. Pauli": "St. Pauli 1910", "Heidenheim": "1. Heidenheim 1846",
+    "Köln": "1. Köln", "Hoffenheim": "TSG 1899 Hoffenheim", "Union Berlin": "1. Union Berlin",
+    "Bochum": "VfL Bochum 1848", "Hamburger SV": "Hamburger", "Wolfsburg": "VfL Wolfsburg",
+    "Freiburg": "SC Freiburg", "Paderborn 07": "SC Paderborn 07", "Elversberg": "07 Elversberg",
+    "Dortmund": "Borussia Dortmund", "Stuttgart": "VfB Stuttgart",
+    "Frankfurt": "Eintracht Frankfurt", "Gladbach": "Borussia Mönchengladbach",
+    "Oviedo": "Real Oviedo",
+}
+
 # คำที่ตัดทิ้งตอนเทียบชื่อ (ไม่ตัดคำว่า real / united / city เพราะใช้แยกทีม)
 _NOISE = {
     "fc", "afc", "cf", "sv", "bsc", "ud", "cd", "rc", "rcd", "ca", "sc",
@@ -122,3 +146,9 @@ def resolve_team(name, known_teams):
         return norm_to_known[close[0]]
 
     return None
+
+
+def resolve_fbref_team(name, known_teams):
+    """จับคู่ชื่อทีมจาก FBref กับชื่อในข้อมูลผลแข่ง: ดู FBREF_ALIASES ก่อน แล้วใช้ resolve_team ตามปกติ
+    คืน None ถ้าไม่พบ"""
+    return resolve_team(FBREF_ALIASES.get(name, name), known_teams)

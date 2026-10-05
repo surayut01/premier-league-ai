@@ -1,0 +1,381 @@
+Date,HomeTeam,AwayTeam,FTHG,FTAG
+2023-08-11 17:30:00,UD Almería,Rayo Vallecano de Madrid,0,2
+2023-08-11 20:00:00,Sevilla,Valencia,1,2
+2023-08-12 15:00:00,Real Sociedad de Fútbol,Girona,1,1
+2023-08-12 17:30:00,UD Las Palmas,RCD Mallorca,1,1
+2023-08-12 19:30:00,Athletic Club,Real Madrid,0,2
+2023-08-13 15:00:00,RC Celta de Vigo,CA Osasuna,0,2
+2023-08-13 17:30:00,Villarreal,Real Betis Balompié,1,2
+2023-08-13 19:30:00,Getafe,Barcelona,0,0
+2023-08-14 17:30:00,Cádiz,Deportivo Alavés,1,0
+2023-08-14 19:30:00,Club Atlético de Madrid,Granada,3,1
+2023-08-18 17:30:00,RCD Mallorca,Villarreal,0,1
+2023-08-18 19:30:00,Valencia,UD Las Palmas,1,0
+2023-08-19 15:00:00,Real Sociedad de Fútbol,RC Celta de Vigo,1,1
+2023-08-19 17:30:00,UD Almería,Real Madrid,1,3
+2023-08-19 19:30:00,CA Osasuna,Athletic Club,0,2
+2023-08-20 17:00:00,Girona,Getafe,3,0
+2023-08-20 17:30:00,Barcelona,Cádiz,2,0
+2023-08-20 19:30:00,Real Betis Balompié,Club Atlético de Madrid,0,0
+2023-08-21 17:00:00,Deportivo Alavés,Sevilla,4,3
+2023-08-21 19:30:00,Granada,Rayo Vallecano de Madrid,0,2
+2023-08-25 17:30:00,UD Las Palmas,Real Sociedad de Fútbol,0,0
+2023-08-25 19:30:00,RC Celta de Vigo,Real Madrid,0,1
+2023-08-26 17:00:00,Cádiz,UD Almería,1,1
+2023-08-26 17:30:00,Granada,RCD Mallorca,3,2
+2023-08-26 19:30:00,Sevilla,Girona,1,2
+2023-08-27 15:30:00,Villarreal,Barcelona,3,4
+2023-08-27 17:30:00,Valencia,CA Osasuna,1,2
+2023-08-27 19:30:00,Athletic Club,Real Betis Balompié,4,2
+2023-08-28 17:30:00,Getafe,Deportivo Alavés,1,0
+2023-08-28 19:30:00,Rayo Vallecano de Madrid,Club Atlético de Madrid,0,7
+2023-09-01 17:30:00,Cádiz,Villarreal,3,1
+2023-09-01 20:00:00,UD Almería,RC Celta de Vigo,2,3
+2023-09-02 12:00:00,Real Sociedad de Fútbol,Granada,5,3
+2023-09-02 14:15:00,Real Madrid,Getafe,2,1
+2023-09-02 16:30:00,Deportivo Alavés,Valencia,1,0
+2023-09-02 19:00:00,Real Betis Balompié,Rayo Vallecano de Madrid,1,0
+2023-09-03 12:00:00,Girona,UD Las Palmas,1,0
+2023-09-03 14:15:00,RCD Mallorca,Athletic Club,0,0
+2023-09-03 19:00:00,CA Osasuna,Barcelona,1,2
+2023-09-15 19:00:00,Rayo Vallecano de Madrid,Deportivo Alavés,2,0
+2023-09-16 12:00:00,Athletic Club,Cádiz,3,0
+2023-09-16 14:15:00,Valencia,Club Atlético de Madrid,3,0
+2023-09-16 16:30:00,RC Celta de Vigo,RCD Mallorca,0,1
+2023-09-16 19:00:00,Barcelona,Real Betis Balompié,5,0
+2023-09-17 12:00:00,Getafe,CA Osasuna,3,2
+2023-09-17 14:15:00,Villarreal,UD Almería,2,1
+2023-09-17 16:30:00,Sevilla,UD Las Palmas,1,0
+2023-09-17 19:00:00,Real Madrid,Real Sociedad de Fútbol,2,1
+2023-09-18 19:00:00,Granada,Girona,2,4
+2023-09-22 19:00:00,Deportivo Alavés,Athletic Club,0,2
+2023-09-23 12:00:00,Girona,RCD Mallorca,5,3
+2023-09-23 14:15:00,CA Osasuna,Sevilla,0,0
+2023-09-23 16:30:00,Barcelona,RC Celta de Vigo,3,2
+2023-09-23 19:00:00,UD Almería,Valencia,2,2
+2023-09-24 12:00:00,Real Sociedad de Fútbol,Getafe,4,3
+2023-09-24 14:15:00,Rayo Vallecano de Madrid,Villarreal,1,1
+2023-09-24 16:30:00,UD Las Palmas,Granada,1,0
+2023-09-24 16:30:00,Real Betis Balompié,Cádiz,1,1
+2023-09-24 19:00:00,Club Atlético de Madrid,Real Madrid,3,1
+2023-09-26 17:00:00,Sevilla,UD Almería,5,1
+2023-09-26 19:30:00,RCD Mallorca,Barcelona,2,2
+2023-09-27 17:00:00,Athletic Club,Getafe,2,2
+2023-09-27 17:00:00,Villarreal,Girona,1,2
+2023-09-27 17:00:00,Real Madrid,UD Las Palmas,2,0
+2023-09-27 19:30:00,Cádiz,Rayo Vallecano de Madrid,0,0
+2023-09-27 19:30:00,Valencia,Real Sociedad de Fútbol,0,1
+2023-09-28 17:00:00,RC Celta de Vigo,Deportivo Alavés,1,1
+2023-09-28 17:00:00,Granada,Real Betis Balompié,1,1
+2023-09-28 19:30:00,CA Osasuna,Club Atlético de Madrid,0,2
+2023-09-29 19:00:00,Barcelona,Sevilla,1,0
+2023-09-30 12:00:00,Getafe,Villarreal,0,0
+2023-09-30 14:15:00,Rayo Vallecano de Madrid,RCD Mallorca,2,2
+2023-09-30 16:30:00,Girona,Real Madrid,0,3
+2023-09-30 19:00:00,Real Sociedad de Fútbol,Athletic Club,3,0
+2023-10-01 12:00:00,UD Almería,Granada,3,3
+2023-10-01 14:15:00,Deportivo Alavés,CA Osasuna,0,2
+2023-10-01 19:00:00,Club Atlético de Madrid,Cádiz,3,2
+2023-10-01 19:00:00,Real Betis Balompié,Valencia,3,0
+2023-10-02 19:00:00,UD Las Palmas,RC Celta de Vigo,2,1
+2023-10-06 19:00:00,Athletic Club,UD Almería,3,0
+2023-10-07 12:00:00,Cádiz,Girona,0,1
+2023-10-07 14:15:00,Real Madrid,CA Osasuna,4,0
+2023-10-07 16:30:00,RCD Mallorca,Valencia,1,1
+2023-10-07 19:00:00,Sevilla,Rayo Vallecano de Madrid,2,2
+2023-10-08 12:00:00,Villarreal,UD Las Palmas,1,2
+2023-10-08 14:15:00,Club Atlético de Madrid,Real Sociedad de Fútbol,2,1
+2023-10-08 16:30:00,RC Celta de Vigo,Getafe,2,2
+2023-10-08 16:30:00,Deportivo Alavés,Real Betis Balompié,1,1
+2023-10-08 19:00:00,Granada,Barcelona,2,2
+2023-10-20 19:00:00,CA Osasuna,Granada,2,0
+2023-10-21 12:00:00,Real Sociedad de Fútbol,RCD Mallorca,1,0
+2023-10-21 14:15:00,Getafe,Real Betis Balompié,1,1
+2023-10-21 16:30:00,Sevilla,Real Madrid,1,1
+2023-10-21 19:00:00,RC Celta de Vigo,Club Atlético de Madrid,0,3
+2023-10-22 12:00:00,UD Las Palmas,Rayo Vallecano de Madrid,0,1
+2023-10-22 14:15:00,Girona,UD Almería,5,2
+2023-10-22 16:30:00,Villarreal,Deportivo Alavés,1,1
+2023-10-22 19:00:00,Barcelona,Athletic Club,1,0
+2023-10-23 19:00:00,Valencia,Cádiz,2,0
+2023-10-27 19:00:00,Girona,RC Celta de Vigo,1,0
+2023-10-28 12:00:00,UD Almería,UD Las Palmas,1,2
+2023-10-28 14:15:00,Barcelona,Real Madrid,1,2
+2023-10-28 16:30:00,RCD Mallorca,Getafe,0,0
+2023-10-28 19:00:00,Cádiz,Sevilla,2,2
+2023-10-29 13:00:00,Real Betis Balompié,CA Osasuna,2,1
+2023-10-29 15:15:00,Rayo Vallecano de Madrid,Real Sociedad de Fútbol,2,2
+2023-10-29 17:30:00,Athletic Club,Valencia,2,2
+2023-10-29 20:00:00,Club Atlético de Madrid,Deportivo Alavés,2,1
+2023-10-30 20:00:00,Granada,Villarreal,2,3
+2023-11-03 20:00:00,UD Las Palmas,Club Atlético de Madrid,2,1
+2023-11-04 13:00:00,CA Osasuna,Girona,2,4
+2023-11-04 15:15:00,Real Betis Balompié,RCD Mallorca,2,0
+2023-11-04 17:30:00,RC Celta de Vigo,Sevilla,1,1
+2023-11-04 20:00:00,Real Sociedad de Fútbol,Barcelona,0,1
+2023-11-05 13:00:00,Deportivo Alavés,UD Almería,1,0
+2023-11-05 15:15:00,Valencia,Granada,1,0
+2023-11-05 17:30:00,Villarreal,Athletic Club,2,3
+2023-11-05 20:00:00,Real Madrid,Rayo Vallecano de Madrid,0,0
+2023-11-06 20:00:00,Getafe,Cádiz,1,0
+2023-11-10 20:00:00,Athletic Club,RC Celta de Vigo,4,3
+2023-11-11 13:00:00,Rayo Vallecano de Madrid,Girona,1,2
+2023-11-11 15:15:00,UD Almería,Real Sociedad de Fútbol,1,3
+2023-11-11 17:30:00,CA Osasuna,UD Las Palmas,1,1
+2023-11-11 17:30:00,Granada,Getafe,1,1
+2023-11-11 20:00:00,Real Madrid,Valencia,5,1
+2023-11-12 15:15:00,Barcelona,Deportivo Alavés,2,1
+2023-11-12 17:30:00,Sevilla,Real Betis Balompié,1,1
+2023-11-12 20:00:00,Club Atlético de Madrid,Villarreal,3,1
+2023-11-24 20:00:00,Deportivo Alavés,Granada,3,1
+2023-11-25 13:00:00,Rayo Vallecano de Madrid,Barcelona,1,1
+2023-11-25 15:15:00,Valencia,RC Celta de Vigo,0,0
+2023-11-25 17:30:00,Getafe,UD Almería,2,1
+2023-11-25 20:00:00,Club Atlético de Madrid,RCD Mallorca,1,0
+2023-11-26 13:00:00,Villarreal,CA Osasuna,3,1
+2023-11-26 15:15:00,Real Sociedad de Fútbol,Sevilla,2,1
+2023-11-26 17:30:00,Cádiz,Real Madrid,0,3
+2023-11-26 20:00:00,Real Betis Balompié,UD Las Palmas,1,0
+2023-11-27 20:00:00,Girona,Athletic Club,1,1
+2023-11-29 20:00:00,RCD Mallorca,Cádiz,1,1
+2023-12-01 20:00:00,UD Las Palmas,Getafe,2,0
+2023-12-02 13:00:00,Girona,Valencia,2,1
+2023-12-02 15:15:00,Athletic Club,Rayo Vallecano de Madrid,4,0
+2023-12-02 17:30:00,Real Madrid,Granada,2,0
+2023-12-02 20:00:00,CA Osasuna,Real Sociedad de Fútbol,1,1
+2023-12-03 13:00:00,RCD Mallorca,Deportivo Alavés,0,0
+2023-12-03 15:15:00,UD Almería,Real Betis Balompié,0,0
+2023-12-03 17:30:00,Sevilla,Villarreal,1,1
+2023-12-03 20:00:00,Barcelona,Club Atlético de Madrid,1,0
+2023-12-04 20:00:00,RC Celta de Vigo,Cádiz,1,1
+2023-12-08 20:00:00,Getafe,Valencia,1,0
+2023-12-09 13:00:00,Deportivo Alavés,UD Las Palmas,0,1
+2023-12-09 15:15:00,Real Betis Balompié,Real Madrid,1,1
+2023-12-09 17:30:00,Villarreal,Real Sociedad de Fútbol,0,3
+2023-12-09 20:00:00,RCD Mallorca,Sevilla,1,0
+2023-12-10 13:00:00,Club Atlético de Madrid,UD Almería,2,1
+2023-12-10 17:30:00,Cádiz,CA Osasuna,1,1
+2023-12-10 20:00:00,Barcelona,Girona,2,4
+2023-12-11 20:00:00,Granada,Athletic Club,1,1
+2023-12-11 20:00:00,Rayo Vallecano de Madrid,RC Celta de Vigo,0,0
+2023-12-15 20:00:00,CA Osasuna,Rayo Vallecano de Madrid,1,0
+2023-12-16 13:00:00,RC Celta de Vigo,Granada,1,0
+2023-12-16 15:15:00,Athletic Club,Club Atlético de Madrid,2,0
+2023-12-16 17:30:00,Sevilla,Getafe,0,3
+2023-12-16 20:00:00,Valencia,Barcelona,1,1
+2023-12-17 13:00:00,UD Almería,RCD Mallorca,0,0
+2023-12-17 15:15:00,Real Sociedad de Fútbol,Real Betis Balompié,0,0
+2023-12-17 17:30:00,UD Las Palmas,Cádiz,1,1
+2023-12-17 20:00:00,Real Madrid,Villarreal,4,1
+2023-12-18 20:00:00,Girona,Deportivo Alavés,3,0
+2023-12-19 18:00:00,Rayo Vallecano de Madrid,Valencia,0,1
+2023-12-19 20:30:00,Club Atlético de Madrid,Getafe,3,3
+2023-12-19 20:30:00,Granada,Sevilla,0,3
+2023-12-20 18:00:00,Barcelona,UD Almería,3,2
+2023-12-20 20:30:00,Athletic Club,UD Las Palmas,1,0
+2023-12-20 20:30:00,Villarreal,RC Celta de Vigo,3,2
+2023-12-21 18:00:00,Real Betis Balompié,Girona,1,1
+2023-12-21 18:00:00,Cádiz,Real Sociedad de Fútbol,0,0
+2023-12-21 20:30:00,Deportivo Alavés,Real Madrid,0,1
+2023-12-21 20:30:00,RCD Mallorca,CA Osasuna,3,2
+2023-12-23 15:15:00,Club Atlético de Madrid,Sevilla,1,0
+2024-01-02 16:00:00,Getafe,Rayo Vallecano de Madrid,0,2
+2024-01-02 18:15:00,Real Sociedad de Fútbol,Deportivo Alavés,1,1
+2024-01-02 20:30:00,Valencia,Villarreal,3,1
+2024-01-03 16:00:00,Granada,Cádiz,2,0
+2024-01-03 18:15:00,RC Celta de Vigo,Real Betis Balompié,2,1
+2024-01-03 18:15:00,Real Madrid,RCD Mallorca,1,0
+2024-01-03 20:30:00,Girona,Club Atlético de Madrid,4,3
+2024-01-04 16:00:00,CA Osasuna,UD Almería,1,0
+2024-01-04 18:15:00,Sevilla,Athletic Club,0,2
+2024-01-04 20:30:00,UD Las Palmas,Barcelona,1,2
+2024-01-12 20:00:00,Sevilla,Deportivo Alavés,2,3
+2024-01-13 13:00:00,UD Las Palmas,Villarreal,3,0
+2024-01-13 15:15:00,RCD Mallorca,RC Celta de Vigo,1,1
+2024-01-13 17:30:00,Athletic Club,Real Sociedad de Fútbol,2,1
+2024-01-13 20:00:00,Real Betis Balompié,Granada,1,0
+2024-01-14 13:00:00,UD Almería,Girona,0,0
+2024-01-14 15:15:00,Cádiz,Valencia,1,4
+2024-01-19 20:00:00,Deportivo Alavés,Cádiz,1,0
+2024-01-20 13:00:00,Rayo Vallecano de Madrid,UD Las Palmas,0,2
+2024-01-20 15:15:00,Villarreal,RCD Mallorca,1,1
+2024-01-20 17:30:00,Valencia,Athletic Club,1,0
+2024-01-20 20:00:00,RC Celta de Vigo,Real Sociedad de Fútbol,0,1
+2024-01-21 13:00:00,CA Osasuna,Getafe,3,2
+2024-01-21 15:15:00,Real Madrid,UD Almería,3,2
+2024-01-21 17:30:00,Real Betis Balompié,Barcelona,2,4
+2024-01-21 20:00:00,Girona,Sevilla,5,1
+2024-01-22 20:00:00,Granada,Club Atlético de Madrid,0,1
+2024-01-26 20:00:00,UD Almería,Deportivo Alavés,0,3
+2024-01-27 13:00:00,Real Sociedad de Fútbol,Rayo Vallecano de Madrid,0,0
+2024-01-27 15:15:00,UD Las Palmas,Real Madrid,1,2
+2024-01-27 17:30:00,Barcelona,Villarreal,3,5
+2024-01-27 20:00:00,RCD Mallorca,Real Betis Balompié,0,1
+2024-01-28 13:00:00,RC Celta de Vigo,Girona,0,1
+2024-01-28 15:15:00,Cádiz,Athletic Club,0,0
+2024-01-28 17:30:00,Sevilla,CA Osasuna,1,1
+2024-01-28 20:00:00,Club Atlético de Madrid,Valencia,2,0
+2024-01-29 20:00:00,Getafe,Granada,2,0
+2024-01-31 18:00:00,Barcelona,CA Osasuna,1,0
+2024-01-31 20:00:00,Club Atlético de Madrid,Rayo Vallecano de Madrid,2,1
+2024-02-01 20:00:00,Getafe,Real Madrid,0,2
+2024-02-02 20:00:00,Athletic Club,RCD Mallorca,4,0
+2024-02-03 13:00:00,Valencia,UD Almería,2,1
+2024-02-03 15:15:00,Granada,UD Las Palmas,1,1
+2024-02-03 17:30:00,Deportivo Alavés,Barcelona,1,3
+2024-02-03 20:00:00,Girona,Real Sociedad de Fútbol,0,0
+2024-02-04 13:00:00,Villarreal,Cádiz,0,0
+2024-02-04 15:15:00,CA Osasuna,RC Celta de Vigo,0,3
+2024-02-04 17:30:00,Real Betis Balompié,Getafe,1,1
+2024-02-04 20:00:00,Real Madrid,Club Atlético de Madrid,1,1
+2024-02-05 20:00:00,Rayo Vallecano de Madrid,Sevilla,1,2
+2024-02-09 20:00:00,Cádiz,Real Betis Balompié,0,2
+2024-02-10 13:00:00,Deportivo Alavés,Villarreal,1,1
+2024-02-10 15:15:00,Real Sociedad de Fútbol,CA Osasuna,0,1
+2024-02-10 17:30:00,Real Madrid,Girona,4,0
+2024-02-10 20:00:00,UD Las Palmas,Valencia,2,0
+2024-02-11 13:00:00,Getafe,RC Celta de Vigo,3,2
+2024-02-11 15:15:00,RCD Mallorca,Rayo Vallecano de Madrid,2,1
+2024-02-11 17:30:00,Sevilla,Club Atlético de Madrid,1,0
+2024-02-11 20:00:00,Barcelona,Granada,3,3
+2024-02-12 20:00:00,UD Almería,Athletic Club,0,0
+2024-02-16 20:00:00,Villarreal,Getafe,1,1
+2024-02-17 13:00:00,Club Atlético de Madrid,UD Las Palmas,5,0
+2024-02-17 15:15:00,CA Osasuna,Cádiz,2,0
+2024-02-17 17:30:00,RC Celta de Vigo,Barcelona,1,2
+2024-02-17 20:00:00,Valencia,Sevilla,0,0
+2024-02-18 13:00:00,Rayo Vallecano de Madrid,Real Madrid,1,1
+2024-02-18 15:15:00,Granada,UD Almería,1,1
+2024-02-18 17:30:00,RCD Mallorca,Real Sociedad de Fútbol,1,2
+2024-02-18 20:00:00,Real Betis Balompié,Deportivo Alavés,0,0
+2024-02-19 20:00:00,Athletic Club,Girona,3,2
+2024-02-23 20:00:00,Real Sociedad de Fútbol,Villarreal,1,3
+2024-02-24 15:15:00,Barcelona,Getafe,4,0
+2024-02-24 17:30:00,Deportivo Alavés,RCD Mallorca,1,1
+2024-02-24 20:00:00,UD Almería,Club Atlético de Madrid,2,2
+2024-02-25 13:00:00,Cádiz,RC Celta de Vigo,2,2
+2024-02-25 15:15:00,Real Betis Balompié,Athletic Club,3,1
+2024-02-25 17:30:00,UD Las Palmas,CA Osasuna,1,1
+2024-02-25 20:00:00,Real Madrid,Sevilla,1,0
+2024-02-26 20:00:00,Girona,Rayo Vallecano de Madrid,3,0
+2024-03-01 20:00:00,RC Celta de Vigo,UD Almería,1,0
+2024-03-02 13:00:00,Sevilla,Real Sociedad de Fútbol,3,2
+2024-03-02 15:15:00,Rayo Vallecano de Madrid,Cádiz,1,1
+2024-03-02 17:30:00,Getafe,UD Las Palmas,3,3
+2024-03-02 20:00:00,Valencia,Real Madrid,2,2
+2024-03-03 13:00:00,Villarreal,Granada,5,1
+2024-03-03 15:15:00,Club Atlético de Madrid,Real Betis Balompié,2,1
+2024-03-03 17:30:00,RCD Mallorca,Girona,1,0
+2024-03-03 20:00:00,Athletic Club,Barcelona,0,0
+2024-03-04 20:00:00,CA Osasuna,Deportivo Alavés,1,0
+2024-03-08 20:00:00,Barcelona,RCD Mallorca,1,0
+2024-03-09 13:00:00,Valencia,Getafe,1,0
+2024-03-09 15:15:00,Cádiz,Club Atlético de Madrid,2,0
+2024-03-09 17:30:00,Granada,Real Sociedad de Fútbol,2,3
+2024-03-09 20:00:00,Girona,CA Osasuna,2,0
+2024-03-10 13:00:00,Deportivo Alavés,Rayo Vallecano de Madrid,1,0
+2024-03-10 15:15:00,UD Las Palmas,Athletic Club,0,2
+2024-03-10 17:30:00,Real Madrid,RC Celta de Vigo,4,0
+2024-03-10 20:00:00,Real Betis Balompié,Villarreal,2,3
+2024-03-11 20:00:00,UD Almería,Sevilla,2,2
+2024-03-15 20:00:00,Real Sociedad de Fútbol,Cádiz,2,0
+2024-03-16 13:00:00,RCD Mallorca,Granada,1,0
+2024-03-16 15:15:00,CA Osasuna,Real Madrid,2,4
+2024-03-16 17:30:00,Getafe,Girona,1,0
+2024-03-16 20:00:00,Athletic Club,Deportivo Alavés,2,0
+2024-03-17 13:00:00,Sevilla,RC Celta de Vigo,1,2
+2024-03-17 15:15:00,Villarreal,Valencia,1,0
+2024-03-17 15:15:00,UD Las Palmas,UD Almería,0,1
+2024-03-17 17:30:00,Rayo Vallecano de Madrid,Real Betis Balompié,2,0
+2024-03-17 20:00:00,Club Atlético de Madrid,Barcelona,0,3
+2024-03-29 20:00:00,Cádiz,Granada,1,0
+2024-03-30 13:00:00,Getafe,Sevilla,0,1
+2024-03-30 15:15:00,UD Almería,CA Osasuna,0,3
+2024-03-30 17:30:00,Valencia,RCD Mallorca,0,0
+2024-03-30 20:00:00,Barcelona,UD Las Palmas,1,0
+2024-03-31 12:00:00,RC Celta de Vigo,Rayo Vallecano de Madrid,0,0
+2024-03-31 14:15:00,Girona,Real Betis Balompié,3,2
+2024-03-31 16:30:00,Deportivo Alavés,Real Sociedad de Fútbol,0,1
+2024-03-31 19:00:00,Real Madrid,Athletic Club,2,0
+2024-04-01 19:00:00,Villarreal,Club Atlético de Madrid,1,2
+2024-04-04 18:00:00,Granada,Valencia,0,1
+2024-04-12 19:00:00,Real Betis Balompié,RC Celta de Vigo,2,1
+2024-04-13 12:00:00,Club Atlético de Madrid,Girona,3,1
+2024-04-13 14:15:00,Rayo Vallecano de Madrid,Getafe,0,0
+2024-04-13 16:30:00,RCD Mallorca,Real Madrid,0,1
+2024-04-13 19:00:00,Cádiz,Barcelona,0,1
+2024-04-14 12:00:00,UD Las Palmas,Sevilla,0,2
+2024-04-14 14:15:00,Granada,Deportivo Alavés,2,0
+2024-04-14 16:30:00,Athletic Club,Villarreal,1,1
+2024-04-14 19:00:00,Real Sociedad de Fútbol,UD Almería,2,2
+2024-04-15 19:00:00,CA Osasuna,Valencia,0,1
+2024-04-19 19:00:00,Athletic Club,Granada,1,1
+2024-04-20 12:00:00,RC Celta de Vigo,UD Las Palmas,4,1
+2024-04-20 14:15:00,Rayo Vallecano de Madrid,CA Osasuna,2,1
+2024-04-20 16:30:00,Valencia,Real Betis Balompié,1,2
+2024-04-20 19:00:00,Girona,Cádiz,4,1
+2024-04-21 12:00:00,Getafe,Real Sociedad de Fútbol,1,1
+2024-04-21 14:15:00,UD Almería,Villarreal,1,2
+2024-04-21 16:30:00,Deportivo Alavés,Club Atlético de Madrid,2,0
+2024-04-21 19:00:00,Real Madrid,Barcelona,3,2
+2024-04-22 19:00:00,Sevilla,RCD Mallorca,2,1
+2024-04-26 19:00:00,Real Sociedad de Fútbol,Real Madrid,0,1
+2024-04-27 12:00:00,UD Las Palmas,Girona,0,2
+2024-04-27 14:15:00,UD Almería,Getafe,1,3
+2024-04-27 16:30:00,Deportivo Alavés,RC Celta de Vigo,3,0
+2024-04-27 19:00:00,Club Atlético de Madrid,Athletic Club,3,1
+2024-04-28 12:00:00,Cádiz,RCD Mallorca,1,1
+2024-04-28 14:15:00,Granada,CA Osasuna,3,0
+2024-04-28 16:30:00,Villarreal,Rayo Vallecano de Madrid,3,0
+2024-04-28 19:00:00,Real Betis Balompié,Sevilla,1,1
+2024-04-29 19:00:00,Barcelona,Valencia,4,2
+2024-05-03 19:00:00,Getafe,Athletic Club,0,2
+2024-05-04 12:00:00,Real Sociedad de Fútbol,UD Las Palmas,2,0
+2024-05-04 14:15:00,Real Madrid,Cádiz,3,0
+2024-05-04 16:30:00,Girona,Barcelona,4,2
+2024-05-04 19:00:00,RCD Mallorca,Club Atlético de Madrid,0,1
+2024-05-05 12:00:00,CA Osasuna,Real Betis Balompié,0,2
+2024-05-05 14:15:00,RC Celta de Vigo,Villarreal,3,2
+2024-05-05 16:30:00,Valencia,Deportivo Alavés,0,1
+2024-05-05 19:00:00,Sevilla,Granada,3,0
+2024-05-05 19:00:00,Rayo Vallecano de Madrid,UD Almería,0,1
+2024-05-10 19:00:00,Deportivo Alavés,Girona,2,2
+2024-05-11 12:00:00,RCD Mallorca,UD Las Palmas,1,0
+2024-05-11 14:15:00,Villarreal,Sevilla,3,2
+2024-05-11 16:30:00,Granada,Real Madrid,0,4
+2024-05-11 19:00:00,Athletic Club,CA Osasuna,2,2
+2024-05-12 12:00:00,Cádiz,Getafe,1,0
+2024-05-12 14:15:00,Club Atlético de Madrid,RC Celta de Vigo,1,0
+2024-05-12 16:30:00,Valencia,Rayo Vallecano de Madrid,0,0
+2024-05-12 19:00:00,Real Betis Balompié,UD Almería,3,2
+2024-05-13 19:00:00,Barcelona,Real Sociedad de Fútbol,2,0
+2024-05-14 17:30:00,CA Osasuna,RCD Mallorca,1,1
+2024-05-14 19:30:00,Real Madrid,Deportivo Alavés,5,0
+2024-05-14 20:00:00,Girona,Villarreal,0,1
+2024-05-15 17:30:00,Sevilla,Cádiz,0,1
+2024-05-15 17:30:00,Rayo Vallecano de Madrid,Granada,2,1
+2024-05-15 20:00:00,RC Celta de Vigo,Athletic Club,2,1
+2024-05-15 20:00:00,Getafe,Club Atlético de Madrid,0,3
+2024-05-16 17:30:00,UD Las Palmas,Real Betis Balompié,2,2
+2024-05-16 19:30:00,UD Almería,Barcelona,0,2
+2024-05-16 20:00:00,Real Sociedad de Fútbol,Valencia,1,0
+2024-05-18 19:00:00,Deportivo Alavés,Getafe,1,0
+2024-05-19 17:00:00,Athletic Club,Sevilla,2,0
+2024-05-19 17:00:00,Club Atlético de Madrid,CA Osasuna,1,4
+2024-05-19 17:00:00,Real Betis Balompié,Real Sociedad de Fútbol,0,2
+2024-05-19 17:00:00,Barcelona,Rayo Vallecano de Madrid,3,0
+2024-05-19 17:00:00,Cádiz,UD Las Palmas,0,0
+2024-05-19 17:00:00,Granada,RC Celta de Vigo,1,2
+2024-05-19 17:00:00,Valencia,Girona,1,3
+2024-05-19 17:00:00,Villarreal,Real Madrid,4,4
+2024-05-19 17:00:00,RCD Mallorca,UD Almería,2,2
+2024-05-24 19:00:00,Girona,Granada,7,0
+2024-05-25 12:00:00,CA Osasuna,Villarreal,1,1
+2024-05-25 14:15:00,Real Sociedad de Fútbol,Club Atlético de Madrid,0,2
+2024-05-25 16:30:00,Rayo Vallecano de Madrid,Athletic Club,0,1
+2024-05-25 16:30:00,UD Almería,Cádiz,6,1
+2024-05-25 19:00:00,Real Madrid,Real Betis Balompié,0,0
+2024-05-26 12:00:00,Getafe,RCD Mallorca,1,2
+2024-05-26 14:15:00,RC Celta de Vigo,Valencia,2,2
+2024-05-26 14:15:00,UD Las Palmas,Deportivo Alavés,1,1
+2024-05-26 19:00:00,Sevilla,Barcelona,1,2

@@ -1,92 +1,192 @@
+"""สมองกลของระบบ (ขั้นที่ 1: ML ประเมินประตูคาดหวัง λ, ขั้นที่ 2: Poisson แจกแจงสกอร์)
+
+  (อัปเกรด 🌟: ปรับจูนพารามิเตอร์ Random Forest เพื่อรับมือกับ Advanced Features ป้องกัน Overfitting)
+  Train   : Random Forest 2 ตัว (ประตูเหย้า / ประตูเยือน) เรียนจากฟีเจอร์ใน Master
+  Predict : λ_เหย้า, λ_เยือน -> ตาราง Poisson 0..MAX_GOALS -> สกอร์ที่น่าจะเป็นที่สุด + P(ชนะ/เสมอ/แพ้)
+  Tuning  : ลองชุด n_estimators / max_depth / min_samples_leaf ด้วย walk-forward log-loss
+            (ช่วง "จูน" แยกจากช่วง "ตรวจ" เหมือนเดิม และใช้ค่าใหม่ก็ต่อเมื่อชนะค่าตั้งต้นในช่วงตรวจ)
+ไฟล์นี้ไม่อ่าน/เขียน CSV ดิบ ยกเว้นไฟล์พารามิเตอร์ที่จูนแล้ว และไม่ import streamlit
+"""
+import json
+
 import numpy as np
 import pandas as pd
-import streamlit as st
 from scipy.stats import poisson
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import make_pipeline
 
-from team_names import resolve_team
+from config import DATA_DIR, LEAGUES
 
-MAX_GOALS = 10      # คิดสกอร์สูงสุดทีมละ 10 ประตู (เดิม 5 ทำให้ความน่าจะเป็นรวมไม่ครบ 100%)
-SHRINK = 4.0        # "จำนวนนัดสมมติ" ที่ดึงค่าทีมเข้าหาค่าเฉลี่ยลีก ลดความเพี้ยนจากข้อมูลน้อย
-HALF_LIFE_DAYS = 365  # นัดเก่าครบ 1 ปีมีน้ำหนักเหลือครึ่งเดียว
+MAX_GOALS = 10
+LAMBDA_MIN, LAMBDA_MAX = 0.15, 4.5
+
+# 🌟 อัปเดต DEFAULT_PARAMS: เพิ่มต้นไม้ ลดความลึก และเพิ่มใบ เพื่อบังคับให้โมเดลไม่ท่องจำข้อมูลมากเกินไป
+DEFAULT_PARAMS = {"kind": "rf", "n_estimators": 300, "max_depth": 7, "min_samples_leaf": 15}
+
+# 🌟 อัปเดต GRID: ขยายตารางค้นหาพารามิเตอร์ให้ครอบคลุมชุดข้อมูลที่มีฟีเจอร์ซับซ้อนขึ้น
+GRID = {"n_estimators": [150, 300], "max_depth": [5, 7, 9], "min_samples_leaf": [10, 15, 25]}
 
 
-def _team_rate(d, team_col, goal_col, league_avg):
-    """อัตราประตู (ถ่วงน้ำหนักเวลา + shrink) หารด้วยค่าเฉลี่ยลีก"""
-    g = (
-        d.assign(wg=d["w"] * d[goal_col])
-        .groupby(team_col)
-        .agg(wg=("wg", "sum"), w=("w", "sum"))
+# ---------------------------------------------------------------- train
+def _regressor(p):
+    """สร้างท่อส่งต่อข้อมูลให้โมเดล (เพิ่ม max_features='sqrt' เพื่อกระจายความสำคัญของตัวแปร)"""
+    return make_pipeline(
+        SimpleImputer(strategy="median"),   # ฟีเจอร์ที่ยังไม่มีประวัติ (ต้นฤดูกาล/ทีมใหม่) -> ค่ากลาง
+        RandomForestRegressor(
+            n_estimators=int(p["n_estimators"]), 
+            max_depth=p["max_depth"],
+            min_samples_split=20,                       # 🌟 บังคับกิ่งต้องมีอย่างน้อย 20 นัดถึงจะแตกต่อ
+            min_samples_leaf=int(p["min_samples_leaf"]), 
+            max_features="sqrt",                        # 🌟 สุ่มฟีเจอร์แค่รากที่สอง (กันตัวแปรเดิมๆ แย่งซีน)
+            n_jobs=-1, 
+            random_state=42,
+        ),
     )
-    rate = (g["wg"] + SHRINK * league_avg) / (g["w"] + SHRINK) / league_avg
-    return rate.to_dict()
 
 
-@st.cache_data(ttl=86400, show_spinner=False)
-def train_model(df, ref_date=None, half_life_days=HALF_LIFE_DAYS):
-    """คำนวณพลังรุก/รับของแต่ละทีม
-
-    ref_date: วันอ้างอิงสำหรับถ่วงน้ำหนัก (ค่าเริ่มต้น = วันที่ล่าสุดในข้อมูล)
-    ส่ง df ที่ตัดนัดอนาคตออกแล้วเพื่อ Backtest โดยไม่ให้ข้อมูลรั่ว
-    """
-    if df is None or df.empty:
+def train(master, features, params=None, before=None):
+    """เทรนจากนัดที่แข่งจบแล้ว (ถ้าระบุ before จะใช้เฉพาะนัดก่อนวันนั้น) คืน dict โมเดล หรือ None"""
+    p = {**DEFAULT_PARAMS, **(params or {})}
+    d = master[master["FTHG"].notna()]
+    if before is not None:
+        d = d[d["Date"] < pd.Timestamp(before)]
+    if len(d) < 30:
         return None
-
-    d = df.copy()
-    ref = pd.Timestamp(ref_date) if ref_date is not None else d["Date"].max()
-    age_days = (ref - d["Date"]).dt.days.clip(lower=0)
-    d["w"] = 0.5 ** (age_days / half_life_days)
-
-    avg_home = float(np.average(d["FTHG"], weights=d["w"]))
-    avg_away = float(np.average(d["FTAG"], weights=d["w"]))
-
+    X = d[list(features)]
     return {
-        "avg_home": avg_home,
-        "avg_away": avg_away,
-        "home_attack": _team_rate(d, "HomeTeam", "FTHG", avg_home),
-        "home_defence": _team_rate(d, "HomeTeam", "FTAG", avg_away),
-        "away_attack": _team_rate(d, "AwayTeam", "FTAG", avg_away),
-        "away_defence": _team_rate(d, "AwayTeam", "FTHG", avg_home),
+        "kind": "rf",
+        "features": list(features),
+        "params": p,
+        "home": _regressor(p).fit(X, d["FTHG"]),
+        "away": _regressor(p).fit(X, d["FTAG"]),
         "teams": sorted(set(d["HomeTeam"]) | set(d["AwayTeam"])),
+        "n_train": len(d),
     }
 
 
-def predict_match(model, home_team, away_team):
-    """ทำนายผลคู่หนึ่ง คืน dict
+def expected_goals(model, rows):
+    """λ เหย้า/เยือน (numpy array) ของทุกแถวใน rows"""
+    X = rows[model["features"]]
+    return (np.clip(model["home"].predict(X), LAMBDA_MIN, LAMBDA_MAX),
+            np.clip(model["away"].predict(X), LAMBDA_MIN, LAMBDA_MAX))
 
-    keys: score, p_home, p_draw, p_away (เป็น %), xg_home, xg_away,
-          missing (ชื่อทีมที่จับคู่กับข้อมูลสถิติไม่ได้ -> ใช้ค่าเฉลี่ยลีกแทน)
-    """
-    if not model:
+
+def feature_importance(model):
+    """ความสำคัญของฟีเจอร์ (เฉลี่ยโมเดลเหย้า+เยือน) เรียงมาก->น้อย"""
+    # Pipeline มี 2 step (Imputer=0, RF=1)
+    imp = sum(model[k][-1].feature_importances_ for k in ("home", "away")) / 2
+    return pd.Series(imp, index=model["features"]).sort_values(ascending=False)
+
+
+# ---------------------------------------------------------------- Poisson
+def score_matrix(lam_h, lam_a, max_goals=MAX_GOALS):
+    """ตารางความน่าจะเป็นสกอร์ [เหย้า, เยือน] (normalize ให้รวม 1)"""
+    k = np.arange(max_goals + 1)
+    m = np.outer(poisson.pmf(k, lam_h), poisson.pmf(k, lam_a))
+    return m / m.sum()
+
+
+def describe_matrix(m, lam_h, lam_a):
+    i, j = np.unravel_index(np.argmax(m), m.shape)
+    return {
+        "score": f"{i} - {j}",
+        "p_home": float(np.tril(m, -1).sum() * 100),   # เหย้ายิงมากกว่า
+        "p_draw": float(np.trace(m) * 100),
+        "p_away": float(np.triu(m, 1).sum() * 100),
+        "xg_home": float(lam_h),
+        "xg_away": float(lam_a),
+    }
+
+
+def predict_rows(model, rows):
+    """ทำนายหลายนัดพร้อมกัน คืน list ของ dict (key เดิมของแอป: score, p_home, p_draw, p_away, xg_home, xg_away, missing)"""
+    if not model or len(rows) == 0:
+        return []
+    lh, la = expected_goals(model, rows)
+    known = set(model["teams"])
+    out = []
+    for (_, r), h, a in zip(rows.iterrows(), lh, la):
+        res = describe_matrix(score_matrix(h, a), h, a)
+        res["missing"] = [t for t in (r["HomeTeam"], r["AwayTeam"]) if t not in known]
+        out.append(res)
+    return out
+
+
+def predict_match(model, row):
+    """ทำนายนัดเดียว (row = 1 แถวจาก Master ที่มีฟีเจอร์ครบ)"""
+    res = predict_rows(model, row.to_frame().T if isinstance(row, pd.Series) else row)
+    return res[0] if res else None
+
+
+# ---------------------------------------------------------------- พารามิเตอร์ที่จูนแล้ว
+def _params_path(league_name):
+    return DATA_DIR / f"tuned_ml_{LEAGUES[league_name]['csv_code']}.json"
+
+
+def load_params(league_name):
+    try:
+        d = json.loads(_params_path(league_name).read_text(encoding="utf-8"))
+        if d.get("kind") == "rf":
+            return {"kind": "rf", "n_estimators": int(d["n_estimators"]),
+                    "max_depth": d["max_depth"], "min_samples_leaf": int(d["min_samples_leaf"])}
+    except Exception:  # noqa: BLE001
+        pass
+    return dict(DEFAULT_PARAMS)
+
+
+def save_params(league_name, params):
+    DATA_DIR.mkdir(exist_ok=True)
+    keep = {k: params[k] for k in ("n_estimators", "max_depth", "min_samples_leaf")}
+    _params_path(league_name).write_text(json.dumps({"kind": "rf", **keep}), encoding="utf-8")
+
+
+def reset_params(league_name):
+    try:
+        _params_path(league_name).unlink()
+    except FileNotFoundError:
+        pass
+
+
+def is_default(params):
+    return all(params.get(k) == DEFAULT_PARAMS[k] for k in ("n_estimators", "max_depth", "min_samples_leaf"))
+
+
+# ---------------------------------------------------------------- tuning
+def run_tuning(master, features, n_tune=380, n_holdout=380, step_weeks=3):
+    """คืน dict: grid, best, holdout, improved, n_tune, n_holdout หรือ None ถ้าข้อมูลไม่พอ
+    step_weeks: ตอนจูนเทรนใหม่ทุกกี่สัปดาห์ (ยิ่งมากยิ่งเร็ว)"""
+    from evaluation import MIN_TRAIN_MATCHES, compare_models, summarize, walk_forward  # กัน import วน
+
+    played = int(master["FTHG"].notna().sum())
+    avail = played - MIN_TRAIN_MATCHES
+    if avail < 200:
+        return None
+    n_holdout = min(n_holdout, avail // 2)
+    n_tune = min(n_tune, avail - n_holdout)
+
+    rows = []
+    for ne in GRID["n_estimators"]:
+        for md in GRID["max_depth"]:
+            for leaf in GRID["min_samples_leaf"]:
+                p = {"kind": "rf", "n_estimators": ne, "max_depth": md, "min_samples_leaf": leaf}
+                s = summarize(walk_forward(master, features, p, n_tune, skip_last=n_holdout,
+                                           step_weeks=step_weeks)["results"])
+                if s:
+                    rows.append({**{k: p[k] for k in GRID}, "logloss": s["logloss"], "accuracy": s["accuracy"]})
+    if not rows:
         return None
 
-    h = resolve_team(home_team, model["teams"])
-    a = resolve_team(away_team, model["teams"])
-    missing = [name for name, found in ((home_team, h), (away_team, a)) if found is None]
+    grid = pd.DataFrame(rows).sort_values("logloss").reset_index(drop=True)
+    top = grid.iloc[0]
+    best = {"kind": "rf", "n_estimators": int(top["n_estimators"]),
+            "max_depth": int(top["max_depth"]), "min_samples_leaf": int(top["min_samples_leaf"])}
 
-    ha = model["home_attack"].get(h, 1.0)
-    hd = model["home_defence"].get(h, 1.0)
-    aa = model["away_attack"].get(a, 1.0)
-    ad = model["away_defence"].get(a, 1.0)
-
-    lambda_home = max(0.2, ha * ad * model["avg_home"])
-    lambda_away = max(0.2, aa * hd * model["avg_away"])
-
-    goals = np.arange(MAX_GOALS + 1)
-    matrix = np.outer(poisson.pmf(goals, lambda_home), poisson.pmf(goals, lambda_away))
-    matrix /= matrix.sum()
-
-    home_win = np.tril(matrix, -1).sum()   # แถว = ประตูเหย้า > คอลัมน์ = ประตูเยือน
-    draw = np.trace(matrix)
-    away_win = np.triu(matrix, 1).sum()
-
-    hg, ag = np.unravel_index(np.argmax(matrix), matrix.shape)
-
-    return {
-        "score": f"{hg} - {ag}",
-        "p_home": float(home_win * 100),
-        "p_draw": float(draw * 100),
-        "p_away": float(away_win * 100),
-        "xg_home": float(lambda_home),
-        "xg_away": float(lambda_away),
-        "missing": missing,
-    }
+    holdout = compare_models(master, n_holdout, {
+        "RF (ค่าที่จูนได้)": (features, best),
+        "RF (ค่าตั้งต้น)": (features, dict(DEFAULT_PARAMS)),
+    }, step_weeks=step_weeks)
+    ll = dict(zip(holdout["โมเดล"], holdout["Log-loss"]))
+    return {"grid": grid, "best": best, "holdout": holdout,
+            "improved": bool(ll["RF (ค่าที่จูนได้)"] < ll["RF (ค่าตั้งต้น)"]),
+            "n_tune": n_tune, "n_holdout": n_holdout}
