@@ -92,21 +92,24 @@ def get_upcoming_fixtures(league_name, limit=5):
             matches = _get_matches(api_id, {"status": statuses})
 
     status_map = {
-        "IN_PLAY": "🔴 กำลังแข่ง (Live)",
-        "PAUSED": "⏸ พักครึ่ง",
-        "SCHEDULED": "⏳ ยังไม่เริ่ม",
-        "TIMED": "⏳ ยังไม่เริ่ม",
+        "IN_PLAY": "กำลังแข่ง (Live)",
+        "PAUSED": "พักครึ่ง",
+        "SCHEDULED": "ยังไม่เริ่ม",
+        "TIMED": "ยังไม่เริ่ม",
     }
     rows = []
     for m in _by_kickoff(matches)[:limit]:
         utc_raw = m.get("utcDate")
         time_str = _to_bangkok(utc_raw).strftime("%d/%m/%Y %H:%M น.") if utc_raw else "ไม่ระบุเวลา"
         rows.append({
-            "สถานะ": status_map.get(m.get("status"), "⏳ ยังไม่เริ่ม"),
+            "สถานะ": status_map.get(m.get("status"), "ยังไม่เริ่ม"),
             "วัน-เวลาแข่งขัน (ไทย)": time_str,
             "ทีมเหย้า": clean_display_name(m.get("homeTeam", {}).get("name", "")),
             "ทีมเยือน": clean_display_name(m.get("awayTeam", {}).get("name", "")),
             "_kickoff_utc": pd.to_datetime(utc_raw, utc=True).tz_localize(None) if utc_raw else pd.NaT,
+            "_status": m.get("status"),
+            "_home_crest": m.get("homeTeam", {}).get("crest"),
+            "_away_crest": m.get("awayTeam", {}).get("crest"),
         })
     return pd.DataFrame(rows)
 

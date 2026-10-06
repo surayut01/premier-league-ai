@@ -348,6 +348,133 @@ background:var(--nav-bg);backdrop-filter:blur(14px);box-shadow:var(--nav-shadow)
     transform: scale(1.015);
     box-shadow: 0 20px 40px rgba(0,0,0,0.35);
 }
+
+/* 🖥️ เดสก์ท็อป: ขยายตัวอักษร / โลโก้ / ตราสโมสร และทำให้ชื่อแอปเด่นขึ้น (มือถือไม่เปลี่ยน) */
+@media (min-width: 721px) {
+    html { font-size: 110% !important; }                         /* ตัวอักษรทั้งแอปใหญ่ขึ้นประมาณ 10% */
+    .block-container { padding-top: 2rem; }
+    .fb-bar { gap: 1.2rem; margin: .2rem 0 1.6rem; }
+    .fb-logo { width: 76px; height: 76px; border-radius: 22px; }
+    .fb-logo svg { width: 44px; height: 44px; }
+    .fb-ttl { font-size: 2.1rem; font-weight: 800; letter-spacing: -.025em; line-height: 1.05; }
+    .fb-ttl .ai { color: var(--acc); }
+    .fb-sub { font-size: 1.02rem; margin-top: .35rem; }
+    .fb-bdg { width: 46px; height: 46px; font-size: .85rem; }    /* ตราสโมสร */
+    .fb-bdg.lg { width: 76px; height: 76px; font-size: 1.15rem; }
+    .fb-bdg.sm { width: 36px; height: 36px; font-size: .72rem; }
+    .fb-tm .nm { font-size: 1.05rem; }
+    .fb-chip, .fb-plab, .fb-mc-foot, .fb-rr-ai, .fb-panel .xg { font-size: .86rem; }
+    .fb-rr-d { font-size: .84rem; }
+    .fb-note, .fb-sec .fb-aside { font-size: .88rem; }
+}
+
+/* ✨ ปรับโฉม UI (ภาษาออกแบบเดียวกันทั้งแอป) — ใช้ตัวแปรสีของธีม จึงเข้ากับทุกธีม
+   หมายเหตุ: Streamlit รุ่นใหม่เปลี่ยนโครงสร้าง (แท็บ/ช่องเลือก/เรดิโอ) จึงเพิ่ม selector ตามโครงสร้างจริงด้วย */
+:root { --r-sm: 12px; --r-md: 16px; --r-lg: 22px; --ring: color-mix(in srgb, var(--acc) 22%, transparent); }
+::selection { background: color-mix(in srgb, var(--acc) 28%, transparent); }
+html, .stApp, [data-testid="stMain"], [data-testid="stAppViewContainer"] {
+    scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--mut) 40%, transparent) transparent;
+}
+
+/* หัวแอป: เส้นแบ่ง + แถบเน้นสีไล่เฉด + โลโก้ไล่เฉด */
+.fb-bar { position: relative; padding-bottom: 1.15rem; margin-bottom: 1.4rem; border-bottom: 1px solid var(--line); }
+.fb-bar:after { content: ""; position: absolute; left: 0; bottom: -1px; width: 120px; height: 3px; border-radius: 3px;
+    background: linear-gradient(90deg, var(--acc), var(--c-away)); }
+.fb-logo { background: linear-gradient(145deg, color-mix(in srgb, var(--logo-bg), #fff 18%), var(--logo-bg));
+    box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.22); }
+
+/* หัวข้อส่วน: ไอคอนในแผ่นสีอ่อน */
+.fb-sec { font-size: 1.15rem; font-weight: 700; margin: 1.8rem 0 .9rem; letter-spacing: -.005em; }
+.fb-sec .fb-ic { box-sizing: border-box; width: 34px; height: 34px; padding: 7px; border-radius: 11px;
+    background: color-mix(in srgb, var(--acc) 13%, transparent); }
+
+/* ตัวเลือกแบบเรดิโอ -> ปุ่มเม็ดยา (pill) */
+[data-testid="stRadioGroup"] { gap: .5rem !important; flex-wrap: wrap; }
+label[data-testid="stRadioOption"] { display: inline-flex !important; align-items: center; background: var(--card) !important;
+    border: 1px solid var(--line) !important; border-radius: 999px !important; padding: .38rem 1.1rem !important;
+    box-shadow: var(--shadow); cursor: pointer; transition: border-color .15s ease, background .15s ease, transform .15s ease; }
+label[data-testid="stRadioOption"] > div > div:first-child { display: none !important; }
+label[data-testid="stRadioOption"] p { margin: 0; font-weight: 500; color: var(--mut); }
+label[data-testid="stRadioOption"]:hover { border-color: var(--acc) !important; transform: translateY(-1px); }
+label[data-testid="stRadioOption"]:has(input:checked) { background: var(--sel-bg) !important; border-color: var(--sel-bg) !important; }
+label[data-testid="stRadioOption"]:has(input:checked) p { color: var(--sel-tx); font-weight: 600; }
+
+/* แท็บ -> แถบแบบ segmented */
+[data-testid="stTabs"] [role="tablist"] { gap: .25rem !important; background: var(--card); padding: .35rem !important;
+    border-radius: 18px; border: 1px solid var(--line); box-shadow: var(--shadow); width: fit-content; max-width: 100%; overflow-x: auto; }
+[data-testid="stTabs"] [role="tablist"]:after { display: none !important; }
+[data-testid="stTab"] { padding: .55rem 1.15rem !important; border-radius: 13px; transition: background .15s ease; }
+[data-testid="stTab"]:hover { background: var(--chip); }
+[data-testid="stTab"] .react-aria-SelectionIndicator { display: none !important; }
+[data-testid="stTab"] p { margin: 0; font-weight: 500; color: var(--mut); }
+[data-testid="stTab"][aria-selected="true"] { background: var(--tabsel-bg); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tabsel-tx) 22%, transparent); }
+[data-testid="stTab"][aria-selected="true"] p { color: var(--tabsel-tx); font-weight: 600; }
+[data-testid="stTabPanel"] { padding-top: 1.1rem; }
+
+/* ช่องเลือก (selectbox) + ป้ายกำกับ */
+.react-aria-ComboBox [role="group"] { background: var(--card) !important; border: 1px solid var(--line) !important;
+    border-radius: var(--r-sm) !important; box-shadow: var(--shadow); min-height: 2.9rem; transition: border-color .15s ease, box-shadow .15s ease; }
+.react-aria-ComboBox [role="group"]:hover { border-color: color-mix(in srgb, var(--acc) 55%, var(--line)) !important; }
+.react-aria-ComboBox [role="group"]:focus-within { border-color: var(--acc) !important; box-shadow: 0 0 0 3px var(--ring); }
+[data-testid="stWidgetLabel"] p { color: var(--mut); font-weight: 500; }
+[role="listbox"] { border-radius: var(--r-sm); }
+
+/* ปุ่ม */
+[data-testid="stBaseButton-secondary"], [data-testid="stBaseButton-primary"] { border-radius: var(--r-sm) !important; font-weight: 600;
+    min-height: 2.7rem; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+[data-testid="stBaseButton-secondary"]:hover, [data-testid="stBaseButton-primary"]:hover { transform: translateY(-1px);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--acc) 20%, transparent); }
+[data-testid="stBaseButton-secondary"]:active, [data-testid="stBaseButton-primary"]:active { transform: none; }
+
+/* การ์ดหลัก: ลายสนามหญ้า + แผงกระจก + แถบความน่าจะเป็นหนาขึ้น */
+.fb-hero { border-radius: 26px; }
+.fb-hero:after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 64px, transparent 64px 128px);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 85%); mask-image: linear-gradient(180deg, #000 0%, transparent 85%); }
+.fb-hero > * { z-index: 1; }
+.fb-panel { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.fb-mc { border-radius: 20px; }
+.fb-pbar { height: 10px; }
+.fb-tm .sc { font-weight: 700; min-width: 2.1rem; }
+.fb-tile { border-radius: 18px; }
+.fb-bars { border-radius: 18px; }
+.fb-rr { border-radius: 16px; transition: transform .2s ease, box-shadow .2s ease; }
+.fb-rr:hover { transform: translateY(-1px); box-shadow: 0 10px 24px color-mix(in srgb, var(--tx) 10%, transparent); }
+
+/* ตารางคะแนน: หัวตารางมีสี + แถบสลับสี */
+.fb-mc table thead th { background: color-mix(in srgb, var(--chip) 70%, transparent); }
+.fb-mc table thead th:first-child { border-top-left-radius: 12px; }
+.fb-mc table thead th:last-child { border-top-right-radius: 12px; }
+.fb-mc table tbody tr:nth-child(even) { background: color-mix(in srgb, var(--chip) 45%, transparent); }
+.fb-mc table th, .fb-mc table td { border-right: none !important; }
+.fb-mc table th:not(:first-child), .fb-mc table td:not(:first-child) { border-left: none !important; }
+
+/* กราฟ / ตาราง / expander ให้เป็นการ์ดเดียวกัน */
+[data-testid="stPlotlyChart"], [data-testid="stVegaLiteChart"], [data-testid="stDataFrame"] {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); box-shadow: var(--shadow); padding: .35rem; }
+[data-testid="stExpander"] { border-radius: 18px; overflow: hidden; }
+[data-testid="stExpander"] details { border: none !important; background: transparent !important; box-shadow: none !important; }
+[data-testid="stExpander"] summary { border-radius: 18px; transition: background .15s ease; }
+[data-testid="stExpander"] summary:hover { background: var(--chip); }
+[data-testid="stCaptionContainer"] { color: var(--mut); }
+
+@media (max-width: 640px) {
+    [data-testid="stTabs"] [role="tablist"] { width: 100%; }
+    [data-testid="stTab"] { padding: .5rem .75rem !important; }
+    [data-testid="stTab"] p { font-size: .88rem; }
+    label[data-testid="stRadioOption"] { padding: .32rem .9rem !important; }
+}
+
+/* ทยอยโผล่ขึ้นเบา ๆ ตอนโหลดการ์ด (ปิดอัตโนมัติถ้าผู้ใช้ตั้งค่าลดการเคลื่อนไหว) */
+@keyframes fb-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: no-preference) {
+    .fb-hero, .fb-mc, .fb-tile, .fb-bars, .fb-rr { animation: fb-rise .45s ease backwards; }
+    .fb-grid .fb-mc:nth-child(2), .fb-tiles .fb-tile:nth-child(2) { animation-delay: .06s; }
+    .fb-grid .fb-mc:nth-child(3), .fb-tiles .fb-tile:nth-child(3) { animation-delay: .12s; }
+    .fb-grid .fb-mc:nth-child(4) { animation-delay: .18s; }
+    .fb-grid .fb-mc:nth-child(5) { animation-delay: .24s; }
+    .fb-grid .fb-mc:nth-child(n+6) { animation-delay: .3s; }
+}
 """
 
 # ---------------------------------------------------------------- ธีม
@@ -706,7 +833,7 @@ def _score_parts(score):
 
 def app_bar(subtitle):
     return (f'<div class="fb-bar"><div class="fb-logo">{icon("ball", 24)}</div>'
-            f'<div><div class="fb-ttl">AI Football Predictor</div><div class="fb-sub">{_e(subtitle)}</div></div></div>')
+            f'<div><div class="fb-ttl"><span class="ai">AI</span> Football Predictor</div><div class="fb-sub">{_e(subtitle)}</div></div></div>')
 
 
 def section(icon_name, title, aside=""):
@@ -830,7 +957,7 @@ def league_table(df, crests={}):
         
         highlight_class = "top-4" if rank <= 4 else ("relegation" if rank >= len(df) - 2 else "")
         
-        rows_html.append(f'<tr class="{highlight_class}"><td style="text-align:center; font-weight:700; width: 45px;">{rank}</td><td style="display:flex; align-items:center; gap:0.6rem; font-weight:600;">{badge(team, crest, "sm")}<span>{_e(team)}</span></td><td style="text-align:center">{p}</td><td style="text-align:center">{w}</td><td style="text-align:center">{d}</td><td style="text-align:center">{l}</td><td style="text-align:center">{gf}</td><td style="text-align:center">{ga}</td><td style="text-align:center; font-weight:600;" class="{gd_cls}">{gd_str}</td><td style="text-align:center; font-weight:700; color:var(--acc); font-size:1.05rem;">{pts}</td></tr>')
+        rows_html.append(f'<tr class="{highlight_class}"><td style="text-align:center; font-weight:700; width: 45px;">{rank}</td><td style="font-weight:600;"><div style="display:flex; align-items:center; gap:0.6rem;">{badge(team, crest, "sm")}<span>{_e(team)}</span></div></td><td style="text-align:center">{p}</td><td style="text-align:center">{w}</td><td style="text-align:center">{d}</td><td style="text-align:center">{l}</td><td style="text-align:center">{gf}</td><td style="text-align:center">{ga}</td><td style="text-align:center; font-weight:600;" class="{gd_cls}">{gd_str}</td><td style="text-align:center; font-weight:700; color:var(--acc); font-size:1.05rem;">{pts}</td></tr>')
     
     table_head = '<thead><tr style="border-bottom: 2px solid var(--line); color: var(--mut); font-size: 0.82rem; text-transform: uppercase;"><th style="text-align:center; padding: 0.75rem 0.5rem;">#</th><th style="padding: 0.75rem 0.5rem;">ทีมสโมสร</th><th style="text-align:center; padding: 0.75rem 0.5rem;">แข่ง</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ชนะ</th><th style="text-align:center; padding: 0.75rem 0.5rem;">เสมอ</th><th style="text-align:center; padding: 0.75rem 0.5rem;">แพ้</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ได้</th><th style="text-align:center; padding: 0.75rem 0.5rem;">เสีย</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ต่าง</th><th style="text-align:center; padding: 0.75rem 0.5rem; color: var(--tx);">แต้ม</th></tr></thead>'
     

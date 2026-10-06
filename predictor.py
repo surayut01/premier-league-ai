@@ -1,6 +1,6 @@
 """สมองกลของระบบ (ขั้นที่ 1: ML ประเมินประตูคาดหวัง λ, ขั้นที่ 2: Poisson แจกแจงสกอร์)
 
-  (อัปเกรด 🌟: ปรับจูนพารามิเตอร์ Random Forest เพื่อรับมือกับ Advanced Features ป้องกัน Overfitting)
+  (อัปเกรด : ปรับจูนพารามิเตอร์ Random Forest เพื่อรับมือกับ Advanced Features ป้องกัน Overfitting)
   Train   : Random Forest 2 ตัว (ประตูเหย้า / ประตูเยือน) เรียนจากฟีเจอร์ใน Master
   Predict : λ_เหย้า, λ_เยือน -> ตาราง Poisson 0..MAX_GOALS -> สกอร์ที่น่าจะเป็นที่สุด + P(ชนะ/เสมอ/แพ้)
   Tuning  : ลองชุด n_estimators / max_depth / min_samples_leaf ด้วย walk-forward log-loss
@@ -21,11 +21,8 @@ from config import DATA_DIR, LEAGUES
 MAX_GOALS = 10
 LAMBDA_MIN, LAMBDA_MAX = 0.15, 4.5
 
-# 🌟 อัปเดต DEFAULT_PARAMS: เพิ่มต้นไม้ ลดความลึก และเพิ่มใบ เพื่อบังคับให้โมเดลไม่ท่องจำข้อมูลมากเกินไป
+# อัปเดต DEFAULT_PARAMS: เพิ่มต้นไม้ ลดความลึก และเพิ่มใบ เพื่อบังคับให้โมเดลไม่ท่องจำข้อมูลมากเกินไป
 DEFAULT_PARAMS = {"kind": "rf", "n_estimators": 300, "max_depth": 7, "min_samples_leaf": 15}
-
-# 🌟 อัปเดต GRID: ขยายตารางค้นหาพารามิเตอร์ให้ครอบคลุมชุดข้อมูลที่มีฟีเจอร์ซับซ้อนขึ้น
-GRID = {"n_estimators": [150, 300], "max_depth": [5, 7, 9], "min_samples_leaf": [10, 15, 25]}
 
 
 # ---------------------------------------------------------------- train
@@ -36,9 +33,9 @@ def _regressor(p):
         RandomForestRegressor(
             n_estimators=int(p["n_estimators"]), 
             max_depth=p["max_depth"],
-            min_samples_split=20,                       # 🌟 บังคับกิ่งต้องมีอย่างน้อย 20 นัดถึงจะแตกต่อ
+            min_samples_split=20,                       # บังคับกิ่งต้องมีอย่างน้อย 20 นัดถึงจะแตกต่อ
             min_samples_leaf=int(p["min_samples_leaf"]), 
-            max_features="sqrt",                        # 🌟 สุ่มฟีเจอร์แค่รากที่สอง (กันตัวแปรเดิมๆ แย่งซีน)
+            max_features="sqrt",                        # สุ่มฟีเจอร์แค่รากที่สอง (กันตัวแปรเดิมๆ แย่งซีน)
             n_jobs=-1, 
             random_state=42,
         ),
@@ -188,7 +185,7 @@ def run_tuning(master, features, n_tune=380, n_holdout=380, step_weeks=3, n_tria
                      
         return s["logloss"]
 
-    study = optuna.create_study(direction="minimize")
+    study = optuna.create_study(direction="minimize", sampler=optuna.samplers.TPESampler(seed=42))
     study.optimize(objective, n_trials=n_trials)
     
     if not rows:

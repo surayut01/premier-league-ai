@@ -180,7 +180,7 @@ def results_for_display(res):
     P = res[["p_home", "p_draw", "p_away"]].to_numpy()
     out["ผลที่ AI เชื่อ"] = labels[P.argmax(axis=1)]
     out["ผลจริง (H/D/A)"] = labels[res["real_idx"].to_numpy()]
-    out["ถูก/ผิด"] = np.where(P.argmax(axis=1) == res["real_idx"].to_numpy(), "✅", "❌")
+    out["ถูก/ผิด"] = np.where(P.argmax(axis=1) == res["real_idx"].to_numpy(), "ถูก", "ผิด")
     return out
 
 # ---------------------------------------------------------------- permutation importance

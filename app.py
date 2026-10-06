@@ -229,7 +229,7 @@ with tab_fx:
             stems_y += [t, t, None]
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=stems_x, y=stems_y, mode="lines", hoverinfo="skip", showlegend=False,
-                                 line=dict(color="rgba(0,0,0,0.45)", width=2.5))) # 👈 เส้นโยงเข้มขึ้น
+                                 line=dict(color="rgba(0,0,0,0.45)", width=2.5))) # เส้นโยงเข้มขึ้น
         fig.add_trace(go.Scatter(
             x=d.values, y=list(d.index), mode="markers", showlegend=False,
             marker=dict(color=[ui.accent() if t == trend_team else "#8a8576" for t in d.index],
@@ -238,11 +238,11 @@ with tab_fx:
             hovertemplate="%{y}: %{x:" + fmt + "}<extra></extra>"))
         fig.add_vline(x=mean_val, line_dash="dash", line_color="rgba(0,0,0,0.8)", line_width=2,
                       annotation_text=f"ค่าเฉลี่ยลีก {format(mean_val, fmt)}", annotation_position="top",
-                      annotation_font=dict(color="black", size=13, family="Prompt, sans-serif")) # 👈 เส้นและตัวหนังสือชัดขึ้น
+                      annotation_font=dict(color="black", size=13, family="Prompt, sans-serif")) # เส้นและตัวหนังสือชัดขึ้น
         fig.update_layout(
             xaxis=dict(
                 title=metric_choice, 
-                gridcolor="rgba(0,0,0,0.4)",  # 👈 เข้มขึ้นมาก
+                gridcolor="rgba(0,0,0,0.4)",  # เข้มขึ้นมาก
                 zeroline=False,
                 tickfont=dict(color="black", size=13, family="Prompt, sans-serif"),
                 title_font=dict(color="black", size=14, family="Prompt, sans-serif")
@@ -251,7 +251,7 @@ with tab_fx:
                 title="", 
                 categoryorder="array", 
                 categoryarray=list(d.index), 
-                gridcolor="rgba(0,0,0,0.2)",  # 👈 เพิ่มเส้นแกน Y แนวนอนให้ชัดขึ้น
+                gridcolor="rgba(0,0,0,0.2)",  # เพิ่มเส้นแกน Y แนวนอนให้ชัดขึ้น
                 tickfont=dict(color="black", size=13, family="Prompt, sans-serif")
             ),
             margin=dict(l=20, r=20, t=40, b=20), 
@@ -400,7 +400,7 @@ with tab_table:
     }, inplace=True)
     tdf["อันดับ"] = range(1, len(tdf) + 1)
     
-    # 🌟 เรียกใช้ฟังก์ชัน HTML ของ UI ตัวเดียวจบ จัดระเบียบหัวและตารางให้อัตโนมัติ
+    # เรียกใช้ฟังก์ชัน HTML ของ UI ตัวเดียวจบ จัดระเบียบหัวและตารางให้อัตโนมัติ
     html(ui.league_table(tdf, crests))
     html(ui.note("ตารางคะแนนคำนวณอัตโนมัติจากผลการแข่งขันจริง • แถบสีเขียว = โซนหัวตาราง • แถบสีแดง = โซนท้ายตาราง"))
 
@@ -444,7 +444,7 @@ with tab_acc:
                 st.caption(f"โอกาสเสมอที่โมเดลให้เฉลี่ย {s['draw_pred'] * 100:.1f}% • เสมอจริง {s['draw_real'] * 100:.1f}% "
                             f"(ต่าง {s['draw_gap'] * 100:+.1f} จุด, z = {s['draw_z']:+.2f})")
 
-                st.markdown("##### 📊 กราฟสรุปประสิทธิภาพการทำนาย")
+                st.markdown("##### กราฟสรุปประสิทธิภาพการทำนาย")
                 import plotly.graph_objects as go
                 
                 categories = ["ทายผลถูก (1X2)", "ทายถูกจากสกอร์", "ทายสกอร์ตรงเป๊ะ"]
@@ -466,14 +466,14 @@ with tab_acc:
                     yaxis=dict(
                         range=[0, 100], 
                         title="เปอร์เซ็นต์ความแม่นยำ (%)",
-                        gridcolor='rgba(0, 0, 0, 0.25)',       # 👈 เพิ่ม: ให้เส้นตารางด้านหลังสีเข้มและชัดขึ้น
-                        zerolinecolor='rgba(0, 0, 0, 0.4)',    # 👈 เพิ่ม: ให้เส้นฐานที่ 0 เข้มขึ้น
-                        tickfont=dict(color='black', size=12), # 👈 เพิ่ม: เปลี่ยนตัวเลขแกน Y เป็นสีดำ
-                        title_font=dict(color='black', size=13) # 👈 เพิ่ม: เปลี่ยนชื่อแกน Y เป็นสีดำ
+                        gridcolor='rgba(0, 0, 0, 0.25)',       # เพิ่ม: ให้เส้นตารางด้านหลังสีเข้มและชัดขึ้น
+                        zerolinecolor='rgba(0, 0, 0, 0.4)',    # เพิ่ม: ให้เส้นฐานที่ 0 เข้มขึ้น
+                        tickfont=dict(color='black', size=12), # เพิ่ม: เปลี่ยนตัวเลขแกน Y เป็นสีดำ
+                        title_font=dict(color='black', size=13) # เพิ่ม: เปลี่ยนชื่อแกน Y เป็นสีดำ
                     ),
                     xaxis=dict(
                         title="",
-                        tickfont=dict(color='black', size=13)  # 👈 เพิ่ม: เปลี่ยนตัวอักษรแกน X เป็นสีดำ
+                        tickfont=dict(color='black', size=13)  # เพิ่ม: เปลี่ยนตัวอักษรแกน X เป็นสีดำ
                     ),
                     margin=dict(l=20, r=20, t=30, b=20),
                     height=350,
@@ -489,35 +489,6 @@ with tab_acc:
                     st.dataframe(disp, width="stretch", hide_index=True)
                     st.download_button("ดาวน์โหลด (CSV)", disp.to_csv(index=False).encode("utf-8-sig"),
                                        f"walk_forward_{league.replace(' ', '_')}.csv", "text/csv")
-
-    st.divider()
-    with st.expander(":material/tune: จูนพารามิเตอร์ของ Random Forest"):
-        st.caption("ลอง n_estimators / max_depth / min_samples_leaf บนช่วงเก่า แล้วตรวจกับช่วงล่าสุดที่ไม่เคยใช้เลือกค่า (ใช้เวลาหลายนาที)")
-        tkey = f"tune_{league}"
-        if st.button("เริ่มจูน"):
-            placeholder = st.empty()
-            placeholder.markdown(ui.spinning_ball_loader("กำลังจูนพารามิเตอร์ Random Forest..."), unsafe_allow_html=True)
-            st.session_state[tkey] = cached_tuning(played, features)
-            placeholder.empty()
-            if st.session_state[tkey] is None:
-                st.warning("ข้อมูลยังไม่พอสำหรับการจูน")
-        tr = st.session_state.get(tkey)
-        if tr:
-            st.markdown(f"ค่าที่ดีที่สุดในช่วงจูน ({tr['n_tune']} นัด): `{tr['best']}`")
-            st.dataframe(tr["grid"].round(4), width="stretch", hide_index=True)
-            st.caption(f"ตรวจกับ {tr['n_holdout']} นัดล่าสุดที่ไม่ได้ใช้เลือกค่า")
-            st.dataframe(tr["holdout"], width="stretch", hide_index=True)
-            if tr["improved"]:
-                st.success("ดีกว่าค่าตั้งต้นในช่วงตรวจ แนะนำให้ใช้")
-                if st.button("ใช้ค่านี้กับลีกนี้"):
-                    ml.save_params(league, tr["best"])
-                    st.session_state.pop(tkey, None)
-                    st.rerun()
-            else:
-                st.info("ไม่ดีกว่าค่าตั้งต้นในช่วงตรวจ จึงไม่แนะนำให้เปลี่ยน")
-        if not ml.is_default(params) and st.button("รีเซ็ตเป็นค่าตั้งต้น"):
-            ml.reset_params(league)
-            st.rerun()
 
 # ---------------------------------------------------------------- ข้อมูลโมเดล
 with st.expander(":material/info: ข้อมูลโมเดลและข้อมูลที่ใช้"):

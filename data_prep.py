@@ -29,14 +29,14 @@ ELO_K = 20.0
 FB_FLAGS = []  
 LEAGUE_AVG_GOALS, LEAGUE_AVG_PTS = 1.4, 1.37   
 
-# 🌟 ฟีเจอร์ที่สะอาดและผ่านการทดสอบว่าเสถียรที่สุด (Single Elo)
+# ฟีเจอร์ที่สะอาดและผ่านการทดสอบว่าเสถียรที่สุด (Single Elo)
 BASE_FEATURES = [
     "HomeElo", "AwayElo", "EloDiff", "HomeRestDays", "AwayRestDays",
     "Home_PPM5", "Away_PPM5",
     "HomeGF_Home", "AwayGA_Away"
 ]
 
-# 🌟 ใช้สถิติดิบ และตัด CrdR90 (ใบแดง) ออก
+# ใช้สถิติดิบ และตัด CrdR90 (ใบแดง) ออก
 FBREF_FEATURES = [
     c for c in [f"{s}_Prev{k}" for s in ("Home", "Away") for k in FB_STATS]
     if "CrdR90" not in c
@@ -278,14 +278,14 @@ def matchweek_start(kickoff_utc):
     t = pd.to_datetime(kickoff_utc) + pd.Timedelta(hours=7 - 6)
     return t.dt.normalize() - pd.to_timedelta(t.dt.dayofweek, unit="D")
 
-# ---------------------------------------------------------------- Export Clean Data 🌟
+# ---------------------------------------------------------------- Export Clean Data 
 def export_clean_data(league_name):
     print(f"\nกำลังประมวลผลข้อมูลของลีก: {league_name}...")
     
     master_df, warnings = build_league_master(league_name)
     if warnings:
         for w in warnings:
-            print(f"  ⚠️ {w}")
+            print(f"  {w}")
             
     clean_dir = DATA_DIR / "clean_data"
     clean_dir.mkdir(parents=True, exist_ok=True)
@@ -300,10 +300,10 @@ def export_clean_data(league_name):
         save_df = group.drop(columns=["Season_Year"])
         save_df.to_csv(file_path, index=False, encoding='utf-8-sig')
         
-        print(f"  ✅ บันทึก {file_name} สำเร็จ (จำนวน {len(save_df)} นัด)")
+        print(f"  บันทึก {file_name} สำเร็จ (จำนวน {len(save_df)} นัด)")
 
 if __name__ == "__main__":
-    print("--- 🚀 เริ่มกระบวนการสร้างและส่งออก Clean Data ---")
+    print("--- เริ่มกระบวนการสร้างและส่งออก Clean Data ---")
     for league in LEAGUES.keys():
         export_clean_data(league)
-    print("\n--- ✨ เสร็จสิ้นกระบวนการทั้งหมด ข้อมูลอยู่ในโฟลเดอร์ Data/clean_data ---")
+    print("\n--- เสร็จสิ้นกระบวนการทั้งหมด ข้อมูลอยู่ในโฟลเดอร์ Data/clean_data ---")

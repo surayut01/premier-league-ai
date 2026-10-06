@@ -1,7 +1,7 @@
 """
 หน่วยดึงข้อมูลจากเว็บ FBref (ผ่าน soccerdata) - ฉบับจัดเต็ม (Max Features & Robust Search)
 รวมสถิติจากตาราง standard, shooting, keeper และ misc
-🌟 (อัปเกรดเพิ่มฟีเจอร์เชิงลึก: CS%, SoT%, G/Sh, OppPKatt)
+(อัปเกรดเพิ่มฟีเจอร์เชิงลึก: CS%, SoT%, G/Sh, OppPKatt)
 """
 import sys
 import warnings
@@ -32,15 +32,15 @@ _FBREF_RAW = {
         "GperSoT": ["G/SoT", "Goals per Shot"],
         "Sh90": ["Sh/90", "Shots Total per 90"],   # ปริมาณการยิงทั้งหมด/90นาที
         "Dist": ["Dist", "Average Shot Distance"], # ระยะยิงเฉลี่ย
-        "SoT_Pct": ["SoT%", "Shots on Target %"],  # 🌟 ใหม่: ความแม่นยำยิงเข้ากรอบ (เปอร์เซ็นต์)
-        "GperSh": ["G/Sh", "Goals per Shot"]       # 🌟 ใหม่: ความเด็ดขาดในการจบสกอร์ (ต่อโอกาสยิงทั้งหมด)
+        "SoT_Pct": ["SoT%", "Shots on Target %"],  # ใหม่: ความแม่นยำยิงเข้ากรอบ (เปอร์เซ็นต์)
+        "GperSh": ["G/Sh", "Goals per Shot"]       # ใหม่: ความเด็ดขาดในการจบสกอร์ (ต่อโอกาสยิงทั้งหมด)
     },
     "keeper": {
         "SoTA": ["SoTA", "Shots on Target Against"], 
         "SavePct": ["Save%", "Save Percentage"],
         "KNineties": ["90s"],
-        "CS_Pct": ["CS%", "Clean Sheet Percentage"], # 🌟 ใหม่: เปอร์เซ็นต์คลีนชีต
-        "OppPKatt": ["PKatt", "Penalty Kicks Attempted"] # 🌟 ใหม่: จำนวนจุดโทษที่เสียให้คู่แข่ง (ในตารางโกล)
+        "CS_Pct": ["CS%", "Clean Sheet Percentage"], # ใหม่: เปอร์เซ็นต์คลีนชีต
+        "OppPKatt": ["PKatt", "Penalty Kicks Attempted"] # ใหม่: จำนวนจุดโทษที่เสียให้คู่แข่ง (ในตารางโกล)
     },
     "misc": {
         "TklW": ["TklW", "Tackles Won"],           # สกัดบอลชนะ (เกมรับ)
@@ -54,8 +54,8 @@ _FBREF_RAW = {
 # รายชื่อคอลัมน์ผลลัพธ์ที่จะเซฟลง CSV (เรียงกลุ่มให้ดูง่าย และเพิ่มฟีเจอร์ใหม่)
 FBREF_SEASON_COLUMNS = [
     "Team", "Season", "MP", "Age", "Poss", 
-    "NPG90", "Ast90", "Sh90", "Dist", "SoT90", "GperSoT", "SoT_Pct", "GperSh",  # 🌟 รุก (เพิ่ม SoT_Pct, GperSh)
-    "SoTA90", "SavePct", "CS_Pct", "OppPKatt", "TklW90", "Int90", "AerWonPct",  # 🌟 รับ (เพิ่ม CS_Pct, OppPKatt)
+    "NPG90", "Ast90", "Sh90", "Dist", "SoT90", "GperSoT", "SoT_Pct", "GperSh",  # รุก (เพิ่ม SoT_Pct, GperSh)
+    "SoTA90", "SavePct", "CS_Pct", "OppPKatt", "TklW90", "Int90", "AerWonPct",  # รับ (เพิ่ม CS_Pct, OppPKatt)
     "Fls90", "Fld90", "CrdY90", "CrdR90"                                        # ความดุดัน
 ]
 
@@ -87,7 +87,7 @@ def fetch_fbref_season_stats(league_name, year):
         try:
             t = fb.read_team_season_stats(stat_type=stat_type)
         except Exception as e:
-            print(f"  ❌ ข้ามตาราง {stat_type}: {e}")
+            print(f"  ข้ามตาราง {stat_type}: {e}")
             continue
             
         part = pd.DataFrame({"Team": t.index.get_level_values("team")})
@@ -156,9 +156,9 @@ def update_fbref(league_name=None, force=False):
                 print(f"[FBref] กำลังดึงข้อมูล {lg} {year} (Max Features)...")
                 df = fetch_fbref_season_stats(lg, year)
                 df.to_csv(path, index=False)
-                print(f"  ✅ บันทึกสำเร็จ ({len(df)} ทีม) -> มีฟีเจอร์ครบ {len(FBREF_SEASON_COLUMNS)-2} ตัว")
+                print(f"  บันทึกสำเร็จ ({len(df)} ทีม) -> มีฟีเจอร์ครบ {len(FBREF_SEASON_COLUMNS)-2} ตัว")
             except DataError as e:
-                print(f"  ❌ ข้าม ({e})")
+                print(f"  ข้าม ({e})")
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
