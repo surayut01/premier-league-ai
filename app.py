@@ -66,7 +66,7 @@ def cached_latest_strength(league, teams):
 OUTCOME_TH = ["เหย้าชนะ", "เสมอ", "เยือนชนะ"]
 
 # ---------------------------------------------------------------- หัวแอป + เลือกลีก
-html(ui.app_bar("ML ประเมินประตูคาดหวัง แล้ว Poisson แจกแจงสกอร์"))
+html(ui.app_bar("ML ประเมินประตูคาดหวัง แล้ว Poisson แจกแจงสกอร์ **เพื่อการเรียนรู้รายวิชา 240-318"))
 c_league, c_refresh = st.columns([4, 1.4], vertical_alignment="center")
 league = c_league.radio("เลือกลีกฟุตบอล", list(LEAGUES.keys()), horizontal=True, label_visibility="collapsed")
 if c_refresh.button("อัปเดตข้อมูล", icon=":material/refresh:", width="stretch"):
