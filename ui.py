@@ -324,7 +324,9 @@ background:var(--nav-bg);backdrop-filter:blur(14px);box-shadow:var(--nav-shadow)
     100% { background-position: 0% 50%; }
 }
 .stApp {
-    background: radial-gradient(circle at 15% 50%, var(--glow1), transparent 60%),
+    background: radial-gradient(ellipse 55% 42% at 12% 0%, var(--spot), transparent 72%),
+                radial-gradient(ellipse 55% 42% at 88% 0%, var(--spot), transparent 72%),
+                radial-gradient(circle at 15% 50%, var(--glow1), transparent 60%),
                 radial-gradient(circle at 85% 30%, var(--glow2), transparent 60%),
                 var(--bg) !important;
     background-size: 200% 200% !important;
@@ -475,13 +477,155 @@ label[data-testid="stRadioOption"]:has(input:checked) p { color: var(--sel-tx); 
     .fb-grid .fb-mc:nth-child(5) { animation-delay: .24s; }
     .fb-grid .fb-mc:nth-child(n+6) { animation-delay: .3s; }
 }
+
+/* ===== อ่านง่ายขึ้นเมื่อทับลายน้ำลูกฟุตบอล ===== */
+/* ข้อความรอง (caption / note): ตัวอักษรดำเข้ม ไม่มีพื้นหลัง */
+[data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p,
+.fb-note {
+    color: var(--tx) !important;        /* สีเดียวกับตัวอักษรบนปุ่ม */
+    font-family: var(--font) !important;
+    font-weight: 400 !important;         /* บางเท่าข้อความบนปุ่ม ไม่หนา */
+}
+.fb-note b, .fb-note strong { font-weight: 400 !important; }
+[data-testid="stCaptionContainer"], .fb-note {
+    background: none;
+    border: none;
+    padding: 0;
+}
+.fb-sub { color: var(--mut-strong) !important; font-weight: 500; }
+
+/* ข้อความเตือน "เพื่อการเรียนรู้รายวิชา" ใต้ชื่อแอป: เด่น สีแดง */
+.fb-sub-warn {
+    display: inline-block; margin-top: .3rem;
+    color: #b3261e; font-weight: 700; font-size: .85rem;
+    background: rgba(179, 38, 30, .10); border: 1px solid rgba(179, 38, 30, .35);
+    border-radius: 999px; padding: .12rem .7rem;
+}
+
+/* ===== การ์ดทำนายหลัก: แสงวิ่งผ่านตลอดเวลา + ขอบเรืองแสงเต้นช้า ๆ ===== */
+@keyframes fb-sweep {            /* แถบแสงเริ่มและจบนอกการ์ดทั้งสองด้าน = วนซ้ำแล้วไม่มีรอยต่อ */
+    from { background-position: 100% 0, 0 0; }
+    to   { background-position: 0% 0, 0 0; }
+}
+@keyframes fb-hero-glow {
+    0%, 100% { box-shadow: var(--shadow-hero), 0 0 16px rgba(120, 230, 180, .22); }
+    50%      { box-shadow: var(--shadow-hero), 0 0 42px rgba(150, 255, 205, .55); }
+}
+.fb-hero {
+    background:
+        linear-gradient(105deg, transparent 41%, rgba(255,255,255,.03) 44%, rgba(255,255,255,.12) 47%, rgba(255,255,255,.26) 50%,
+                         rgba(255,255,255,.12) 53%, rgba(255,255,255,.03) 56%, transparent 59%)
+            100% 0 / 300% 100% no-repeat,
+        var(--hero-bg);
+    animation: fb-rise .45s ease backwards, fb-sweep 5s linear infinite, fb-hero-glow 4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .fb-hero { animation: none; }
+}
+
+/* =====================================================================
+   PREMIUM POLISH — เพิ่มความหรู: เงาหลายชั้น, ขอบไฮไลต์, ทองแชมเปญ, ปุ่ม/ฟอร์มนุ่มขึ้น
+   ===================================================================== */
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+::selection { background: color-mix(in srgb, var(--gold) 38%, transparent); }
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--tx) 22%, transparent) transparent; }
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--tx) 20%, transparent); border-radius: 99px; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* หัวแอป: แถวโลโก้ + ชื่อ/คำบรรยายสูงเท่ากัน อยู่กึ่งกลางกัน • ป้ายแดงแยกบรรทัดใต้แถว • เส้นทองปิดท้าย */
+.fb-bar-wrap { position: relative; padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+/* เส้นแบ่งเดียวใต้หัวแอป: เส้นทองบางไล่จางไปทางขวา + แถบเน้นเขียว→ทองเรืองแสงที่ปลายซ้าย */
+.fb-bar-wrap::before { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+    background: linear-gradient(90deg, var(--gold), color-mix(in srgb, var(--gold) 40%, transparent) 38%, transparent 96%); }
+.fb-bar-wrap::after { content: ""; position: absolute; left: 0; bottom: -1px; width: clamp(90px, 18vw, 160px); height: 3px; border-radius: 3px;
+    background: linear-gradient(90deg, var(--acc), var(--gold));
+    box-shadow: 0 0 14px color-mix(in srgb, var(--gold) 60%, transparent); }
+/* ปิดเส้นกรอบ/แถบเดิมของ .fb-bar เพื่อไม่ให้มีเส้นซ้อนกันสองชั้น */
+.fb-bar-wrap .fb-bar { margin: 0 0 .85rem; padding-bottom: 0; border-bottom: none; align-items: center; }
+.fb-bar-wrap .fb-bar:after { display: none; }
+.fb-logo { box-shadow: 0 0 0 2px color-mix(in srgb, var(--gold) 70%, transparent), 0 8px 20px color-mix(in srgb, var(--acc) 35%, transparent); }
+/* ===== หัวแอปขนาดใหญ่ เด่น (ขนาดยืดหยุ่นตามความกว้างจอ: มือถือไม่ล้น เดสก์ท็อปใหญ่เต็มที่) ===== */
+.fb-bar-wrap .fb-bar { gap: clamp(.8rem, 2.6vw, 1.3rem); }
+.fb-bar .fb-logo {
+    width: clamp(54px, 13vw, 78px); height: clamp(54px, 13vw, 78px);
+    border-radius: clamp(16px, 4vw, 24px);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--logo-bg) 78%, #fff), var(--logo-bg) 62%);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 80%, transparent),
+                0 0 0 7px color-mix(in srgb, var(--gold) 16%, transparent),
+                inset 0 2px 0 rgba(255,255,255,.28),
+                0 14px 32px -4px color-mix(in srgb, var(--acc) 50%, transparent);
+}
+.fb-bar .fb-logo svg { width: 54%; height: 54%; }
+.fb-bar .fb-ttl { font-size: clamp(1.5rem, 6.2vw, 2.6rem); font-weight: 800; line-height: 1.1; letter-spacing: -.03em; }
+.fb-bar .fb-ttl .ai {
+    background: linear-gradient(100deg, var(--acc), var(--gold) 90%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    padding-right: .04em;
+}
+.fb-bar .fb-sub { font-size: clamp(.84rem, 2.8vw, 1.05rem); font-weight: 500; letter-spacing: .005em; margin-top: .3rem; line-height: 1.35; }
+.fb-bar .fb-sub { line-height: 1.3; margin-top: .1rem; }
+.fb-bar-wrap .fb-sub-warn { margin-top: 0; }
+
+/* หัวข้อส่วน: ไอคอนอยู่ในกรอบสี่เหลี่ยมมุมโค้ง */
+.fb-sec { letter-spacing: -.005em; }
+.fb-sec .fb-ic { box-sizing: content-box; padding: 6px; border-radius: 11px;
+    background: color-mix(in srgb, var(--acc) 11%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 38%, transparent); }
+
+/* การ์ดทุกใบ: ไล่เฉดบางมาก + เส้นไฮไลต์ด้านในบน + เงาสองชั้น */
+.fb-mc, .fb-tile, .fb-bars, .fb-rr, [data-testid="stMetric"], [data-testid="stExpander"],
+[data-testid="stPlotlyChart"], [data-testid="stVegaLiteChart"], [data-testid="stDataFrame"] {
+    background: linear-gradient(180deg, var(--card), color-mix(in srgb, var(--card) 93%, var(--bg)));
+    border-color: color-mix(in srgb, var(--gold) 20%, var(--line));
+    box-shadow: inset 0 1px 0 var(--hl), 0 1px 2px rgba(40,30,15,.05), 0 10px 28px -6px rgba(40,30,15,.12);
+}
+.fb-mc:hover, .fb-tile:hover, .fb-bars:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--gold) 65%, transparent);
+    box-shadow: inset 0 1px 0 var(--hl), 0 2px 4px rgba(40,30,15,.06), 0 18px 38px -8px rgba(40,30,15,.2);
+}
+[data-testid="stPlotlyChart"], [data-testid="stVegaLiteChart"] { border-radius: 20px; padding: .6rem; }
+[data-testid="stMetricValue"] { font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+
+/* ไทล์สรุป: ตัวเลขใหญ่ขึ้นนิด ป้ายล่างนุ่มขึ้น */
+.fb-tile .v { letter-spacing: -.02em; }
+.fb-tile .l { letter-spacing: .01em; }
+
+/* หลอดความน่าจะเป็น / แถบสถิติ: มีมิติ */
+.fb-pbar { height: 9px; box-shadow: inset 0 1px 2px rgba(0,0,0,.12); }
+.fb-pbar i.h, .fb-pbar i.d, .fb-pbar i.a, .fb-ab-t i { background-image: linear-gradient(180deg, rgba(255,255,255,.30), rgba(255,255,255,0) 60%); }
+.fb-ab-t { height: 7px; box-shadow: inset 0 1px 2px rgba(0,0,0,.10); }
+
+/* การ์ดหลัก: ขอบทองจาง ๆ + แผงกระจกมีขอบบนสว่าง */
+.fb-hero { border-color: color-mix(in srgb, var(--hero-pop) 30%, transparent); }
+.fb-panel { box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 24px rgba(0,0,0,.18); }
+.fb-vsrow .nm { letter-spacing: -.015em; text-shadow: 0 2px 10px rgba(0,0,0,.25); }
+.fb-tag.hot { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--hero-pop) 35%, transparent); }
+
+/* ช่องเลือก / กรอกข้อมูล: โฟกัสแล้วมีวงแสงนุ่ม ๆ */
+[data-baseweb="select"]>div, [data-baseweb="input"] { transition: border-color .2s ease, box-shadow .2s ease; box-shadow: inset 0 1px 0 var(--hl); }
+[data-baseweb="select"]>div:hover { border-color: color-mix(in srgb, var(--gold) 60%, transparent); }
+[data-baseweb="select"]:focus-within>div, [data-baseweb="input"]:focus-within {
+    border-color: var(--acc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--acc) 18%, transparent); }
+
+/* ตารางคะแนน: หัวตารางเล็กกว่า เว้นวรรคตัวอักษรเล็กน้อย */
+.fb-mc table thead th { font-size: .74rem; letter-spacing: .03em; color: var(--mut-strong); font-weight: 600; }
+.fb-mc table td { font-variant-numeric: tabular-nums; }
+
+/* แถบเมนูล่างบนมือถือ: ขอบทองบาง ๆ */
+@media (prefers-reduced-motion: reduce) {
+    .fb-mc:hover, .fb-tile:hover, .fb-bars:hover { transform: none; }
+}
 """
 
 # ---------------------------------------------------------------- ธีม
 THEMES = {
     "cream": dict(
-        bg="#f4efe4", glow1="rgba(217,160,110,.20)", glow2="rgba(160,190,160,.18)", card="#fffdf8", line="rgba(70,55,35,.11)",
-        tx="#2a2823", mut="#7a7365", track="rgba(70,55,35,.09)", chip="rgba(70,55,35,.07)",
+        bg="#f4efe4", glow1="rgba(240,190,120,.36)", glow2="rgba(190,225,190,.34)", card="#fffdf8", line="rgba(70,55,35,.11)",
+        tx="#2a2823", mut="#7a7365", mut_strong="#4f493d", spot="rgba(255,250,230,.95)", gold="#b8934a", hl="rgba(255,255,255,.80)", track="rgba(70,55,35,.09)", chip="rgba(70,55,35,.07)",
         c_home="#2f5d50", c_draw="#d4cab6", c_away="#d9895c", good="#3d7a58", bad="#c1504a", warn="#c48a28", info="#4d6fa3",
         acc="#2f5d50", logo_bg="#2f5d50", logo_tx="#f4efe4", btn_bg="#2f5d50", btn_tx="#fffdf8", sel_bg="#2f5d50", sel_tx="#fffdf8",
         tabsel_bg="rgba(47,93,80,.12)", tabsel_tx="#2f5d50",
@@ -495,7 +639,7 @@ THEMES = {
         cfg=dict(base="light", primaryColor="#2f5d50", backgroundColor="#f4efe4", secondaryBackgroundColor="#fffdf8", textColor="#2a2823")),
     "slate": dict(
         bg="#101214", glow1="transparent", glow2="transparent", card="#171a1d", line="rgba(255,255,255,.07)",
-        tx="#e7e9eb", mut="#8b9298", track="rgba(255,255,255,.07)", chip="rgba(255,255,255,.06)",
+        tx="#e7e9eb", mut="#8b9298", mut_strong="#b9c0c6", spot="transparent", gold="#d4b46a", hl="rgba(255,255,255,.05)", track="rgba(255,255,255,.07)", chip="rgba(255,255,255,.06)",
         c_home="#8fb8a6", c_draw="#454c53", c_away="#c8a27c", good="#86b894", bad="#d27a70", warn="#c8a27c", info="#86a6c8",
         acc="#8fb8a6", logo_bg="#8fb8a6", logo_tx="#101214", btn_bg="#8fb8a6", btn_tx="#101a16", sel_bg="#8fb8a6", sel_tx="#101a16",
         tabsel_bg="rgba(143,184,166,.14)", tabsel_tx="#b5d6c7",
@@ -507,7 +651,7 @@ THEMES = {
         cfg=dict(base="dark", primaryColor="#8fb8a6", backgroundColor="#101214", secondaryBackgroundColor="#171a1d", textColor="#e7e9eb")),
     "contrast": dict(
         bg="#edf0f5", glow1="rgba(255,122,89,.10)", glow2="rgba(74,99,216,.08)", card="#ffffff", line="rgba(16,26,58,.09)",
-        tx="#111a3a", mut="#6a7391", track="rgba(16,26,58,.08)", chip="rgba(16,26,58,.06)",
+        tx="#111a3a", mut="#6a7391", mut_strong="#444d6b", spot="rgba(255,255,255,.55)", gold="#c9a45c", hl="rgba(255,255,255,.85)", track="rgba(16,26,58,.08)", chip="rgba(16,26,58,.06)",
         c_home="#3f5bd8", c_draw="#cdd3e1", c_away="#ff7a59", good="#2a9d6f", bad="#e0524d", warn="#e2992f", info="#3f5bd8",
         acc="#ff6a47", logo_bg="#111a3a", logo_tx="#ffffff", btn_bg="#111a3a", btn_tx="#ffffff", sel_bg="#111a3a", sel_tx="#ffffff",
         tabsel_bg="#111a3a", tabsel_tx="#ffffff",
@@ -831,9 +975,10 @@ def _score_parts(score):
     return a, b
 
 
-def app_bar(subtitle):
-    return (f'<div class="fb-bar"><div class="fb-logo">{icon("ball", 24)}</div>'
-            f'<div><div class="fb-ttl"><span class="ai">AI</span> Football Predictor</div><div class="fb-sub">{_e(subtitle)}</div></div></div>')
+def app_bar(subtitle, warn=""):
+    w = f'<div class="fb-sub-warn">{_e(warn)}</div>' if warn else ""
+    return (f'<div class="fb-bar-wrap"><div class="fb-bar"><div class="fb-logo">{icon("ball", 24)}</div>'
+            f'<div><div class="fb-ttl"><span class="ai">AI</span> Football Predictor</div><div class="fb-sub">{_e(subtitle)}</div></div></div>{w}</div>')
 
 
 def section(icon_name, title, aside=""):
@@ -959,7 +1104,7 @@ def league_table(df, crests={}):
         
         rows_html.append(f'<tr class="{highlight_class}"><td style="text-align:center; font-weight:700; width: 45px;">{rank}</td><td style="font-weight:600;"><div style="display:flex; align-items:center; gap:0.6rem;">{badge(team, crest, "sm")}<span>{_e(team)}</span></div></td><td style="text-align:center">{p}</td><td style="text-align:center">{w}</td><td style="text-align:center">{d}</td><td style="text-align:center">{l}</td><td style="text-align:center">{gf}</td><td style="text-align:center">{ga}</td><td style="text-align:center; font-weight:600;" class="{gd_cls}">{gd_str}</td><td style="text-align:center; font-weight:700; color:var(--acc); font-size:1.05rem;">{pts}</td></tr>')
     
-    table_head = '<thead><tr style="border-bottom: 2px solid var(--line); color: var(--mut); font-size: 0.82rem; text-transform: uppercase;"><th style="text-align:center; padding: 0.75rem 0.5rem;">#</th><th style="padding: 0.75rem 0.5rem;">ทีมสโมสร</th><th style="text-align:center; padding: 0.75rem 0.5rem;">แข่ง</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ชนะ</th><th style="text-align:center; padding: 0.75rem 0.5rem;">เสมอ</th><th style="text-align:center; padding: 0.75rem 0.5rem;">แพ้</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ได้</th><th style="text-align:center; padding: 0.75rem 0.5rem;">เสีย</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ต่าง</th><th style="text-align:center; padding: 0.75rem 0.5rem; color: var(--tx);">แต้ม</th></tr></thead>'
+    table_head = '<thead><tr style="border-bottom: 2px solid var(--line); color: var(--mut); font-size: 0.82rem; text-transform: uppercase;"><th style="text-align:center; padding: 0.75rem 0.5rem;"></th><th style="padding: 0.75rem 0.5rem;">ทีมสโมสร</th><th style="text-align:center; padding: 0.75rem 0.5rem;">แข่ง</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ชนะ</th><th style="text-align:center; padding: 0.75rem 0.5rem;">เสมอ</th><th style="text-align:center; padding: 0.75rem 0.5rem;">แพ้</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ได้</th><th style="text-align:center; padding: 0.75rem 0.5rem;">เสีย</th><th style="text-align:center; padding: 0.75rem 0.5rem;">ต่าง</th><th style="text-align:center; padding: 0.75rem 0.5rem; color: var(--tx);">แต้ม</th></tr></thead>'
     
     body = "".join(rows_html)
     return f'<div class="fb-mc" style="padding: 0.5rem; overflow-x: auto;"><table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">{table_head}<tbody>{body}</tbody></table></div>'

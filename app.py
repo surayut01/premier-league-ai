@@ -66,7 +66,7 @@ def cached_latest_strength(league, teams):
 OUTCOME_TH = ["เหย้าชนะ", "เสมอ", "เยือนชนะ"]
 
 # ---------------------------------------------------------------- หัวแอป + เลือกลีก
-html(ui.app_bar("ML ประเมินประตูคาดหวัง แล้ว Poisson แจกแจงสกอร์ **เพื่อการเรียนรู้รายวิชา 240-318"))
+html(ui.app_bar("ML ประเมินประตูคาดหวัง แล้ว Poisson แจกแจงสกอร์", warn="เว็บไซต์นี้สร้างขึ้นเพื่อการศึกษาในรายวิชา 240-318 AI-ML ไม่สนับสนุนการเล่นพนันแต่อย่างใด"))
 c_league, c_refresh = st.columns([4, 1.4], vertical_alignment="center")
 league = c_league.radio("เลือกลีกฟุตบอล", list(LEAGUES.keys()), horizontal=True, label_visibility="collapsed")
 if c_refresh.button("อัปเดตข้อมูล", icon=":material/refresh:", width="stretch"):
@@ -239,8 +239,17 @@ with tab_fx:
         fig.add_vline(x=mean_val, line_dash="dash", line_color="rgba(0,0,0,0.8)", line_width=2,
                       annotation_text=f"ค่าเฉลี่ยลีก {format(mean_val, fmt)}", annotation_position="top",
                       annotation_font=dict(color="black", size=13, family="Prompt, sans-serif")) # เส้นและตัวหนังสือชัดขึ้น
+        LABEL_W = 96                                  # พื้นที่ชื่อทีมด้านซ้าย (px) คงที่ ไม่ว่าชื่อยาวแค่ไหน
+        import textwrap
+        for t in d.index:                             # ชื่อทีมชิดขอบซ้าย • ยาวเกินตัดเป็น 2 บรรทัด
+            fig.add_annotation(
+                xref="paper", yref="y", x=0, y=t, xshift=-LABEL_W + 2,
+                text="<br>".join(textwrap.wrap(t, width=13)) or t,
+                showarrow=False, xanchor="left", yanchor="middle", align="left",
+                font=dict(color="black", size=12, family="Prompt, sans-serif"))
         fig.update_layout(
             xaxis=dict(
+                fixedrange=True,
                 title=metric_choice, 
                 gridcolor="rgba(0,0,0,0.4)",  # เข้มขึ้นมาก
                 zeroline=False,
@@ -252,10 +261,11 @@ with tab_fx:
                 categoryorder="array", 
                 categoryarray=list(d.index), 
                 gridcolor="rgba(0,0,0,0.2)",  # เพิ่มเส้นแกน Y แนวนอนให้ชัดขึ้น
-                tickfont=dict(color="black", size=13, family="Prompt, sans-serif")
+                showticklabels=False,         # ซ่อนชื่อทีมแบบเดิม แล้ววาดเองชิดซ้ายด้านล่าง
+                fixedrange=True,
             ),
-            margin=dict(l=20, r=20, t=40, b=20), 
-            height=max(280, 30 * len(d) + 100),
+            margin=dict(l=LABEL_W, r=16, t=40, b=20), 
+            height=max(280, 36 * len(d) + 100),
             plot_bgcolor="rgba(0,0,0,0)", 
             paper_bgcolor="rgba(0,0,0,0)"
         )
@@ -402,7 +412,6 @@ with tab_table:
     
     # เรียกใช้ฟังก์ชัน HTML ของ UI ตัวเดียวจบ จัดระเบียบหัวและตารางให้อัตโนมัติ
     html(ui.league_table(tdf, crests))
-    html(ui.note("ตารางคะแนนคำนวณอัตโนมัติจากผลการแข่งขันจริง • แถบสีเขียว = โซนหัวตาราง • แถบสีแดง = โซนท้ายตาราง"))
 
 
 # =========================== TAB: วัดความแม่นยำ ===========================
