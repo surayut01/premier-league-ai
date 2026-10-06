@@ -1,5 +1,6 @@
 .aider*
 .streamlit/secrets.toml
+.streamlit/config.toml
 .aider.tags.cache.v4
 *.pyc
 .claude*
